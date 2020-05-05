@@ -21,7 +21,7 @@
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/Morgan_test" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
@@ -36,7 +36,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="" />
+    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,6 +54,11 @@
       <list>
         <option value="Morgan Casale" />
       </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Morgan_test" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
@@ -95,7 +103,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1588696496604</updated>
-      <workItem from="1588696499823" duration="1993000" />
+      <workItem from="1588696499823" duration="2756000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -146,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588699043846</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="test">
+      <created>1588699379615</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1588699379615</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,7 +178,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="origin/Morgan_test" />
                       </list>
                     </value>
                   </entry>
@@ -183,10 +198,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588699043431">
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588699379238">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699043431" />
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699379238" />
     <state x="172" y="86" key="DiffContextDialog" timestamp="1588698391160">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -199,13 +214,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588699057234">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588699402673">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699057234" />
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588698923344">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699402673" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588699217534">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698923344" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699217534" />
   </component>
 </project>
