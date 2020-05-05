@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="CS_Project" targetName="CS_Project" />
+    </generated>
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="ChangeListManager">
+    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1bUpOqKFuctNpkTYrA5chakydak" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
   </component>
   <component name="RunManager">
     <configuration name="CS_Project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project">
@@ -16,5 +47,56 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="" />
+      <created>1588696496604</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588696496604</updated>
+      <workItem from="1588696499823" duration="390000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit 2">
+      <created>1588696726523</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1588696726523</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Initial commit 3">
+      <created>1588696740326</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1588696740326</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit 2" />
+    <MESSAGE value="Initial commit 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit 3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588696739950">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696739950" />
+    <state x="837" y="417" width="551" height="205" key="Github.ShareDialog" timestamp="1588696540774">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="837" y="417" width="551" height="205" key="Github.ShareDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696540774" />
+    <state x="632" y="218" key="Github.UntrackedFilesDialog" timestamp="1588696548662">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
   </component>
 </project>
