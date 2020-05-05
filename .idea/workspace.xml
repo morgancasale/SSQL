@@ -40,6 +40,12 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
     <configuration name="CS_Project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project">
@@ -58,7 +64,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1588696496604</updated>
-      <workItem from="1588696499823" duration="390000" />
+      <workItem from="1588696499823" duration="1135000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -74,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588696740326</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Initial commit 4">
+      <created>1588696899974</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1588696899974</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,13 +96,14 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit 2" />
     <MESSAGE value="Initial commit 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit 3" />
+    <MESSAGE value="Initial commit 4" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit 4" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588696739950">
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588696899599">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696739950" />
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696899599" />
     <state x="837" y="417" width="551" height="205" key="Github.ShareDialog" timestamp="1588696540774">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -98,5 +112,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588698339765">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698339765" />
   </component>
 </project>
