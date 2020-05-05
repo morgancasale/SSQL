@@ -79,7 +79,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RunManager">
-    <configuration name="CS_Project" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project">
+    <configuration name="CS_Project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -95,7 +95,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1588696496604</updated>
-      <workItem from="1588696499823" duration="1654000" />
+      <workItem from="1588696499823" duration="1993000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -139,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588698536994</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="test">
+      <created>1588699043846</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1588699043846</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,10 +183,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588698536595">
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588699043431">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698536595" />
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699043431" />
     <state x="172" y="86" key="DiffContextDialog" timestamp="1588698391160">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -192,13 +199,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588698545646">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588699057234">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698545646" />
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588698496989">
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588699057234" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1588698923344">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698496989" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588698923344" />
   </component>
 </project>
