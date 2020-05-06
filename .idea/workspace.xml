@@ -15,22 +15,37 @@
     <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
+      <config projectName="CS_Project" targetName="CS_Project_meta" />
       <config projectName="CS_Project" targetName="CS_Project" />
     </generated>
   </component>
-  <component name="CMakeSettings">
+  <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="" />
+    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Classes/Date/Date.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Classes/Date/Date.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Classes/Time/Time.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Classes/Time/Time.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Funzioni strane che usiamo" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Metaclass.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Metaclass.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Metaclass_test.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utility.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,6 +57,9 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="OCResolveContextSettings">
+    <option name="configuration" value="0-Debug-CS_Project_meta" />
   </component>
   <component name="ProjectId" id="1bUpOqKFuctNpkTYrA5chakydak" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -59,15 +77,33 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Morgan Casale\OneDrive - Politecnico di Torino\Documenti\Poli\Info\C++\CS Project\Classes\Time" />
+      <recent name="C:\Users\Morgan Casale\OneDrive - Politecnico di Torino\Documenti\Poli\Info\C++\CS Project\tests" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Application.CS_Project">
     <configuration name="CS_Project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="CS_Project_meta" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_Project_meta" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_Project_meta">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.CS_Project" />
+      <item itemvalue="CMake Application.CS_Project_meta" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -80,6 +116,7 @@
       <option name="presentableId" value="Default" />
       <updated>1588696496604</updated>
       <workItem from="1588696499823" duration="390000" />
+      <workItem from="1588772779503" duration="7435000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -95,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588696740326</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="test 1">
+      <created>1588709398898</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1588709398898</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -116,13 +160,18 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit 2" />
     <MESSAGE value="Initial commit 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit 3" />
+    <MESSAGE value="test 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="test 1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588696739950">
+    <state x="673" y="321" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1588774015874">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696739950" />
+    <state x="673" y="321" key="#com.intellij.fileTypes.FileTypeChooser/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588774015874" />
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1588709398537">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588709398537" />
     <state x="837" y="417" width="551" height="205" key="Github.ShareDialog" timestamp="1588696540774">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -131,5 +180,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588709406806">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588709406806" />
   </component>
 </project>
