@@ -4,6 +4,10 @@
     <expand>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
       <path>
@@ -217,12 +221,9 @@
     <state x="632" y="218" key="Github.UntrackedFilesDialog" timestamp="1588696548662">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588709406806">
+    <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" /><state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588709406806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588709406806" />
-
   </component>
 </project>
