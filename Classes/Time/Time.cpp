@@ -1,20 +1,14 @@
 #include "Time.h"
 using namespace std;
-const exception time_error= (const exception &) "Time format error";
-
-int Time::tot_seconds() const {
-    return 360*hours+60*minutes+seconds;
-}
-int Time::tot_mins() const {
-    return 360*hours+60*minutes;
-}
 
 void Time::set_hours(const int &h) {
     try{
-        if(h>=0 and h<=24){
+        if(h<0 or h>24){
             throw("Hours format error");
         }
-        hours=h;
+        else{
+            hours=h;
+        }
     }
     catch(const string &e){
         cerr<<endl<<e;
@@ -23,10 +17,12 @@ void Time::set_hours(const int &h) {
 int Time::get_hours() const { return hours; }
 void Time::set_minutes(const int &m) {
     try{
-        if(m>=0 and m<=60){
+        if(m<0 or m>60){
             throw("Minutes format error");
         }
-        minutes=m;
+        else{
+            minutes=m;
+        }
     }
     catch(const string &e){
         cerr<<endl<<e;
@@ -34,10 +30,12 @@ void Time::set_minutes(const int &m) {
 }
 int Time::get_minutes() const { return minutes; }
 void Time::set_seconds(const int &s) { try{
-        if(s>=0 and s<=60){
+        if(s<0 or s>60){
             throw("Seconds format error");
         }
-        seconds=s;
+        else{
+            seconds=s;
+        }
     }
     catch(const string &e){
         cerr<<endl<<e;
@@ -74,3 +72,17 @@ void Time::set_time(const string &time) {
         ss>>hours>>minutes>>seconds;
     }
 }
+
+int Time::tot_seconds() const {
+    return 360*hours+60*minutes+seconds;
+}
+int Time::tot_mins() const {
+    return 360*hours+60*minutes;
+}
+
+bool Time::equal_sec(Time t2) const & { return this->tot_seconds()==t2.tot_seconds(); }
+bool Time::operator==(Time t2) const & { equal_sec(t2); }
+bool Time::equal_min(Time t2) const & { return this->tot_mins()==t2.tot_mins(); }
+
+bool Time::operator>(Time t2) const & { return this->tot_seconds()>t2.tot_seconds(); }
+bool Time::operator<(Time t2) const & { return this->tot_seconds()<t2.tot_seconds(); }
