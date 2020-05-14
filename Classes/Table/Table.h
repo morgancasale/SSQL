@@ -1,7 +1,3 @@
-//
-// Created by carlt on 08/05/20.
-//
-
 #ifndef CS_PROJECT_TABLE_H
 #define CS_PROJECT_TABLE_H
 #include "../../utility.h"

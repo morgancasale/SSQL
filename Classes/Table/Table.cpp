@@ -1,7 +1,3 @@
-//
-// Created by carlt on 08/05/20.
-//
-
 #include "Table.h"
 
 void Table::get_data(string in){
