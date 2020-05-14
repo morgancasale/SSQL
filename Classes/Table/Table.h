@@ -31,6 +31,7 @@ class Table {
 private:
     string name;
     vector<string> elements;
+    Row defaultrow;
     vector<Row> rows;
 public:
     void get_data(string in);
