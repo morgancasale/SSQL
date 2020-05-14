@@ -1,7 +1,7 @@
 #ifndef CS_PROJECT_DATABASE_H
 #define CS_PROJECT_DATABASE_H
 #include <vector>
-#include "../Table_temp/Table.h"
+#include "../Table/Table.h"
 
 class Database {
 public:
