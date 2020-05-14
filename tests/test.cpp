@@ -3,17 +3,9 @@
 #include "../utility.h"
 using namespace std;
 
-class miao{
-public:
-    int i;
-    miao(int a){
-        i=a;
-    }
-};
 
 int main(){
-    vector<miao> ciao;
-    ciao.resize(1);
-    ciao.end()= miao &a(4);
+    string a="ciao mamma come stai";
+    cout<<substr_from_c_to_c(a, 0,3, 'a');
     return 0;
 }

@@ -1,5 +1,5 @@
 #include "utility.h"
-#include "Classes/Table_temp/Table.h"
+#include "Classes/Table/Table.h"
 #include "Classes/Database/Database.h"
 
 Database data1;
@@ -16,10 +16,9 @@ string allowed_coms[8]={
 };
 
 
-bool process_command(string choice, const string &command) {
+bool process_command(const string &choice, const string &command) {
     if(command=="quit()"){
-    }
-
+    } else
     if(command=="create table"){
         Table temp(choice); //this creates a temporary Table
         data1.Tables.resize(data1.Tables.size()+1);
@@ -47,8 +46,8 @@ bool process_command(string choice, const string &command) {
 
 bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp") {
     bool err=true;
-    for(int i=0; i<8; i++){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
-        if(((command=substr_from_s_to_s(input, 0, 1)) == allowed_coms[i]) or ((command=substr_from_s_to_s(input, 0, 2)) == allowed_coms[i])){
+    for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
+        if(((command= substr_from_c_to_c(input, 0, 1, ' ')) == tmp) or ((command= substr_from_c_to_c(input, 0, 2, ' ')) == tmp)){
             err=false;
         }
     }
