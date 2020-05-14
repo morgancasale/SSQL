@@ -20,6 +20,11 @@ public:
 
     int tot_seconds() const;
     int tot_mins() const;
+    bool equal_sec(Time t2) const &;
+    bool operator ==(Time t2) const &;
+    bool equal_min(Time t2) const &;
+    bool operator > (Time t2) const &;
+    bool operator < (Time t2) const &;
     Time(){
         hours=0, minutes=0, seconds=0;
     };
