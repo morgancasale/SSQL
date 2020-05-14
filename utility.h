@@ -1,7 +1,8 @@
 #ifndef CS_PROJECT_UTILITY_H
 #define CS_PROJECT_UTILITY_H
-#endif //CS_PROJECT_UTILITY_H
+
 using namespace std;
+#include <iostream>
 #include <algorithm>
 #include <sstream>
 #include "Classes/Database/Database.h"
@@ -11,6 +12,7 @@ stringstream data_ss(string in, const char &sub){ //remove char sub from string 
     stringstream ss(in);
     return ss;
 }
+
 
 string tolower(string &in){ //converts all upper letters of a string to lower ones
     for(int i=0; i<in.size(); i++){
