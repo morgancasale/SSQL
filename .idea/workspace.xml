@@ -4,6 +4,10 @@
     <expand>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
       <path>
@@ -33,7 +37,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="">
+    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" commen
       <change afterPath="$PROJECT_DIR$/Classes/Date/Date.cpp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Classes/Date/Date.h" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Classes/Time/Time.cpp" afterDir="false" />
@@ -56,6 +60,11 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="OCResolveContextSettings">
@@ -83,6 +92,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
+
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Morgan Casale\OneDrive - Politecnico di Torino\Documenti\Poli\Info\C++\CS Project\Classes\Time" />
@@ -105,6 +115,7 @@
       <item itemvalue="CMake Application.CS_Project_meta" />
     </list>
   </component>
+
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -132,6 +143,7 @@
       <option name="project" value="LOCAL" />
       <updated>1588696740326</updated>
     </task>
+
     <task id="LOCAL-00003" summary="test 1">
       <created>1588709398898</created>
       <option name="number" value="00003" />
@@ -140,6 +152,7 @@
       <updated>1588709398898</updated>
     </task>
     <option name="localTasksCounter" value="4" />
+
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,7 +163,34 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="master" />
+                </option>
+              </RecentGroup>
+            </list>
           </value>
         </entry>
       </map>
@@ -160,6 +200,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit 2" />
     <MESSAGE value="Initial commit 3" />
+
     <MESSAGE value="test 1" />
     <option name="LAST_COMMIT_MESSAGE" value="test 1" />
   </component>
@@ -172,6 +213,7 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588709398537" />
+
     <state x="837" y="417" width="551" height="205" key="Github.ShareDialog" timestamp="1588696540774">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -179,8 +221,7 @@
     <state x="632" y="218" key="Github.UntrackedFilesDialog" timestamp="1588696548662">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588709406806">
+    <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" /><state x="552" y="252" key="Vcs.Push.Dialog.v2" timestamp="1588709406806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588709406806" />
