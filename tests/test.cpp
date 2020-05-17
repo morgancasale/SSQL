@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../utility.h"
+#include "../syntax.h"
 using namespace std;
 
 string ron(string in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ') { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
@@ -44,7 +45,7 @@ bool g(string in, const bool &show_err=true){
     bool err=false;
 
     string first_line=substr_from_c_to_c(in, 0, 4, false);
-    if(num_of_words(first_line)!=3 and !err){
+    if(num_of_words(first_line)!=3){
         err=true;
     }
     if(first_line[first_line.size()-1]!='(' and !err){ //this check if there is a '(' after the table name
@@ -88,12 +89,15 @@ bool g(string in, const bool &show_err=true){
 
 int main(){
     string b="CREATE TABLE CUSTOMERS ( ID INT NOT NULL, NAME TEXT NOT NULL, AGE INT NOT NULL, ADDRESS TEXT , SALARY FLOAT, PRIMARY KEY (ID) );";
+
+    cout<<substr_from_c_to_c(b, 2, 3, false);
     clean_input(b);
-    bool d=check_CREATE_syntax(b);
-    cout<<"a ";
-    if(!d){
-        cout<<"success!";
-    }
-    //cout<<b;
+
+    /*bool c;
+    if(c=check_CREATE_syntax(b)){
+        cout<<"1st test -> success";
+    }*/
+    vector<string> data=get_CREATE_data(b);
+    cout<<b;
     return 0;
 }

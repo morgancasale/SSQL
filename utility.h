@@ -47,7 +47,7 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
     return in.substr(start,end-start);
 }*/
 
-string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ', const bool &show_error=true) { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
+string substr_from_c_to_c(const string &in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ', const bool &show_error=true) { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
     int start=0, end=1;
     int char1=0, i=0, char2=0;
     bool found1=false, found2=false;

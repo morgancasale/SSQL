@@ -1,5 +1,5 @@
 #include "Table.h"
-
+#include "../../syntax.h"
 void Table::get_data(string in){
     if(in.compare(0,3,"int")){
         defaultrow.ints.resize(sizeof(list_int)+1);
@@ -25,6 +25,6 @@ Table::Table(string in){
         get_data(<take substring from in from (0st+i) space after '{' to (2nd+i) space>);
     }
     empty_unused_elements();*/
-
-    if(check_CREATE_syntax(in, true));
+    string *data_in={};
+    if(check_CREATE_syntax(in, data_in));
 }

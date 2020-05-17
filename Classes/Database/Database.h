@@ -21,7 +21,7 @@ public:
     bool process_command(const string &choice, const string &command);
     bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
-    bool check_Table(const string &in, const bool show_err=false);
+    bool check_Table(const string &in, bool show_err=false);
 
 
     bool delete_Table(string command);
@@ -39,6 +39,9 @@ public:
     ~Database()=default;
 };
 
-bool check_CREATE_syntax(string in, const bool &show_err=true); //solve privacy problem
+void a(const string &in){
+    cout<<in;
+}
+//bool check_CREATE_syntax(string in, const bool &show_err=true); //solve privacy problem
 
 #endif //CS_PROJECT_DATABASE_H
