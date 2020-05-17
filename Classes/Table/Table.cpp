@@ -25,4 +25,6 @@ Table::Table(string in){
         get_data(<take substring from in from (0st+i) space after '{' to (2nd+i) space>);
     }
     empty_unused_elements();*/
+
+    if(check_CREATE_syntax(in, true));
 }

@@ -1,7 +1,7 @@
 #ifndef CS_PROJECT_DATE_H
 #define CS_PROJECT_DATE_H
 #include <iostream>
-#include "../Time/time.h"
+#include "../Time/Time.h"
 using namespace std;
 
 

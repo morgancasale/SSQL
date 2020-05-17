@@ -21,17 +21,20 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
     return in;
 }
 
-string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &c= ' ') { //it return the sub string from the space s1 to the space s2, enter 0 to take from beginning and -1 to take up to the end
-    int start=0, end=-1;
-    int chars=0, i=0;
-    bool found=false;
-    for(; i<in.size() and chars != c2; i++){
-        if(in[i]==c){
-            chars++;
+/*string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ') { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
+    int start=0, end;
+    int char1=0, i=0, char2=0;
+    bool found1=false;
+    for(; i<in.size() and char2 != c2; i++){
+        if(in[i] == f1){
+            char1++;
         }
-        if(chars==c1 and !found){
+        if(in[i] == f2){
+            char2++;
+        }
+        if(char1 == c1 and !found1){
             start=i+1;
-            found=true;
+            found1=true;
         }
     }
     end=i-1;
@@ -42,4 +45,123 @@ string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &c
         end=in.size();
     }
     return in.substr(start,end-start);
+}*/
+
+string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ', const bool &show_error=true) { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
+    int start=0, end=1;
+    int char1=0, i=0, char2=0;
+    bool found1=false, found2=false;
+    for(; i<in.size() and char2 != c2; i++){
+        if(in[i] == f1){
+            char1++;
+        }
+        if(in[i] == f2){
+            char2++;
+        }
+        if(char1 == c1 and !found1){
+            start=i+1;
+            found1=true;
+        }
+    }
+
+    if(in[i-1]==f2){
+        found2=true;
+    }
+
+    end=i-1;
+    if(c1==0){
+        start=0;
+    }
+    if(c2==-1){
+        end=in.size();
+    }
+
+    if(!found1 or !found2 and show_error) {
+        cerr << endl << "One or the two characters weren't found!";
+    }
+    if(!found1 or !found2){ //if one or two characters aren't found then the function returns "/err"
+        return "/err"; //Maybe we should add an exception for the use of "/err" as any name
+    } else{
+        return in.substr(start,end-start);
+    }
 }
+
+
+
+bool remove_duplicate_chars(string &in, vector<char> c, const bool &show_err=true){
+    bool err=false;
+
+    for(char tmp: c){
+        int last_c=in.find(tmp); //finds the position of the first occurrence of the character tmp
+        if(last_c != -1){ //find returns -1 if the characters isn't found
+            for(int i= last_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from last_c
+                if((in[i]!=in[last_c]) or (in[i]!=tmp)){
+                    last_c++;
+                    in[last_c]=in[i];
+                }
+            }
+            in[++last_c]='\0';
+        } else{
+          err=true;
+        }
+    }
+
+    if(err and show_err){
+        cerr<<"Can't find one or more of the characters to delete!"<<endl;
+    }
+    return err;
+}
+
+string remove_endl(string &in){
+    int pos=in.find('\n');
+    while(pos!=-1){
+        in.replace(pos,1, " ");
+        pos=in.find('\n');
+    }
+    return in;
+}
+
+bool clean_input(string &in){
+    tolower(in);
+    remove_endl(in);
+    return remove_duplicate_chars(in, {' '});
+}
+
+string get_command_from_file(string in, const int &comm_i){
+    return in;
+}
+
+string erase_substr(string &in, const string &to_erase){
+    int pos=in.find(to_erase);
+    if(pos!=-1){
+        in.erase(pos, to_erase.size());
+        remove_endl(in);
+    }
+    return in;
+}
+
+string get_substr_froms_to_s(const string &in, const string &s1, const string &s2){
+    int start=in.find(s1);
+    int end=in.find(s2)+s2.size();
+
+    if(start==-1 or end==-1){
+        return "/err";
+    }
+    else{
+        return in.substr(start, end - start);
+    }
+}
+
+int num_of_words(const string &in){
+    int num=0;
+    for(int i=0; i<in.size(); i++){
+        for(; isalpha(in[i]); i++){
+        }
+        if(isalpha(in[i-1])){
+            num++;
+        }
+    }
+    return num;
+}
+
+#endif
