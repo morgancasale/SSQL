@@ -5,7 +5,7 @@
 #include "utility.h"
 using namespace std;
 
-bool check_CREATE_syntax(string in, const bool &show_err=true){
+bool check_CREATE_syntax(string in, const bool &show_err=true){ //it returns true if no error was found
     bool err=false;
 
     string first_line=substr_from_c_to_c(in, 0, 4, false);
@@ -55,17 +55,20 @@ bool check_CREATE_syntax(string in, const bool &show_err=true){
 vector<string> get_CREATE_data(string in){
     vector<string> data;
     data.resize(1);
-    string a=substr_from_c_to_c(in, 2, 3, false);
+    string a=substr_from_c_to_c(in, 2, 3, ' ', ' ', false);
     data[0]=a;
 
     string line;
-    for(int i=0; substr_from_c_to_c(in, 1, 1, '(', ')', false)!=" "; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substr_from_c_to_c(in, 1, 1, '(', ')', false)!="  "; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
         data[i]=substr_from_c_to_c(in, 4, 1, ' ', ',', false);
         if(data[i]=="/err"){
-            data[i]=substr_from_c_to_c(in, 1, 1, '(', ')', false);
+            data[i]=substr_from_c_to_c(in, 4, 7, ' ', ' ', false);
+            erase_substr(in, data[i]);
+        }else{
+            erase_substr(in, data[i]+", ");
         }
-        erase_substr(in, data[i]);
+
     }
 
     return data;

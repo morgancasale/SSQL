@@ -89,9 +89,8 @@ bool g(string in, const bool &show_err=true){
 
 int main(){
     string b="CREATE TABLE CUSTOMERS ( ID INT NOT NULL, NAME TEXT NOT NULL, AGE INT NOT NULL, ADDRESS TEXT , SALARY FLOAT, PRIMARY KEY (ID) );";
-
-    cout<<substr_from_c_to_c(b, 2, 3, false);
     clean_input(b);
+    cout<<substr_from_c_to_c(b, 2, 3, ' ', ' ',false);
 
     /*bool c;
     if(c=check_CREATE_syntax(b)){

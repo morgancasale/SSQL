@@ -39,15 +39,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="Trying to make the check_CREATE_syntax function work">
-      <change afterPath="$PROJECT_DIR$/syntax.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Classes/Database/Database.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Database/Database.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Database/Database.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Database/Database.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Classes/Table/Table.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Table/Table.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cs Project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/syntax.h" beforeDir="false" afterPath="$PROJECT_DIR$/syntax.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utility.h" beforeDir="false" afterPath="$PROJECT_DIR$/utility.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,45 +244,45 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state width="1878" height="245" key="GridCell.Tab.0.bottom" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898885" />
+    <state width="1877" height="348" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.0.center" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1589806876965">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898885" />
+    <state width="1877" height="348" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876965" />
     <state width="1878" height="245" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.0.left" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1589806876965">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898884" />
+    <state width="1877" height="348" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876965" />
     <state width="1878" height="245" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.0.right" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898885" />
+    <state width="1877" height="348" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.1.bottom" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898886" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.1.center" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898886" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.1.left" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898886" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1878" height="245" key="GridCell.Tab.1.right" timestamp="1589751198163">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1589806876966">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589729898886" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589806876966" />
     <state width="1878" height="245" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
     <state x="2180" y="234" width="992" height="737" key="SettingsEditor" timestamp="1589751050545">
       <screen x="1920" y="0" width="1920" height="1080" />
@@ -328,12 +326,7 @@
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/syntax.h</url>
           <line>54</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/utility.h</url>
-          <line>49</line>
-          <option name="timeStamp" value="32" />
+          <option name="timeStamp" value="36" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
