@@ -21,32 +21,6 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
     return in;
 }
 
-/*string substr_from_c_to_c(string in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ') { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
-    int start=0, end;
-    int char1=0, i=0, char2=0;
-    bool found1=false;
-    for(; i<in.size() and char2 != c2; i++){
-        if(in[i] == f1){
-            char1++;
-        }
-        if(in[i] == f2){
-            char2++;
-        }
-        if(char1 == c1 and !found1){
-            start=i+1;
-            found1=true;
-        }
-    }
-    end=i-1;
-    if(c1==0){
-        start=0;
-    }
-    if(c2==-1){
-        end=in.size();
-    }
-    return in.substr(start,end-start);
-}*/
-
 string substr_from_c_to_c(const string &in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ', const bool &show_error=true) { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
     int start=0, end=1;
     int char1=0, i=0, char2=0;
@@ -74,6 +48,7 @@ string substr_from_c_to_c(const string &in, const int &c1, const int &c2, const 
     }
     if(c2==-1){
         end=in.size();
+        found2=true;
     }
 
     if(!found1 or !found2 and show_error) {
@@ -140,7 +115,7 @@ string erase_substr(string &in, const string &to_erase){
     return in;
 }
 
-string get_substr_froms_to_s(const string &in, const string &s1, const string &s2){
+string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
     int start=in.find(s1);
     int end=in.find(s2)+s2.size();
 

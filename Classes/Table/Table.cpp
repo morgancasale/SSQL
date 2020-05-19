@@ -1,25 +1,7 @@
 #include "Table.h"
 #include "../../syntax.h"
-void Table::get_data(string in){
-    if(in.compare(0,3,"int")){
-        defaultRow.ints.resize(sizeof(list_int)+1);
-        defaultRow.ints[0].key = in.substr(3,sizeof(in)-3);
-        elements.resize(sizeof(elements)+1);
-        elements.push_back(in.substr(3,sizeof(in)-3));
-    }
 
-    //...
-}
-void Table::empty_unused_elements() {
-    if(defaultRow.ints.empty()){   vector<list_int>().swap(defaultRow.ints);  }
-    if(defaultRow.floats.empty()){   vector<list_float>().swap(defaultRow.floats);  }
-    if(defaultRow.chars.empty()){   vector<list_char>().swap(defaultRow.chars);  }
-    if(defaultRow.texts.empty()){   vector<list_string>().swap(defaultRow.texts);  }
-    if(defaultRow.dates.empty()){   vector<list_date>().swap(defaultRow.dates);  }
-    if(defaultRow.times.empty()){   vector<list_time>().swap(defaultRow.times);  }
-}
-
-Table::Table(string in){
+Table::Table(const string &in){
     if(!check_CREATE_syntax(in)){
         cerr<<endl<<"CREATE command syntax error!";
     } else{
@@ -29,4 +11,55 @@ Table::Table(string in){
             process_CREATE_data(data);
         }
     }
+}
+
+void *Table::create_col(const string &in) {
+    string key=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
+    string type=substr_from_c_to_c(in, 1, 2);
+    elements.push_back(type);
+    bool not_null=false;
+    if(substr_from_c_to_c(in, 2, -1)=="not null"){
+        not_null=true;
+    }
+
+    if(type=="int"){
+        static Column<int> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    } else
+    if(type=="float"){
+        static Column<float> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    } else
+    if(type=="char"){
+        static Column<char> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    } else
+    if(type=="string"){
+        static Column<string> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    } else
+    if(type=="date"){
+        static Column<Date> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    } else
+    if(type=="time"){
+        static Column<Date> tmp;
+        tmp.key=key;
+        tmp.not_null=not_null;
+        return static_cast<void *>(&tmp);
+    }
+}
+
+void Table::Table2(const string &in) {
+    cols.push_back(create_col(in));
 }
