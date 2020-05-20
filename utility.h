@@ -5,7 +5,7 @@ using namespace std;
 #include <iostream>
 #include <algorithm>
 #include <sstream>
-#include "Classes/Database/Database.h"
+#include <vector>
 
 stringstream data_ss(string in, const char &sub){ //remove char sub from string then returns a stringstream from the modified input string
     replace(in.begin(), in.end(), sub, ' ');
@@ -142,7 +142,7 @@ int num_of_words(const string &in){
 template<typename type> bool check_existence(const vector<type> &vec, const type &el){
     bool found=false;
     for(const type &x : vec){
-        if(x==vec){ found=true; }
+        if(x==el){ found=true; }
     }
     return found;
 }

@@ -1,9 +1,7 @@
 #ifndef CS_PROJECT_TABLE_H
 #define CS_PROJECT_TABLE_H
-#include "../../utility.h"
 #include "../Date/Date.h"
-#include "../Time/Time.h"
-
+#include <vector>
 using namespace std;
 
 template<typename type> class Column{
@@ -19,6 +17,8 @@ private:
     vector<string> elementsTypes;
     vector<string> elementsNames;
     vector<void *> cols;
+    static bool check_CREATE_syntax(string in, const bool &show_err=true);
+    static vector<string> get_CREATE_data(string in);
 public:
     void* create_col(const string &in);
 

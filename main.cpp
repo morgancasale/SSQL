@@ -6,7 +6,7 @@ int main(int argc, char **argv) {
     Database data1;
     if(argc>2){
         script=true;
-        data1.process_script_command(argv[1]);
+        //data1.process_script_command(argv[1]);
     }
     string choice;
     int comm_i=0;

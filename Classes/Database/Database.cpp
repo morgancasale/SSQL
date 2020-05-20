@@ -1,4 +1,4 @@
-<#include "Database.h"
+#include "Database.h"
 #include "../../core.h"
 
 bool Database::check_Table(const string &in, const bool show_err) {
