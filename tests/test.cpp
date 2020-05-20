@@ -1,5 +1,5 @@
 #include <iostream>
-#include "template.h"
+#include "../utility.h"
 using namespace std;
 
 template<typename type> class col{
@@ -16,7 +16,8 @@ public:
 };
 
 int main(){
-    Table2 t("id int not null");
+    Table t;
+    t.create_col("id int");
     cout<<"w";
     return 0;
 }

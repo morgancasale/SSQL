@@ -139,4 +139,12 @@ int num_of_words(const string &in){
     return num;
 }
 
+template<typename type> bool check_existence(const vector<type> &vec, const type &el){
+    bool found=false;
+    for(const type &x : vec){
+        if(x==vec){ found=true; }
+    }
+    return found;
+}
+
 #endif

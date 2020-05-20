@@ -16,12 +16,15 @@ public:
 class Table{
 private:
     string name;
-    vector<string> elements;
+    vector<string> elementsTypes;
+    vector<string> elementsNames;
     vector<void *> cols;
+public:
     void* create_col(const string &in);
 
 public:
     explicit Table(const string &in);
+    Table()=default;
     void Table2(const string &in);
     ~Table()=default;
     string get_name(){return name;}
