@@ -9,6 +9,7 @@ public:
     vector<type> values;
     string key;
     bool not_null;
+    bool auto_increment;
 };
 
 class Table{
@@ -20,7 +21,7 @@ private:
     static bool check_CREATE_syntax(string in, const bool &show_err=true);
     static vector<string> get_CREATE_data(string in);
 public:
-    void* create_col(const string &in);
+    void* create_col(string in);
 
 public:
     explicit Table(const string &in);

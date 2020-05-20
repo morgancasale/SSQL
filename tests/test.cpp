@@ -4,7 +4,7 @@ using namespace std;
 
 int main(){
     Table t;
-    t.create_col("id int");
+    t.create_col("id int auto_increment");
     cout<<"w";
     return 0;
 }
