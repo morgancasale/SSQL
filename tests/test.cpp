@@ -1,19 +1,6 @@
 #include <iostream>
-#include "../utility.h"
+#include "../Classes/Table/Table.h"
 using namespace std;
-
-template<typename type> class col{
-private:
-    static type value;
-
-public:
-    type get_value(){
-        return value;
-    }
-    void set_value(const type &in){
-        value=in;
-    }
-};
 
 int main(){
     Table t;
