@@ -157,6 +157,7 @@ vector<string> Table::get_CREATE_data(string in){
     return data;
 }
 
-void Table::Table2(const string &in) {
-    cols.push_back(create_col(in));
+void Table::empty_table() {
+    for (int i = 0; i < cols.size(); i++)
+        static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
 }

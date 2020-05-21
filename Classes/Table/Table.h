@@ -14,19 +14,20 @@ public:
 class Table{
 private:
     string name;
-    vector<string> elementsTypes;
-    vector<string> elementsNames;
-    vector<void *> cols;
     static bool check_CREATE_syntax(string in, const bool &show_err=true);
     static vector<string> get_CREATE_data(string in);
+    vector<void *> cols;
+    vector<string> elementsTypes;
+    vector<string> elementsNames;
 public:
     void* create_col(const string &in);
 
 public:
     explicit Table(const string &in);
     Table()=default;
-    void Table2(const string &in);
     ~Table()=default;
+    void set_name(string name){name=name;}
     string get_name(){return name;}
+    void empty_table();
 };
 #endif //CS_PROJECT_TABLE_H

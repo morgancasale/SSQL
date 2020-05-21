@@ -6,6 +6,7 @@ int main(){
     Table t;
     t.create_col("id int");
     cout<<"w";
+    t.delete_table();
     return 0;
 }
 

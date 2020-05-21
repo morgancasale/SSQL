@@ -31,10 +31,22 @@ bool Database::process_command(const string &choice, const string &command) {
         }
     } else
     if(command=="drop table"){
-        delete_Table(choice);
+        bool err=true;  int j=0;
+        for(int i=0; i<Tables.size(); i++){
+            if(Tables[i].get_name() == choice)  err=false;   j=i;
+        }
+        if(!err) Tables.erase(Tables.begin()+j);
+        else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="trunc table"){
-        empty_Table(choice);
+        bool err=true;  int j=0;
+        for(int i=0; i<Tables.size(); i++){
+            if(Tables[i].get_name() == choice)  err=false;   j=i;
+        }
+        if(!err){
+            Tables[j].empty_table();
+        }
+        else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
         add_Row_to_Table(choice);

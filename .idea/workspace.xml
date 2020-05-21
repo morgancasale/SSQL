@@ -16,14 +16,7 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/Morgan_test" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </select>
+    <select />
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
@@ -38,17 +31,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="Advanced Table constructor even further">
+    <list default="true" id="cc0bd6ea-1aa1-4aec-934c-f6e5c7ca676b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Classes/Database/Database.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Database/Database.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Date/Date.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Date/Date.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Classes/Table/Table.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Table/Table.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Classes/Table/Table.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Table/Table.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Time/Time.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Time/Time.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Time/Time.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Time/Time.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/syntax.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utility.h" beforeDir="false" afterPath="$PROJECT_DIR$/utility.h" afterDir="false" />
     </list>
@@ -75,7 +62,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="OCResolveContextSettings">
-    <option name="configuration" value="0-Debug-CS_Project_meta" />
+    <option name="configuration" value="0-Debug-CS_project_test" />
   </component>
   <component name="ProjectId" id="1bUpOqKFuctNpkTYrA5chakydak" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -100,7 +87,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -135,7 +122,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="55cfbc96-50f6-466b-be82-93c3b4afc53d" name="Default Changelist" comment="" />
+      <changelist id="cc0bd6ea-1aa1-4aec-934c-f6e5c7ca676b" name="Default Changelist" comment="" />
       <created>1588696496604</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -152,6 +139,7 @@
       <workItem from="1589984089877" duration="3125000" />
       <workItem from="1589995826523" duration="2570000" />
       <workItem from="1590005748952" duration="2459000" />
+      <workItem from="1590048328429" duration="10344000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -288,25 +276,29 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state width="1877" height="347" key="GridCell.Tab.0.bottom" timestamp="1590007620741">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="179" key="GridCell.Tab.0.bottom" timestamp="1590043974084">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1877" height="347" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1323" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590043974084" />
     <state width="1878" height="245" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.0.center" timestamp="1590007620741">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="179" key="GridCell.Tab.0.center" timestamp="1590043974083">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1877" height="347" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1323" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
     <state width="1878" height="245" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.0.left" timestamp="1590007620741">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="179" key="GridCell.Tab.0.left" timestamp="1590043974083">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1877" height="347" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1323" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
     <state width="1878" height="245" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.0.right" timestamp="1590007620741">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1323" height="179" key="GridCell.Tab.0.right" timestamp="1590043974083">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1877" height="347" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1323" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
     <state width="1878" height="245" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
     <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1590007621433">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -328,9 +320,10 @@
     </state>
     <state width="1877" height="347" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007621433" />
     <state width="1878" height="245" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state x="2180" y="234" width="992" height="737" key="SettingsEditor" timestamp="1589751050545">
-      <screen x="1920" y="0" width="1920" height="1080" />
+    <state x="185" y="20" width="916" height="708" key="SettingsEditor" timestamp="1590071208734">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="185" y="20" width="916" height="708" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1590071208734" />
     <state x="2180" y="234" width="992" height="737" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751050545" />
     <state x="783" y="433" key="VCS.ChangelistChooser" timestamp="1590004964610">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -349,10 +342,11 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590006328305" />
-    <state x="648" y="232" key="git4idea.branch.GitSmartOperationDialog" timestamp="1589986989024">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="461" y="153" key="git4idea.branch.GitSmartOperationDialog" timestamp="1590043038725">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="648" y="232" key="git4idea.branch.GitSmartOperationDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589986989024" />
+    <state x="461" y="153" key="git4idea.branch.GitSmartOperationDialog/0.0.1366.728@0.0.1366.728" timestamp="1590043038725" />
     <state x="736" y="305" key="refactoring.ChangeSignatureDialog" timestamp="1589549338042">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -365,30 +359,5 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2605" y="468" width="540" height="178" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589732958047" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/tests/test.cpp</url>
-          <line>5</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Classes/Table/Table.cpp</url>
-          <line>15</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="CMakeRunConfiguration">
-        <watch expression="in[i]" language="ObjectiveC" />
-        <watch expression="first_line[first_line.size()-1]" language="ObjectiveC" />
-        <watch expression="int a=in.find(&quot;);&quot;)" language="ObjectiveC" />
-        <watch expression="i" language="ObjectiveC" />
-        <watch expression="in[i]" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>
