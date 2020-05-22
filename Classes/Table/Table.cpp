@@ -171,18 +171,7 @@ vector<string> Table::get_CREATE_data(string in){
     return data;
 }
 
-
-int Table::find_col(const string &in){
-    int i=0;
-    bool found=false;
-    for(; i<elementsNames.size() and !found; i++){
-        if(elementsNames[i]==in){
-            found=true;
-        }
-    }
-    if(!found){
-        return -1;
-    } else{
-        return i;
-    }
+void Table::empty_table() {
+    for (int i = 0; i < cols.size(); i++)
+        static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
 }

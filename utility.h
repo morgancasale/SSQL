@@ -63,10 +63,10 @@ string substr_from_c_to_c(const string &in, const int &c1, const int &c2, const 
 
 
 
-bool remove_duplicate_chars(string &in, vector<char> c, const bool &show_err=true){
+bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=true){
     bool err=false;
 
-    for(char tmp: c){
+    for(const char & tmp: c){
         int last_c=in.find(tmp); //finds the position of the first occurrence of the character tmp
         if(last_c != -1){ //find returns -1 if the characters isn't found
             for(int i= last_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from last_c
@@ -147,6 +147,17 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
     return found;
 }
 
-bool check_data_consistence(str)
+template <typename T=int>
+T string_to_type(const string& in, bool show_err=false){
+    T a;
+    if(in=="int") {int b; a=b;}
+    else if(in=="float")  {float b; a=b;}
+    else if(in=="char") {char b;a=b;}
+    else if(in=="string" or in=="text")  {string b; a=b;}
+    else if(in=="date") {Date b;a=b;}
+    else if(in=="time")  {Time b; a=b;}
+    else if(show_err)   {cerr<<endl<<"Type "<<in<<" not suported"<<endl; void* b;  a=b; }
+    return a;
+};
 
 #endif

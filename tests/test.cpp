@@ -6,6 +6,7 @@ int main(){
     Table t;
     t.create_col("id int auto_increment");
     cout<<"w";
+    t.delete_table();
     return 0;
 }
 
