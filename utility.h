@@ -20,33 +20,36 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
     }
     return in;
 }
-
-string substr_from_c_to_c(const string &in, const int &c1, const int &c2, const char &f1= ' ', const char &f2=' ', const bool &show_error=true) { //it return the sub string from the c1 character f1 to the c2 character f2, enter c1=0 to take from beginning and c2=-1 to take up to the end
+// it return the substring from the n(counter1) instance of char1
+// to the n(counter2) instance of char2
+// tricks: counter1=0 to take from beginning ignoring char1
+//         and counter2=-1 to take up to the end ignoring char2
+string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ', const bool &show_error=true) {
     int start=0, end=1;
-    int char1=0, i=0, char2=0;
+    int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
-    for(; i<in.size() and char2 != c2; i++){
-        if(in[i] == f1){
-            char1++;
+    for(; i<in.size() and tmpCounter2 != counter2; i++){
+        if(in[i] == char1){
+            tmpCounter1++;
         }
-        if(in[i] == f2){
-            char2++;
+        if(in[i] == char2){
+            tmpCounter2++;
         }
-        if(char1 == c1 and !found1){
+        if(tmpCounter1 == counter1 and !found1){
             start=i+1;
             found1=true;
         }
     }
 
-    if(in[i-1]==f2){
+    if(in[i-1] == char2){
         found2=true;
     }
 
     end=i-1;
-    if(c1==0){
+    if(counter1 == 0){
         start=0;
     }
-    if(c2==-1){
+    if(counter2 == -1){
         end=in.size();
         found2=true;
     }
