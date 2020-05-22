@@ -86,7 +86,7 @@ bool Database::INSERT_INTO(string in){
         vector<string> elementsNames;
         vector<string> elementsValues;
         get_INSERT_INTO_data(in, Table_i, elementsNames, elementsValues);
-        set_INSERT_INTO_data(in, Table_i, elementsNames, elementsValues);
+        set_INSERT_INTO_data(Table_i, elementsNames, elementsValues);
     } else{
         cerr<<endl<<"There is no Table with name "<<Table<<"!";
         return false;
@@ -119,14 +119,19 @@ void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<strin
     }
 }
 
-bool Database::set_INSERT_INTO_data(string in, const int & Table_i, const vector<string> & elementsNames, const vector<string> & elementsValues){
+bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & elementsNames, const vector<string> & elementsValues){
     bool err=false;
     for(int i=0; i<elementsNames.size(); i++){
-        int col_i=Tables[Table_i].find_col(elementsNames[i]);
+        int col_i=Tables[Table_i].find_col_by_name(elementsNames[i]);
+        if(col_i!=-1) {
+            string type;
+            if(check_data_consistence(elementsValues[i], type=Tables[Table_i].elementsTypes[col_i])) {
 
-        if(check_data_consistence(elementsValues[i], Tables[Table_i].elementsTypes[col_i])){
-
+            } else{
+                err = true;
+            }
         } else{
+            cerr<<endl<<"No column with name "<<elementsNames[i]<<" is in the table!";
             err=true;
         }
     }

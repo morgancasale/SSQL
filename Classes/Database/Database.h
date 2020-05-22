@@ -45,7 +45,7 @@ public:
     void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
                               vector<string> &elementsValues);
 
-    bool set_INSERT_INTO_data(string in, const int &Table_i, const vector<string> &elementsNames,
+    bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
                               const vector<string> &elementsValues);
 };
 
