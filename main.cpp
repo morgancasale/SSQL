@@ -1,5 +1,6 @@
 #include <iostream>
 #include "core.h"
+#include "syntax.h"
 using namespace std;
 
 int main(int argc, char **argv) {
@@ -9,6 +10,7 @@ int main(int argc, char **argv) {
         //data1.process_script_command(argv[1]);
     }
     string choice;
+    string command;
     int comm_i=0;
     do{
         if(argc==1){
@@ -20,12 +22,10 @@ int main(int argc, char **argv) {
             cin>>choice;
         }
 
-        clean_input(choice);
-        string command;
-        if(data1.check_command(choice, true, command)){
-            data1.process_command(choice, command);
-        }
-    }while(choice!="quit()");
+        command=take_command(choice);
+        if(command!="/err") data1.process_command(choice, command);
+
+    }while(command!="quit()");
 
 
 

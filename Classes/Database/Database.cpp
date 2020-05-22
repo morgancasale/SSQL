@@ -1,5 +1,6 @@
 #include "Database.h"
-#include "../../core.h"
+#include "../../syntax.h"
+
 
 bool Database::check_Table(const string &in, const bool show_err) {
     bool err=false;
@@ -30,7 +31,7 @@ bool Database::process_command(const string &choice, const string &command) {
             Tables[Tables.size()]=temp; //that is copied to the last ( == new ) Table of the Database
         }
     } else
-    if(command=="drop table"){
+    if(command=="drop table" and control_drop(choice)){
         bool err=true;  int j=0;
         for(int i=0; i<Tables.size(); i++){
             if(Tables[i].get_name() == choice)  err=false;   j=i;
@@ -38,14 +39,12 @@ bool Database::process_command(const string &choice, const string &command) {
         if(!err) Tables.erase(Tables.begin()+j);
         else     cerr<<"la tabella non esiste"<<endl;
     } else
-    if(command=="trunc table"){
+    if(command=="truncate table" and control_truncate(choice)){
         bool err=true;  int j=0;
         for(int i=0; i<Tables.size(); i++){
             if(Tables[i].get_name() == choice)  err=false;   j=i;
         }
-        if(!err){
-            Tables[j].empty_table();
-        }
+        if(!err)    Tables[j].empty_table();
         else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
@@ -60,18 +59,5 @@ bool Database::process_command(const string &choice, const string &command) {
     if(command=="select"){
         print_selected_data(choice);
     }
-}
-
-bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
-    bool err=true;
-    for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
-        if(((command= substr_from_c_to_c(input, 0, 1, ' ')) == tmp) or ((command= substr_from_c_to_c(input, 0, 2, ' ')) == tmp)){
-            err=false;
-        }
-    }
-    if(show_error and err){
-        cerr<<"This command doesn't exist!";
-    }
-    return err;
 }
 
