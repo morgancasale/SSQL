@@ -147,4 +147,6 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
     return found;
 }
 
+bool check_data_consistence(str)
+
 #endif

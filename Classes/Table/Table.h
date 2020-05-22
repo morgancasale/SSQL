@@ -15,7 +15,6 @@ public:
 class Table{
 private:
     string name;
-    vector<string> elementsTypes;
     vector<string> elementsNames;
     vector<void *> cols;
     static bool check_CREATE_syntax(string in, const bool &show_err=true);
@@ -23,11 +22,14 @@ private:
 public:
     void* create_col(string in);
 
+    vector<string> elementsTypes;
 public:
     explicit Table(const string &in);
     Table()=default;
     void Table2(const string &in);
     ~Table()=default;
-    string get_name(){return name;}
+    string get_name(){ return name; }
+
+    int find_col(const string &in);
 };
 #endif //CS_PROJECT_TABLE_H
