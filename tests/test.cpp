@@ -1,12 +1,11 @@
 #include <iostream>
-#include "../Classes/Table/Table.h"
+//#include "../Classes/Table/Table.h"
+//#include "../utility.h"
 using namespace std;
 
 int main(){
-    Table t;
-    t.create_col("id int");
-    cout<<"w";
-    t.delete_table();
+    char a=39;
+    cout<<a;
     return 0;
 }
 

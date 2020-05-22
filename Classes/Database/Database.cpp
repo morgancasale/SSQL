@@ -60,4 +60,93 @@ bool Database::process_command(const string &choice, const string &command) {
         print_selected_data(choice);
     }
 }
+bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
+    bool err=true;
+    for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
+        if(((command= substr_from_c_to_c(input, 0, 1, ' ')) == tmp) or ((command= substr_from_c_to_c(input, 0, 2, ' ')) == tmp)){
+            err=false;
+        }
+    }
+    if(show_error and err){
+        cerr<<"This command doesn't exist!";
+    }
+    return err;
+}
 
+bool Database::INSERT_INTO(string in){
+    bool err=false;
+
+    string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
+    erase_substr(in, Table+" (");
+    int Table_i=find_Table(Table);
+
+    if(Table_i!=-1) {
+        vector<string> elementsNames;
+        vector<string> elementsValues;
+        get_INSERT_INTO_data(in, Table_i, elementsNames, elementsValues);
+        set_INSERT_INTO_data(Table_i, elementsNames, elementsValues);
+    } else{
+        cerr<<endl<<"There is no Table with name "<<Table<<"!";
+        return false;
+    }
+
+}
+
+void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<string> & elementsNames, vector<string> & elementsValues){
+    for(; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" ";){
+        string elementName=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
+        if(elementName=="/err"){
+            elementName=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
+            erase_substr(in, elementName);
+        }else{
+            erase_substr(in, elementName+",");
+        }
+        elementsNames.push_back(elementName);
+    }
+
+    erase_substr(in, " ) values (");
+    for(int i=0; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" "; i++){
+        string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
+        if(elementValue=="/err"){
+            elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
+            erase_substr(in, elementValue);
+        }else{
+            erase_substr(in, elementValue+",");
+        }
+        elementsValues.push_back(elementValue);
+    }
+}
+
+bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & elementsNames, const vector<string> & elementsValues){
+    bool err=false;
+    for(int i=0; i<elementsNames.size(); i++){
+        int col_i=Tables[Table_i].find_col_by_name(elementsNames[i]);
+        if(col_i!=-1) {
+            string type;
+            if(check_data_consistence(elementsValues[i], type=Tables[Table_i].elementsTypes[col_i])) {
+
+            } else{
+                err = true;
+            }
+        } else{
+            cerr<<endl<<"No column with name "<<elementsNames[i]<<" is in the table!";
+            err=true;
+        }
+    }
+
+}
+
+int Database::find_Table(const string &in) {
+    int i=0;
+    bool found=false;
+    for(; i<Tables.size() and !found; i++){
+        if(Tables[i].get_name()==in){
+            found=true;
+        }
+    }
+    if(!found){
+        return -1;
+    } else{
+        return i;
+    }
+}

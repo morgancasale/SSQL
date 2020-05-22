@@ -6,6 +6,7 @@ using namespace std;
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include "Classes/Date/Date.h"
 
 stringstream data_ss(string in, const char &sub){ //remove char sub from string then returns a stringstream from the modified input string
     replace(in.begin(), in.end(), sub, ' ');
@@ -153,14 +154,47 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
 template <typename T=int>
 T string_to_type(const string& in, bool show_err=false){
     T a;
-    if(in=="int") {int b; a=b;}
-    else if(in=="float")  {float b; a=b;}
-    else if(in=="char") {char b;a=b;}
+    if(in=="int") { int b; a=b; }
+    else if(in=="float")  { float b; a=b; }
+    else if(in=="char") { char b;a=b; }
     else if(in=="string" or in=="text")  {string b; a=b;}
-    else if(in=="date") {Date b;a=b;}
-    else if(in=="time")  {Time b; a=b;}
-    else if(show_err)   {cerr<<endl<<"Type "<<in<<" not suported"<<endl; void* b;  a=b; }
+    else if(in=="date") { Date b;a=b; }
+    else if(in=="time") { Time b; a=b; }
+    else if(show_err) { cerr<<endl<<"Type "<<in<<" not supported"<<endl; void* b;  a=b; }
     return a;
 };
+
+bool check_data_consistence(const string & var, const string & to_check){
+    bool response=false;
+    if(substr_from_c_to_c(var, 1, 2, '"', '"', false)!="/err"){
+        response = (to_check == "string");
+    } else
+    if(substr_from_c_to_c(var, 1, 2, 39, 39, false)!="/err"){ //char a=39 --> a='
+        response = (to_check == "char");
+    } else
+    if(var.find(".")!=-1){
+        bool Date_resp;
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
+            response = (to_check=="time");
+        }else
+        if(Date_resp){
+            response = (to_check=="date");
+        }else{
+            response = (to_check=="float");
+        }
+    } else
+    if(var.find(":")!=-1){
+        bool Date_resp;
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
+            response = (to_check=="time");
+        }else
+        if(Date_resp){
+            response = (to_check=="date");
+        }
+    } else{
+        response = (to_check=="int");
+    }
+    return response;
+}
 
 #endif

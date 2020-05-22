@@ -10,6 +10,7 @@ public:
     vector<type> values;
     string key;
     bool not_null;
+    bool auto_increment;
 };
 
 class Table{
@@ -17,11 +18,11 @@ private:
     string name;
     static vector<string> get_CREATE_data(string in);
     vector<void *> cols;
-    vector<string> elementsTypes;
     vector<string> elementsNames;
 public:
-    void* create_col(const string &in);
+    void* create_col(string in);
 
+    vector<string> elementsTypes;
 public:
     explicit Table(const string &in);
     Table()=default;
@@ -29,5 +30,7 @@ public:
     void set_name(string name){name=name;}
     string get_name(){return name;}
     void empty_table();
+
+    int find_col_by_name(const string &in);
 };
 #endif //CS_PROJECT_TABLE_H
