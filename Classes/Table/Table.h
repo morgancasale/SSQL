@@ -17,17 +17,18 @@ private:
     string name;
     static bool check_CREATE_syntax(string in, const bool &show_err=true);
     static vector<string> get_CREATE_data(string in);
-    vector<void *> cols;
-    vector<string> elementsNames;
+
 public:
     void* create_col(string in);
 
     vector<string> elementsTypes;
+    vector<void *> cols;
+    vector<string> elementsNames;
 public:
     explicit Table(const string &in);
     Table()=default;
     ~Table()=default;
-    void set_name(string name){name=name;}
+    void set_name(string name_in){name=name_in;}
     string get_name(){return name;}
     void empty_table();
 

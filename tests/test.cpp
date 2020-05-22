@@ -1,11 +1,27 @@
 #include <iostream>
+#include <vector>
 //#include "../Classes/Table/Table.h"
 //#include "../utility.h"
 using namespace std;
 
+template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
+    for(int i=0; i<minuend.size(); i++){
+        for(int j=0; j<subtrahend.size(); j++){
+            if(minuend[i]==subtrahend[j]){
+                for(int k=i; k<minuend.size()-1; k++){
+                    minuend[k]=minuend[k+1];
+                }
+                minuend.resize(minuend.size()-1);
+            }
+        }
+    }
+    return minuend;
+}
+
 int main(){
-    char a=39;
-    cout<<a;
+    vector<char> a={'a', 'b', 'c'}, b={'b', 'c'};
+    a=a-b;
+    cout<<"a";
     return 0;
 }
 

@@ -73,6 +73,72 @@ bool Database::check_command(const string &input, const bool &show_error, string
     return err;
 }
 
+bool Database::check_not_filled(const int & Table_i, const vector<string> filled_elements){
+    bool err=false;
+    vector<string> not_filled=Tables[Table_i].elementsNames-filled_elements;
+
+    for(int i=0; i<Tables[Table_i].cols.size(); i++){
+        for(const string & el: not_filled){
+            if(Tables[Table_i].elementsTypes[i]=="int"){
+                if((*static_cast<Column<int>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<int>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            } else
+            if(Tables[Table_i].elementsTypes[i]=="float"){
+                if((*static_cast<Column<float>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<float>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            } else
+            if(Tables[Table_i].elementsTypes[i]=="char"){
+                if((*static_cast<Column<char>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<char>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            } else
+            if(Tables[Table_i].elementsTypes[i]=="string"){
+                if((*static_cast<Column<char>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<char>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            } else
+            if(Tables[Table_i].elementsTypes[i]=="time"){
+                if((*static_cast<Column<Time>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<Time>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            } else
+            if(Tables[Table_i].elementsTypes[i]=="date"){
+                if((*static_cast<Column<Date>*>(Tables[Table_i].cols[i])).key==el and
+                   (*static_cast<Column<Date>*>(Tables[Table_i].cols[i])).not_null){
+                    err=true;
+                }
+            }
+        }
+    }
+
+    if(err){
+        cerr<<endl<<"An element set as not null was not filled!";
+    }
+    return err;
+}
+
+void Database::auto_increment(const int & Table_i){
+    for(int i=0; i<Tables[Table_i].cols.size(); i++){
+        if(Tables[Table_i].elementsTypes[i]=="int"){
+            if((*static_cast<Column<int>*>(Tables[Table_i].cols[i])).auto_increment){
+                (*static_cast<Column<int>*>(Tables[Table_i].cols[i])).values.resize((*static_cast<Column<int>*>(Tables[Table_i].cols[i])).values.size()+1);
+                if(Table_i>0){
+                    (*static_cast<Column<int>*>(Tables[Table_i].cols[i])).values[(*static_cast<Column<int>*>(Tables[Table_i-1].cols[i])).values.size()]++;
+                } else{
+                    (*static_cast<Column<int>*>(Tables[Table_i].cols[i])).values[(*static_cast<Column<int>*>(Tables[Table_i-1].cols[i])).values.size()]=0;
+                }
+            }
+        }
+    }
+}
+
 bool Database::INSERT_INTO(string in){
     bool err=false;
 
@@ -84,12 +150,17 @@ bool Database::INSERT_INTO(string in){
         vector<string> elementsNames;
         vector<string> elementsValues;
         get_INSERT_INTO_data(in, Table_i, elementsNames, elementsValues);
-        set_INSERT_INTO_data(Table_i, elementsNames, elementsValues);
+        err=set_INSERT_INTO_data(Table_i, elementsNames, elementsValues);
+        err=check_not_filled(Table_i, elementsNames);
+        if(!err){
+            auto_increment(Table_i);
+        }
+
     } else{
         cerr<<endl<<"There is no Table with name "<<Table<<"!";
-        return false;
+        err=true;
     }
-
+    return err;
 }
 
 void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<string> & elementsNames, vector<string> & elementsValues){
@@ -117,6 +188,8 @@ void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<strin
     }
 }
 
+
+
 bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & elementsNames, const vector<string> & elementsValues){
     bool err=false;
     for(int i=0; i<elementsNames.size(); i++){
@@ -124,8 +197,9 @@ bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & 
         if(col_i!=-1) {
             string type;
             if(check_data_consistence(elementsValues[i], type=Tables[Table_i].elementsTypes[col_i])) {
-
+                err=cast_data(Tables[i], col_i, type, elementsValues[i]);
             } else{
+                cerr<<endl<<"Some of the data is not compatible with the respective column!";
                 err = true;
             }
         } else{
@@ -133,7 +207,7 @@ bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & 
             err=true;
         }
     }
-
+    return err;
 }
 
 int Database::find_Table(const string &in) {

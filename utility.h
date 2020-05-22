@@ -7,6 +7,7 @@ using namespace std;
 #include <sstream>
 #include <vector>
 #include "Classes/Date/Date.h"
+#include "Classes/Table/Table.h"
 
 stringstream data_ss(string in, const char &sub){ //remove char sub from string then returns a stringstream from the modified input string
     replace(in.begin(), in.end(), sub, ' ');
@@ -148,50 +149,167 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
     return found;
 }
 
-template <typename T=int>
-T string_to_type(const string& in, bool show_err=false){
-    T a;
-    if(in=="int") { int b; a=b; }
-    else if(in=="float")  { float b; a=b; }
-    else if(in=="char") { char b;a=b; }
-    else if(in=="string" or in=="text")  {string b; a=b;}
-    else if(in=="date") { Date b;a=b; }
-    else if(in=="time") { Time b; a=b; }
-    else if(show_err) { cerr<<endl<<"Type "<<in<<" not supported"<<endl; void* b;  a=b; }
-    return a;
-};
+bool is_a_Time(const string & var){
+    bool response=true;
+
+    int hours, min, sec;
+
+    char sub;
+    if(var.find(':')!=-1){
+        sub=':';
+    }
+    else if(var.find('.')!=-1){
+        sub='.';
+    }else{
+        response=false;
+    }
+    if(response){
+        stringstream ss=data_ss(var, sub);
+        ss>>hours>>min>>sec;
+        if(hours<0 or hours>24){ //checks hours
+            response=false;
+        }
+        if(min<0 or min>60){ //checks minutes
+            response=false;
+        }
+        if(sec<0 or sec>60){
+            response=false;
+        }
+    }
+
+    return response;
+}
+bool is_a_Date(const string & var){
+    bool response=true;
+
+    int day, month, year;
+
+    char sub;
+    bool err=false;
+    if(var.find(':')!=-1){
+        sub=':';
+    } else if(var.find('.')!=-1){
+        sub='.';
+    } else if(var.find('/')!=-1){
+        sub='/';
+    } else{
+        response=false;
+    }
+
+    if(response){
+        stringstream ss=data_ss(var, sub);
+        ss>>day>>month>>year;
+
+        if(month<0 or month>12){
+            response=false;
+        }
+        if(response) {
+            switch (month) {
+                default:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    if (day < 0 or day > 31) {
+                        response = false;
+                    }
+                    break;
+                case 2:
+                    if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
+                        response = false;
+                    }
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    if (day < 0 or day > 30) {
+                        response = false;
+                    }
+                    break;
+            }
+        }
+    }
+    return response;
+}
 
 bool check_data_consistence(const string & var, const string & to_check){
     bool response=false;
+
     if(substr_from_c_to_c(var, 1, 2, '"', '"', false)!="/err"){
         response = (to_check == "string");
     } else
     if(substr_from_c_to_c(var, 1, 2, 39, 39, false)!="/err"){ //char a=39 --> a='
         response = (to_check == "char");
     } else
-    if(var.find(".")!=-1){
+    if(var.find('.')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
-            response = (to_check=="time");
-        }else
-        if(Date_resp){
-            response = (to_check=="date");
-        }else{
-            response = (to_check=="float");
-        }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
+        else if(Date_resp){ response = (to_check=="date"); }
+        else{ response = (to_check=="float"); }
     } else
-    if(var.find(":")!=-1){
+    if(var.find(':')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
-            response = (to_check=="time");
-        }else
-        if(Date_resp){
-            response = (to_check=="date");
-        }
-    } else{
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
+        else if(Date_resp){ response = (to_check=="date"); }
+    } else
+    if(var.find('/')!=-1){ response = (to_check=="date"); }
+    else{
         response = (to_check=="int");
     }
+
     return response;
+}
+
+bool cast_data(Table & table, const int & col_i, const string & type, const string & data){
+    bool auto_increment_err=false;
+    if(type=="int"){
+        if((*static_cast<Column<int>*>(table.cols[col_i])).auto_increment){
+            auto_increment_err=true;
+        } else{
+            (*static_cast<Column<int>*>(table.cols[col_i])).values.push_back(stoi(data));
+        }
+    } else
+    if(type=="float"){
+        (*static_cast<Column<float>*>(table.cols[col_i])).values.push_back(stof(data));
+    } else
+    if(type=="char"){
+        (*static_cast<Column<char>*>(table.cols[col_i])).values.push_back(data[1]);
+    } else
+    if(type=="string"){
+        string data_tmp=substr_from_c_to_c(data, 1, 2, '"', '"', false);
+        (*static_cast<Column<string>*>(table.cols[col_i])).values.push_back(data_tmp);
+    } else
+    if(type=="time"){
+        (*static_cast<Column<Time>*>(table.cols[col_i])).values.resize((*static_cast<Column<Time>*>(table.cols[col_i])).values.size()+1); //Increase Time vector of one
+        (*static_cast<Column<Time>*>(table.cols[col_i])).values.end()->set_time(data);
+    } else
+    if(type=="date"){
+        (*static_cast<Column<Date>*>(table.cols[col_i])).values.resize((*static_cast<Column<Date>*>(table.cols[col_i])).values.size()+1); //Increase Date vector of one
+        (*static_cast<Column<Date>*>(table.cols[col_i])).values.end()->set_Date(data);
+    }
+
+    if(auto_increment_err){
+        cerr<<endl<<"It isn't possible to enter data in a column if auto_increment was chosen for it!";
+    }
+    return auto_increment_err;
+}
+
+template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
+    for(int i=0; i<minuend.size(); i++){
+        for(int j=0; j<subtrahend.size(); j++){
+            if(minuend[i]==subtrahend[j]){
+                for(int k=i; k<minuend.size()-1; k++){
+                    minuend[k]=minuend[k+1];
+                }
+                minuend.resize(minuend.size()-1);
+            }
+        }
+    }
+    return minuend;
 }
 
 #endif

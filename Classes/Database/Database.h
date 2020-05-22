@@ -47,6 +47,10 @@ public:
 
     bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
                               const vector<string> &elementsValues);
+
+    bool check_not_filled(const int &Table_i, const vector<string> not_filled);
+
+    void auto_increment(const int &Table_i);
 };
 
 void a(const string &in){
