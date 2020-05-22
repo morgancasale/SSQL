@@ -6,6 +6,7 @@
 class Database {
 public:
     vector<Table> Tables;
+    vector<string> TablesNames;
 
     string allowed_coms[8]={
             "create table",
@@ -23,6 +24,7 @@ public:
 
     bool check_Table(const string &in, bool show_err=false);
 
+    bool INSERT_INTO(string in);
 
     bool delete_Table(string command);
 
@@ -36,7 +38,15 @@ public:
 
     bool print_selected_data(string command);
 
+    int find_Table(const string & in);
+
     ~Database()=default;
+
+    void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
+                              vector<string> &elementsValues);
+
+    bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
+                              const vector<string> &elementsValues);
 };
 
 void a(const string &in){

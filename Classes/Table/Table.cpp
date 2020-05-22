@@ -6,15 +6,20 @@ Table::Table(const string &in){
         cerr<<endl<<"CREATE command syntax error!";
     } else{
         vector<string> data=get_CREATE_data(in);
-        bool err=false;
-        for(int i=0; i<data.size() and !err; i++){
-            create_col(data[i]);
+        for(const auto &i : data){
+            create_col(i);
         }
     }
 }
 
-void *Table::create_col(const string &in) {
+void *Table::create_col(string in) {
     bool err=false;
+
+    bool auto_increment=false;
+    if(in.find("auto_increment")!=-1){
+        auto_increment=true;
+        erase_substr(in," auto_increment");
+    }
 
     bool notNull=false;
     string tmp;
@@ -33,6 +38,11 @@ void *Table::create_col(const string &in) {
         type=substr_from_c_to_c(in, 1, -1);
     }
 
+    if(type!="int" and auto_increment){
+        cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!";
+        return nullptr;
+    }
+
     if(check_existence(elementsNames, key) and !err){
         cerr<<"Column named "<<key<<" (of type "<<type<<") already exists!";
         return nullptr;
@@ -47,6 +57,7 @@ void *Table::create_col(const string &in) {
         static Column<int> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
+        tmp.auto_increment=auto_increment;
         return static_cast<void *>(&tmp);
     } else
     if(type=="float" and !err){
@@ -105,8 +116,10 @@ bool Table::check_CREATE_syntax(string in, const bool &show_err){ //it returns t
     if(end2!=-1 and !err){//this checks if there is the final substring ");" somewhere
         for(int i=0; i<end2 and !err and substr_from_c_to_c(in, 1, 1, '(', ')', false)!=" "; i++){ //this checks if every input starts with a space end ends with a ',', it considers input of two and three letters
             line=substr_from_c_to_c(in, 4, 1, ' ', ',', false);
-            if(num_of_words(line)>4){
-                err=true;
+            if(substr_from_c_to_c(in, 5, 6, ' ', ',', false)=="int"){
+                if(num_of_words(line)>5){ err=true; }
+            } else{
+                if (num_of_words(line) > 4) { err = true; }
             }
             if(line=="/err" and !err){
                 line=substr_from_c_to_c(in, 4, 1, ' ', ')', false);
@@ -119,6 +132,7 @@ bool Table::check_CREATE_syntax(string in, const bool &show_err){ //it returns t
             } else{
                 erase_substr(in, line+", ");
             }
+
         }
     } else{
         err=true;
@@ -160,4 +174,19 @@ vector<string> Table::get_CREATE_data(string in){
 void Table::empty_table() {
     for (int i = 0; i < cols.size(); i++)
         static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
+}
+
+int Table::find_col_by_name(const string &in) {
+    int i=0;
+    bool found=false;
+    for(; i<elementsNames.size() and !found; i++){
+        if(elementsNames[i]==in){
+            found=true;
+        }
+    }
+    if(!found){
+        return -1;
+    } else{
+        return i;
+    }
 }
