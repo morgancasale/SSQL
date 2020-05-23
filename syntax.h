@@ -91,12 +91,14 @@ bool control_insert(string in){
     if(secondLine.find('(')==in.npos or secondLine.find(')')==in.npos
        or num_of_words(secondLine.substr(0, secondLine.find('(')))!=1) return false;
     else {
-        //Fare controllo n parole=counter
+        //elimino le stringhe per non causare problemi al contatore dopo
+        for(int i=0;i<character_counter(secondLine,39);i++)
+            erase_substr(secondLine,substr_from_c_to_c(secondLine,1,1,39,39));
+        //controllo il numero di dati inseriti che corrisponda a counter
+        if(character_counter(secondLine,',')==counter-1) err=true;
+        else{return false;}
     }
     return err;
 }
-/*
-INSERT INTO CUSTOMERS (AGE, ADDRESS, NAME)
-VALUES (20, “via Roma 10, Torino”, “Francesco Rossi”);
-*/
+
 #endif //CS_PROJECT_SYNTAX_H

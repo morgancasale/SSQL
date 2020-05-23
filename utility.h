@@ -65,7 +65,13 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     }
 }
 
-
+int character_counter(const string & in, char char_to_count){
+    int counter=0;
+    for(char c:in){
+        if(c==char_to_count) counter++;
+    }
+    return counter;
+}
 
 bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=true){
     bool err=false;
