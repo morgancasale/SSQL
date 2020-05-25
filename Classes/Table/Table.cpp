@@ -1,5 +1,5 @@
 #include "Table.h"
-#include "../../utility.h"
+
 
 Table::Table(const string &in){
     if(!control_create(in)){
@@ -97,6 +97,7 @@ void *Table::create_col(string in) {
         cerr<<endl<<"CREATE input syntax error!";
         return nullptr;
     }
+    return nullptr;
 }
 
 vector<string> Table::get_CREATE_data(string in){

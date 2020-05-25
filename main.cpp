@@ -1,5 +1,10 @@
 #include <iostream>
-#include "Classes/Database/Database.h"
+#include "Classes/Table/Table.cpp"
+#include "syntax.h"
+#include "utility.h"
+#include "Classes/Date/Date.cpp"
+#include "Classes/Time/Time.cpp"
+#include "core.h"
 using namespace std;
 
 int main(int argc, char **argv) {

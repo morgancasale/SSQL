@@ -20,6 +20,7 @@ bool Database::check_Table(const string &in, const bool show_err) {
 }
 
 bool Database::process_command(const string &choice, const string &command) {
+    bool err=true;  int j=0;
     if(command=="quit()"){
     } else
     if(command=="create table"){
@@ -30,7 +31,6 @@ bool Database::process_command(const string &choice, const string &command) {
         }
     } else
     if(command=="drop table" and control_drop(choice)){
-        bool err=true;  int j=0;
         for(int i=0; i<Tables.size(); i++){
             if(Tables[i].get_name() == choice)  err=false;   j=i;
         }
@@ -38,7 +38,6 @@ bool Database::process_command(const string &choice, const string &command) {
         else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="truncate table" and control_truncate(choice)){
-        bool err=true;  int j=0;
         for(int i=0; i<Tables.size(); i++){
             if(Tables[i].get_name() == choice)  err=false;   j=i;
         }
@@ -46,17 +45,18 @@ bool Database::process_command(const string &choice, const string &command) {
         else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
-        add_Row_to_Table(choice);
+        //add_Row_to_Table(choice);
     } else
     if(command=="delete from"){
-        delete_Row_from_Table(choice);
+       //delete_Row_from_Table(choice);
     } else
     if(command=="update"){
-        update_Row_data(choice);
+        //update_Row_data(choice);
     } else
     if(command=="select"){
-        print_selected_data(choice);
+        //print_selected_data(choice);
     }
+    return err;
 }
 bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;

@@ -1,26 +1,32 @@
 #include <iostream>
-#include <vector>
-//#include "../Classes/Table/Table.h"
-//#include "../utility.h"
 using namespace std;
-
-template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
-    for(int i=0; i<minuend.size(); i++){
-        for(int j=0; j<subtrahend.size(); j++){
-            if(minuend[i]==subtrahend[j]){
-                for(int k=i; k<minuend.size()-1; k++){
-                    minuend[k]=minuend[k+1];
-                }
-                minuend.resize(minuend.size()-1);
-            }
-        }
-    }
-    return minuend;
-}
+#include "../Classes/Time/Time.cpp"
+#include "../Classes/Date/Date.cpp"
+#include "../utility.h"
+#include "../syntax.h"
+#include "../Classes/Table/Table.cpp"
+#include "../Classes/Database/Database.cpp"
 
 int main(){
-    vector<char> a={'a', 'b', 'c'}, b={'b', 'c'};
-    a=a-b;
+    stringstream ss=data_ss("ciao,dsfhgj", ',');
+
+    Time time;
+    cout<<time.get_hours();
+
+    Date date;
+    cout<<date.get_day();
+
+    cout<<endl<<character_counter("ccccc", 'c');
+
+    if(!control_create("frguhk")) cout<<endl<<"A";
+
+    Table table;
+    table.set_name("ciao");
+    cout<<endl<<table.get_name();
+
+    Database aaaa;
+    cout<<endl<<aaaa.allowed_coms[0];
+
     cout<<"a";
     return 0;
 }
