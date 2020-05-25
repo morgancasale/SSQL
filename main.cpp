@@ -1,12 +1,11 @@
 #include <iostream>
-#include "core.h"
-#include "syntax.h"
+#include "Classes/Database/Database.h"
 using namespace std;
 
 int main(int argc, char **argv) {
     Database data1;
     if(argc>2){
-        script=true;
+        //script=true;
         //data1.process_script_command(argv[1]);
     }
     string choice;
@@ -14,7 +13,7 @@ int main(int argc, char **argv) {
     int comm_i=0;
     do{
         if(argc==1){
-            script=true;
+            //script=true;
             choice=get_command_from_file(argv[1], comm_i);
         }
         if(argc==2){

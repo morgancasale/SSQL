@@ -122,8 +122,8 @@ vector<string> Table::get_CREATE_data(string in){
 }
 
 void Table::empty_table() {
-    for (int i = 0; i < cols.size(); i++)
-        static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
+    //for (int i = 0; i < cols.size(); i++)
+        //static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
 }
 
 int Table::find_col_by_name(const string &in) {

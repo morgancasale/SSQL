@@ -7,13 +7,6 @@ using namespace std;
 #include <sstream>
 #include <vector>
 #include "Classes/Date/Date.h"
-#include "Classes/Table/Table.h"
-
-stringstream data_ss(string in, const char &sub){ //remove char sub from string then returns a stringstream from the modified input string
-    replace(in.begin(), in.end(), sub, ' ');
-    stringstream ss(in);
-    return ss;
-}
 
 
 string tolower(string &in){ //converts all upper letters of a string to lower ones
@@ -271,40 +264,6 @@ bool check_data_consistence(const string & var, const string & to_check){
     }
 
     return response;
-}
-
-bool cast_data(Table & table, const int & col_i, const string & type, const string & data){
-    bool auto_increment_err=false;
-    if(type=="int"){
-        if((*static_cast<Column<int>*>(table.cols[col_i])).auto_increment){
-            auto_increment_err=true;
-        } else{
-            (*static_cast<Column<int>*>(table.cols[col_i])).values.push_back(stoi(data));
-        }
-    } else
-    if(type=="float"){
-        (*static_cast<Column<float>*>(table.cols[col_i])).values.push_back(stof(data));
-    } else
-    if(type=="char"){
-        (*static_cast<Column<char>*>(table.cols[col_i])).values.push_back(data[1]);
-    } else
-    if(type=="string"){
-        string data_tmp=substr_from_c_to_c(data, 1, 2, '"', '"', false);
-        (*static_cast<Column<string>*>(table.cols[col_i])).values.push_back(data_tmp);
-    } else
-    if(type=="time"){
-        (*static_cast<Column<Time>*>(table.cols[col_i])).values.resize((*static_cast<Column<Time>*>(table.cols[col_i])).values.size()+1); //Increase Time vector of one
-        (*static_cast<Column<Time>*>(table.cols[col_i])).values.end()->set_time(data);
-    } else
-    if(type=="date"){
-        (*static_cast<Column<Date>*>(table.cols[col_i])).values.resize((*static_cast<Column<Date>*>(table.cols[col_i])).values.size()+1); //Increase Date vector of one
-        (*static_cast<Column<Date>*>(table.cols[col_i])).values.end()->set_Date(data);
-    }
-
-    if(auto_increment_err){
-        cerr<<endl<<"It isn't possible to enter data in a column if auto_increment was chosen for it!";
-    }
-    return auto_increment_err;
 }
 
 template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){

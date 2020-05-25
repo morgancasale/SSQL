@@ -1,6 +1,5 @@
 #ifndef CS_PROJECT_TABLE_H
 #define CS_PROJECT_TABLE_H
-#include "../Date/Date.h"
 #include "../../syntax.h"
 #include <vector>
 using namespace std;

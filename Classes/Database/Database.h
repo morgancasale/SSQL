@@ -2,7 +2,6 @@
 #define CS_PROJECT_DATABASE_H
 #include <vector>
 #include "../Table/Table.h"
-
 class Database {
 public:
     vector<Table> Tables;
@@ -51,6 +50,8 @@ public:
     bool check_not_filled(const int &Table_i, const vector<string> & not_filled);
 
     void auto_increment(const int &Table_i);
+
+    bool cast_data(Table &table, const int &col_i, const string &type, const string &data);
 };
 
 void a(const string &in){
