@@ -1,6 +1,7 @@
 #ifndef CS_PROJECT_TABLE_H
 #define CS_PROJECT_TABLE_H
 #include "../Date/Date.h"
+#include "../../syntax.h"
 #include <vector>
 using namespace std;
 
@@ -15,7 +16,6 @@ public:
 class Table{
 private:
     string name;
-    static bool check_CREATE_syntax(string in, const bool &show_err=true);
     static vector<string> get_CREATE_data(string in);
 
 public:
