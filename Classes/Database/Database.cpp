@@ -73,7 +73,7 @@ bool Database::check_command(const string &input, const bool &show_error, string
     return err;
 }
 
-bool Database::check_not_filled(const int & Table_i, const vector<string> filled_elements){
+bool Database::check_not_filled(const int & Table_i, const vector<string> & filled_elements){
     bool err=false;
     vector<string> not_filled=Tables[Table_i].elementsNames-filled_elements;
 

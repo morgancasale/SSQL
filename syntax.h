@@ -4,7 +4,7 @@
 
 #ifndef CS_PROJECT_SYNTAX_H
 #define CS_PROJECT_SYNTAX_H
-#include "utility.h"
+#include "ass.h"
 
 string allowed_coms[8]={
         "create table",
