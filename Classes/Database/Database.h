@@ -6,18 +6,6 @@ class Database {
 public:
     vector<Table> Tables;
     vector<string> TablesNames;
-
-    string allowed_coms[8]={
-            "create table",
-            "drop table",
-            "trunc table",
-            "insert into",
-            "delete from",
-            "update",
-            "select",
-            "quit()"
-    };
-
     bool process_command(const string &choice, const string &command);
     bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
@@ -39,6 +27,8 @@ public:
 
     int find_Table(const string & in);
 
+    Database() = default;
+
     ~Database()=default;
 
     void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
@@ -52,6 +42,8 @@ public:
     void auto_increment(const int &Table_i);
 
     bool cast_data(Table &table, const int &col_i, const string &type, const string &data);
+
+    static bool check_TableName(const string &name);
 };
 
 void a(const string &in){

@@ -8,6 +8,26 @@ using namespace std;
 #include "../Classes/Database/Database.cpp"
 
 int main(){
+    Database d4;
+    string choice="create table phone ( name text not null, yor int not null, price float, sef int auto_increment not null, primary key(name) );";
+    string command=take_command(choice);
+    if(d4.process_command(choice, command)){
+        cout<<endl<<"CREATE command correctly processed!";
+    }else{
+        cerr<<":(";
+    }
+
+    choice="insert into phone (yor, name, sef) values (2020, \"oneplus 8 pro\");";
+    command=take_command(choice);
+    if(d4.process_command(choice, command)){
+        cout<<endl<<"INSERT command correctly processed!";
+    }else{
+        cerr<<":(";
+    }
+    return 0;
+}
+
+/*
     stringstream ss=data_ss("ciao,dsfhgj", ',');
 
     Time time;
@@ -28,8 +48,7 @@ int main(){
     cout<<endl<<aaaa.allowed_coms[0];
 
     cout<<"a";
-    return 0;
-}
+*/
 
 /*
     vector<void *> a;

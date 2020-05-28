@@ -1,18 +1,81 @@
 #include "Table.h"
 
-
-Table::Table(const string &in){
+bool Table::set_Table(const string &in){
+    bool noErr=true;
     if(!control_create(in)){
         cerr<<endl<<"CREATE command syntax error!";
+        noErr=false;
     } else{
         vector<string> data=get_CREATE_data(in);
-        for(const auto &i : data){
-            create_col(i);
+        name=data[0];
+        int dataSize=data.size();
+        for(int i=1; i<(dataSize-1) and noErr; i++){
+            noErr=!create_col(data[i]);
         }
+        noErr=find_check_primaryKey(data[dataSize-1]);
     }
+    return noErr;
 }
 
-void *Table::create_col(string in) {
+bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave primaria ha senso e se esiste
+    bool noErr=true;
+    primaryKey_index=-1;
+
+    if(in.find("primary key(")==-1){ noErr=false; }
+
+    string key;
+    if(noErr){
+        key=substr_from_c_to_c(in, 1, 1, '(', ')', false);
+
+        if (key == "/err") { noErr = false; }
+    }
+
+    if(noErr) {
+        noErr = false;
+        int i=0;
+        for (const string &tmp : elementsNames) { if (key == tmp) { noErr = true; primaryKey_index=i; } i++; }
+    }
+
+    if(!noErr){
+        cerr<<endl<<"Primary key is not valid or not found!";
+    }
+    return noErr;
+}
+
+bool Table::check_key(const string & key){ //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
+    bool noErr = true;
+    bool existenceErr = false;
+    if(key=="/err"){ noErr=false; }
+    for(const string & tmp: allowed_coms){ if(key==tmp){ noErr=false; } }
+    if(noErr){
+        for(const string & tmp: allowed_types){ if(key==tmp){ noErr=false; } }
+    }
+    if(noErr){
+        for(const string & tmp: elementsNames){ if(key==tmp){ noErr=false; existenceErr=true; } }
+    }
+
+
+    if(!noErr and !existenceErr){
+        cerr<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names";
+    }
+    else if(existenceErr){
+        cerr<<endl<<"Column with name "<< key <<" already exists!";
+    }
+    return noErr;
+}
+
+bool Table::check_type(const string & type){
+    bool noErr=false;
+    for(const string & tmp: allowed_types){ if(tmp==type){ noErr=true; } }
+
+    if(!noErr){
+        cerr<<endl<<"Type "<< type <<" is not allowed!"<<endl;
+        cerr<<"Check the documentation to find out the allowed types";
+    }
+    return noErr;
+}
+
+bool Table::create_col(string in) {
     bool err=false;
 
     bool auto_increment=false;
@@ -22,96 +85,98 @@ void *Table::create_col(string in) {
     }
 
     bool notNull=false;
-    string tmp;
+    if(in.find("not null")!=-1){
+        notNull=true;
+        erase_substr(in," not null");
+    }
+    /*string tmp;
     if((tmp=substr_from_c_to_c(in, 2, -1))!="/err"){
         if(tmp=="not null"){
             notNull=true;
         } else{
             err=true;
         }
-    }
+    }*/
     string key=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
-    string type;
-    if(notNull){
-        type=substr_from_c_to_c(in, 1, 2);
-    } else{
+    err=!check_key(key);
+
+    string type="";
+    if(!err){
         type=substr_from_c_to_c(in, 1, -1);
+        err=!check_type(type);
     }
 
-    if(type!="int" and auto_increment){
-        cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!";
-        return nullptr;
+
+    if((type!="int" and auto_increment)){
+        if(!err){
+            cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!";
+            err=true;
+        }
     }
 
-    if(check_existence(elementsNames, key) and !err){
-        cerr<<"Column named "<<key<<" (of type "<<type<<") already exists!";
-        return nullptr;
-    }
-    if(key=="/err" or type=="/err"){
-        err=true;
-    }
-    elementsTypes.push_back(type);
-    elementsNames.push_back(key);
-
-    if(type=="int" and !err){
+    if(!err and type == "int"){
         static Column<int> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
         tmp.auto_increment=auto_increment;
-        return static_cast<void *>(&tmp);
+        cols.push_back(static_cast<void *>(&tmp));
     } else
-    if(type=="float" and !err){
+    if(!err and type == "float"){
         static Column<float> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
-        return static_cast<void *>(&tmp);
+        cols.push_back(static_cast<void *>(&tmp));
     } else
-    if(type=="char" and !err){
+    if(!err and type == "char"){
         static Column<char> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
-        return static_cast<void *>(&tmp);
+        cols.push_back(static_cast<void *>(&tmp));
     } else
-    if(type=="string" and !err){
+    if(!err and (type == "string" or type == "text")){
         static Column<string> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
-        return static_cast<void *>(&tmp);
+        cols.push_back(static_cast<void *>(&tmp));
     } else
-    if(type=="date" and !err){
+    if(!err and type == "date") {
+        static Column<Date> tmp;
+        tmp.key = key;
+        tmp.not_null = notNull;
+        cols.push_back(static_cast<void *>(&tmp));
+    }
+    if(!err and type == "time"){
         static Column<Date> tmp;
         tmp.key=key;
         tmp.not_null=notNull;
-        return static_cast<void *>(&tmp);
-    } else
-    if(type=="time" and !err){
-        static Column<Date> tmp;
-        tmp.key=key;
-        tmp.not_null=notNull;
-        return static_cast<void *>(&tmp);
+        cols.push_back(static_cast<void *>(&tmp));
     } else{
         err=true;
     }
 
     if(err){
         cerr<<endl<<"CREATE input syntax error!";
-        return nullptr;
     }
-    return nullptr;
+
+    if(!err) {
+        elementsTypes.push_back(type);
+        elementsNames.push_back(key);
+    }
+    return err;
 }
 
 vector<string> Table::get_CREATE_data(string in){
     vector<string> data;
     data.resize(1);
-    string a=substr_from_c_to_c(in, 2, 3, ' ', ' ', false);
-    data[0]=a;
+    data[0]=substr_from_c_to_c(in, 0, 1);
 
     string line;
     for(int i=1; substr_from_c_to_c(in, 1, 1, '(', ')', false)!="  "; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]=substr_from_c_to_c(in, 4, 1, ' ', ',', false);
+        data[i]=substr_from_c_to_c(in, 2, 1, ' ', ',', false);
         if(data[i]=="/err"){
-            data[i]=substr_from_c_to_c(in, 4, 7, ' ', ' ', false);
+            data[i]=substr_from_c_to_c(in, 2, 7, ' ', ';', false);
+            data[i].resize(data[i].size()-2);
             erase_substr(in, data[i]);
         }else{
             erase_substr(in, data[i]+", ");
@@ -138,6 +203,6 @@ int Table::find_col_by_name(const string &in) {
     if(!found){
         return -1;
     } else{
-        return i;
+        return i-1;
     }
 }

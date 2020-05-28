@@ -9,6 +9,9 @@ using namespace std;
 
 int main(int argc, char **argv) {
     Database data1;
+
+    //first recover database data from file
+
     if(argc>2){
         //script=true;
         //data1.process_script_command(argv[1]);

@@ -6,7 +6,7 @@
 #define CS_PROJECT_SYNTAX_H
 #include "utility.h"
 
-string allowed_coms[8]={
+const string allowed_coms[8]={
         "create table",
         "drop table",
         "truncate table",
@@ -17,14 +17,24 @@ string allowed_coms[8]={
         "quit()"
 };
 
+const string allowed_types[7]={
+        "int",
+        "float",
+        "char",
+        "string",
+        "text",
+        "date",
+        "time"
+};
+
 string take_command(string & in){
     bool err=false; string tmp;
     clean_input(in);
-    for(string s:allowed_coms) {
+    for(const string & s:allowed_coms) {
         if(in.find(s) != in.npos) {
             err=false;
             tmp=in.substr(in.find(s), s.size());
-            in.erase(in.find(s),s.size());
+            in-=(tmp+" ");
             return tmp;
         }else   err=true;
     }
@@ -35,26 +45,27 @@ string take_command(string & in){
 bool control_create(string in){
     bool err = false;
     //controllo sintassi prima riga
-    if(in.find('(')!=in.npos and num_of_words(in.substr(0,in.find('(')))==1) {
-            err = true;
+    if(in.find('(')!=in.npos and num_of_words(in.substr(0,in.find('(')))!=1) {
+        err = true;
     }
 
     string line;
     int end2=in.find(");");
+    bool tmp=true;
     if(end2!=in.npos and !err){//this checks if there is the final substring ");" somewhere
-        for(int i=0; i<end2 and !err and substr_from_c_to_c(in, 1, 1, '(', ')', false)!=" "; i++){ //this checks if every input starts with a space end ends with a ',', it considers input of two and three letters
-            line=substr_from_c_to_c(in, 4, 1, ' ', ',', false);
-            if(num_of_words(line)>4){
+        for(int i=0; i<end2 and !err and tmp; i++){ //this checks if every input starts with a space end ends with a ',', it considers input of two and three letters
+            line=substr_from_c_to_c(in, 2, 1, ' ', ',', false);
+            if(num_of_words(line)>5){
                 err=true;
             }
             if(line=="/err" and !err){
-                line=substr_from_c_to_c(in, 4, 1, ' ', ')', false);
-                string line2=substr_from_c_to_c(in, 4, 2, ' ', ')', false);
-                if(line=="/err" or line2=="/err"){
+                line=substr_from_c_to_c(in, 2, 1, ' ', ';', false);
+                line.resize(line.size()-2);
+                if(num_of_words(line)>5){
                     err=true;
                 }
-                erase_substr(in, line2);
                 erase_substr(in, line);
+                tmp=substr_from_c_to_c(in, 1, 1, '(', ';', false)!="  )";
             } else{
                 erase_substr(in, line+", ");
             }
@@ -76,29 +87,51 @@ bool control_create(string in){
 bool control_drop(const string & in){return num_of_words(in)==1;};
 bool control_truncate(const string & in){return num_of_words(in)==1;};
 bool control_insert(string in){
-    bool err=false;
+    bool noErr=true;
     int counter=0;
-    if(in.find("values")==in.npos or in.find(';')==in.npos) return false;
+
+    //controlla se ci sia il termine "values" e un ';' alla fine
+    if(in.find("values")==in.npos or in.find(';')==in.npos) noErr=false;
+
     string secondLine = in.substr(in.find("values"), in.find(';'));
-    string firstLine = erase_substr(in, secondLine);
+    string firstLine = in-secondLine;
+
     //controllo prima riga
     if(firstLine.find('(')==in.npos or firstLine.find(')')==in.npos
-        or num_of_words(firstLine.substr(0, firstLine.find('(')))!=1) return false;
+        or num_of_words(firstLine.substr(0, firstLine.find('(')))!=1) noErr=false;
     else {
         counter = num_of_words(firstLine.substr(firstLine.find('('), firstLine.find(')')));
     }
+
     //controllo la seconda riga
     if(secondLine.find('(')==in.npos or secondLine.find(')')==in.npos
-       or num_of_words(secondLine.substr(0, secondLine.find('(')))!=1) return false;
+       or num_of_words(secondLine.substr(0, secondLine.find('(')))!=1) { noErr=false; }
     else {
         //elimino le stringhe per non causare problemi al contatore dopo
-        for(int i=0;i<character_counter(secondLine,39);i++)
-            erase_substr(secondLine,substr_from_c_to_c(secondLine,1,1,39,39));
+        for(int i=0; i<character_counter(secondLine,'"'); i++) {
+            string toErase="\""+substr_from_c_to_c(secondLine, 1, 1, '"', '"', false)+"\"";
+            erase_substr(secondLine, toErase);
+        }
+
+        //elimino i caratteri per non causare problemi al contatore dopo
+        for(int i=0; i<character_counter(secondLine,39); i++) {
+            string toErase=substr_from_c_to_c(secondLine, 1, 1, 39, 39, false);
+            if(toErase.size()!=1){ noErr=false; } else{ //controlla se la stringa presa tra le virgolette è di un solo carattere
+                toErase="'"+toErase+"'";
+                erase_substr(secondLine, toErase);
+            }
+
+        }
+
         //controllo il numero di dati inseriti che corrisponda a counter
-        if(character_counter(secondLine,',')==counter-1) err=true;
-        else{return false;}
+        noErr= (character_counter(secondLine, ',') != (counter-1));
     }
-    return err;
+
+    if(!noErr){
+        cerr<<"INSERT INTO syntax error!";
+    }
+
+    return noErr;
 }
 
 #endif //CS_PROJECT_SYNTAX_H

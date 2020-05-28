@@ -1,51 +1,74 @@
 #include "Database.h"
 
-bool Database::check_Table(const string &in, const bool show_err) {
-    bool err=false;
-    string in_Table_name=substr_from_c_to_c(in,2,3);
-    int i=0;
-    do{
-        if(Tables[i].get_name()==in_Table_name){
-            err=true;
-        }
-        i++;
-    }while((i<Tables.size()) and !err);
+bool Database::check_TableName(const string & name){
+    bool noErr=true;
+    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
+    if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
+    if(noErr){ if(name=="/err"){ noErr=false; } }
+    return noErr;
+}
 
-    if(err and show_err){
+bool Database::check_Table(const string &in, const bool show_err) {
+    bool noErr=true;
+    string in_Table_name=substr_from_c_to_c(in,2,3);
+    noErr=check_TableName(in_Table_name);
+    int i=0;
+    if(!Tables.empty()) {
+        do {
+            if (Tables[i].get_name() == in_Table_name) {
+                noErr = false;
+            }
+            i++;
+        } while ((i < Tables.size()) and noErr);
+    }
+    if(!noErr and show_err){
         cerr<<"Table named"<<in_Table_name<<" already exists!"<<endl;
         cerr<<"Choose another name.";
     }
 
-    return err;
+    return noErr;
 }
 
 bool Database::process_command(const string &choice, const string &command) {
-    bool err=true;  int j=0;
+    bool noErr=true;  int j=0;
     if(command=="quit()"){
+        //stampa su file il database
     } else
     if(command=="create table"){
         if(check_Table(choice, true)){
-            Table temp(choice); //this creates a temporary Table
-            Tables.resize(Tables.size()+1);
-            Tables[Tables.size()]=temp; //that is copied to the last ( == new ) Table of the Database
+            Table temp;//this creates a temporary Table
+            if(temp.set_Table(choice)){
+                Tables.push_back(temp);
+                cout<<"a";
+            }
+            else{
+                noErr=false;
+            }
         }
     } else
     if(command=="drop table" and control_drop(choice)){
+        noErr=false;
         for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  err=false;   j=i;
+            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
         }
-        if(!err) Tables.erase(Tables.begin()+j);
+        if(noErr) Tables.erase(Tables.begin()+j);
         else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="truncate table" and control_truncate(choice)){
+        noErr=false;
         for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  err=false;   j=i;
+            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
         }
-        if(!err)    Tables[j].empty_table();
+        if(noErr)    Tables[j].empty_table();
         else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
-        //add_Row_to_Table(choice);
+        if(control_insert(choice)){
+            INSERT_INTO(choice);
+        }
+        else{
+            noErr=false;
+        }
     } else
     if(command=="delete from"){
        //delete_Row_from_Table(choice);
@@ -56,7 +79,7 @@ bool Database::process_command(const string &choice, const string &command) {
     if(command=="select"){
         //print_selected_data(choice);
     }
-    return err;
+    return noErr;
 }
 bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;
@@ -141,7 +164,7 @@ bool Database::INSERT_INTO(string in){
     bool err=false;
 
     string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
-    erase_substr(in, Table+" (");
+    in-=(Table+" ");
     int Table_i=find_Table(Table);
 
     if(Table_i!=-1) {
@@ -162,25 +185,25 @@ bool Database::INSERT_INTO(string in){
 }
 
 void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<string> & elementsNames, vector<string> & elementsValues){
-    for(; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" ";){
-        string elementName=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
-        if(elementName=="/err"){
-            elementName=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
+    for(; !substr_from_c_to_c(in, 1, 1, '(', ')', false).empty();){
+        string elementName=substr_from_c_to_c(in, 1, 1, '(', ',', false);
+        if(elementName=="/err" or num_of_words(elementName)>1){
+            elementName=substr_from_c_to_c(in, 1, 1, '(', ')', false);
             erase_substr(in, elementName);
         }else{
-            erase_substr(in, elementName+",");
+            erase_substr(in, elementName+", ");
         }
         elementsNames.push_back(elementName);
     }
 
-    erase_substr(in, " ) values (");
-    for(int i=0; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" "; i++){
+    in-="() values (";
+    for(int i=0; !substr_from_c_to_c(in, 0, 1, ' ', ')', false).empty(); i++){
         string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
         if(elementValue=="/err"){
             elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
             erase_substr(in, elementValue);
         }else{
-            erase_substr(in, elementValue+",");
+            erase_substr(in, elementValue+", ");
         }
         elementsValues.push_back(elementValue);
     }
@@ -219,14 +242,14 @@ int Database::find_Table(const string &in) {
     if(!found){
         return -1;
     } else{
-        return i;
+        return i-1;
     }
 }
 
 bool Database::cast_data(Table & table, const int & col_i, const string & type, const string & data){
     bool auto_increment_err=false;
     if(type=="int"){
-        if((*static_cast<Column<int>*>(table.cols[col_i])).auto_increment){
+        if((*static_cast<Column<int>*>(table.cols[col_i])).auto_increment){ //non puoi inserire dati in una colonna auto_increment
             auto_increment_err=true;
         } else{
             (*static_cast<Column<int>*>(table.cols[col_i])).values.push_back(stoi(data));

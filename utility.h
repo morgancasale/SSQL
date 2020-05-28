@@ -119,6 +119,14 @@ string erase_substr(string &in, const string &to_erase){
     return in;
 }
 
+string operator -(string minuend, const string & subtrahend){
+    return erase_substr(minuend, subtrahend);
+}
+
+void operator -=(string & minuend, const string & subtrahend){
+    erase_substr(minuend, subtrahend);
+}
+
 string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
     int start=in.find(s1);
     int end=in.find(s2)+s2.size();
@@ -132,11 +140,17 @@ string get_substr_from_s_to_s(const string &in, const string &s1, const string &
 }
 
 int num_of_words(const string &in){
-    int num=0;
-    for(int i=0; i<in.size(); i++){
+    int num=0, i=0, k=0;
+
+    if(!isalpha(in[0]) and !isalpha(in[in.size()])){
+        i++;
+        k++;
+    }
+
+    for(; i<in.size()-k; i++){
         for(; isalpha(in[i]); i++){
         }
-        if(isalpha(in[i-1])){
+        if(in[i]!=0 and isalpha(in[i-1])){
             num++;
         }
     }
@@ -279,5 +293,6 @@ template<typename type> vector<type> operator -(vector<type> minuend, const vect
     }
     return minuend;
 }
+
 
 #endif
