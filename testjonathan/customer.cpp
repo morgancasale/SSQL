@@ -287,35 +287,32 @@ void search() {
 
 // questo imbasso da vedere meglio
 
-bool sortS(string a ,string b)
-{
-    for(int i=0; i < a.length() && i < b.length(); ++i)
-    {
-        if (a[i] > b[i])
-            return false;
-        else if (a[i] < b[i])
-            return true;
-    }
-    return a.length() < b.length() ;
-}
+char orden = “a”;  /* a: ascendente d: descendente */
 
-void selectionSort(string arr[], int n)
-{
-    int i, j, min_idx;
-    for (i = 0; i < n-1; i++)
+    for (i=0; i<n-1; i++)
     {
-        min_idx = i;
-        for (j = i+1; j < n; j++)
+        for (j=i+1; j<n; j++)
         {
-            if (sortS(arr[j],arr[min_idx]))
-            {
-                min_idx = j;
+            switch(orden)
+            {case "a":
+                if(strcmp(Vector[i],Vector[j])>0)
+                {
+                    aux  = Vector[i];
+                    Vector[i] = Vector[j];
+                    Vector[j] = aux;
+                }
+                break;
+                case "d":
+                    if(strcmp(Vector[i],Vector[j])<0)
+                    {
+                        aux  = Vector[i];
+                        Vector[i] = Vector[j];
+                        Vector[j] = aux;
+                    }
+                    break;
             }
-            swap(arr[min_idx], arr[i]);
         }
     }
-}
-
 
 
 
