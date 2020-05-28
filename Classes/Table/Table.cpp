@@ -89,23 +89,15 @@ bool Table::create_col(string in) {
         notNull=true;
         erase_substr(in," not null");
     }
-    /*string tmp;
-    if((tmp=substr_from_c_to_c(in, 2, -1))!="/err"){
-        if(tmp=="not null"){
-            notNull=true;
-        } else{
-            err=true;
-        }
-    }*/
+
     string key=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
     err=!check_key(key);
 
-    string type="";
+    string type=" ";
     if(!err){
         type=substr_from_c_to_c(in, 1, -1);
         err=!check_type(type);
     }
-
 
     if((type!="int" and auto_increment)){
         if(!err){
@@ -144,7 +136,7 @@ bool Table::create_col(string in) {
         tmp.key = key;
         tmp.not_null = notNull;
         cols.push_back(static_cast<void *>(&tmp));
-    }
+    } else
     if(!err and type == "time"){
         static Column<Date> tmp;
         tmp.key=key;

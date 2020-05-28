@@ -31,7 +31,7 @@ public:
 
     ~Database()=default;
 
-    void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
+    static void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
                               vector<string> &elementsValues);
 
     bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
