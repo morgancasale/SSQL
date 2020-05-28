@@ -287,7 +287,7 @@ void search() {
 
 // questo imbasso da vedere meglio
 
-char orden = “a”;  /* a: ascendente d: descendente */
+char orden = “a”;  /* a=ascending; d=descending */
 
     for (i=0; i<n-1; i++)
     {
@@ -313,14 +313,3 @@ char orden = “a”;  /* a: ascendente d: descendente */
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
