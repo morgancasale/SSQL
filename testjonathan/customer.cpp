@@ -286,6 +286,7 @@ void search() {
 
 
 // questo imbasso da vedere meglio
+// da definire ancora il char se necessario
 
 char orden = “a”;  /* a=ascending; d=descending */
 
