@@ -67,7 +67,7 @@ static int createTable(const char* s) {
     }
 }
 
-static int insertDara(const char* s){
+static int insertData(const char* s){
     nsql* DB;
     char* messageError;
 
