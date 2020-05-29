@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-template<typename type> class Column{
+template<typename type> class Column {
 public:
     vector<type> values;
     string key;
