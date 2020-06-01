@@ -1,37 +1,55 @@
 #ifndef CS_PROJECT_TABLE_H
 #define CS_PROJECT_TABLE_H
-#include "../../utility.h"
-#include "../Date/Date.h"
-#include "../Time/Time.h"
+#include "../../syntax.h"
+#include <vector>
+using namespace std;
 
-struct list_int{ string key; int val; };
-struct list_float{ string key; float val; };
-struct list_char{ string key; char val; };
-struct list_string{ string key; string val; };
-struct list_date{ string key; Date val; };
-struct list_time{ string key; Time val; };
-
-class Row{
+template<typename type> class Column {
 public:
+    vector<type> values;
     string key;
-    vector<list_int> ints;
-    vector<list_float> floats;
-    vector<list_char> chars;
-    vector<list_string> texts;
-    vector<list_date> dates;
-    vector<list_time> times;
+    bool not_null=false;
+    bool auto_increment=false;
 };
 
-
-class Table {
+class Table{
 private:
     string name;
-    vector<string> elements;
-    Row defaultrow;
-    vector<Row> rows;
+    static vector<string> get_CREATE_data(string in);
+    int primaryKey_index;
+    static int count_data(const vector<string> &data, const string &type);
+
 public:
-    void get_data(string in);
-    void empty_unused_elements();
-    Table(string in);
+    bool find_check_primaryKey(const string & in);
+    bool create_col(string in, const vector<string> & data);
+    int rows=0;
+    vector<string> elementsTypes;
+    vector<void *> cols;
+    vector<string> elementsNames;
+
+public:
+    bool set_Table(const string &in);
+    Table()=default;
+    ~Table()=default;
+    void set_name(string name_in){name=name_in;}
+    string get_name(){ return name; }
+    void empty_table();
+
+    int find_col_by_name(const string & in);
+
+    bool check_key(const string & in);
+
+    static bool check_type(const string & type);
+
+
+    void cast_data_to_col(const int &col_i, const string &type, const string &data);
+
+    void auto_increment_col();
+
+    bool set_INSERT_INTO_data( const vector<string> &elementsNames, const vector<string> &elementsValues);
+
+    bool check_INSERT_INTO_data(const vector<string> &filled_elements);
+
+
 };
 #endif //CS_PROJECT_TABLE_H
