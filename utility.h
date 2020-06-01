@@ -256,7 +256,7 @@ bool check_data_consistence(const string & var, const string & to_check){
     bool response=false;
 
     if(substr_from_c_to_c(var, 1, 2, '"', '"', false)!="/err"){
-        response = (to_check == "string");
+        response = (to_check == "string" or to_check =="text");
     } else
     if(substr_from_c_to_c(var, 1, 2, 39, 39, false)!="/err"){ //char a=39 --> a='
         response = (to_check == "char");
@@ -281,13 +281,18 @@ bool check_data_consistence(const string & var, const string & to_check){
 }
 
 template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
-    for(int i=0; i<minuend.size(); i++){
-        for(int j=0; j<subtrahend.size(); j++){
-            if(minuend[i]==subtrahend[j]){
-                for(int k=i; k<minuend.size()-1; k++){
+
+    for(int i=0; i<subtrahend.size(); i++){
+        string sub=subtrahend[i];//prendo un sottraendo
+        bool found=false;
+        for(int j=0; j<minuend.size() and !found; j++){
+            string min=minuend[j]; //prendo il minuendo
+            if(min==sub){
+                for(int k=j; k<minuend.size()-1; k++){
                     minuend[k]=minuend[k+1];
                 }
                 minuend.resize(minuend.size()-1);
+                found=true;
             }
         }
     }

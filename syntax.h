@@ -43,10 +43,13 @@ string take_command(string & in){
 };
 
 bool control_create(string in){
-    bool err = false;
+    bool err = false, primaryKeyErr=false;
     //controllo sintassi prima riga
     if(in.find('(')!=in.npos and num_of_words(in.substr(0,in.find('(')))!=1) {
         err = true;
+    }
+    if(in.find("primary key(")==-1){
+        primaryKeyErr=true;
     }
 
     string line;
@@ -78,11 +81,13 @@ bool control_create(string in){
         err=true;
     }
 
-    if(err){
+    if(primaryKeyErr){
+        cerr<<endl<<"No primary key specified!";
+    }else if(err){
         cerr<<endl<<"CREATE command Syntax error!";
     }
 
-    return !err;
+    return (!err and !primaryKeyErr);
 };
 bool control_drop(const string & in){return num_of_words(in)==1;};
 bool control_truncate(const string & in){return num_of_words(in)==1;};
@@ -109,13 +114,13 @@ bool control_insert(string in){
     else {
         //elimino le stringhe per non causare problemi al contatore dopo
         for(int i=0; i<character_counter(secondLine,'"'); i++) {
-            string toErase="\""+substr_from_c_to_c(secondLine, 1, 1, '"', '"', false)+"\"";
+            string toErase="\""+substr_from_c_to_c(secondLine, 1, 2, '"', '"', false)+"\"";
             erase_substr(secondLine, toErase);
         }
 
         //elimino i caratteri per non causare problemi al contatore dopo
         for(int i=0; i<character_counter(secondLine,39); i++) {
-            string toErase=substr_from_c_to_c(secondLine, 1, 1, 39, 39, false);
+            string toErase=substr_from_c_to_c(secondLine, 1, 2, 39, 39, false);
             if(toErase.size()!=1){ noErr=false; } else{ //controlla se la stringa presa tra le virgolette è di un solo carattere
                 toErase="'"+toErase+"'";
                 erase_substr(secondLine, toErase);
@@ -124,7 +129,7 @@ bool control_insert(string in){
         }
 
         //controllo il numero di dati inseriti che corrisponda a counter
-        noErr= (character_counter(secondLine, ',') != (counter-1));
+        noErr= (character_counter(secondLine, ',') == (counter-1));
     }
 
     if(!noErr){

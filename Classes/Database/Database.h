@@ -7,7 +7,7 @@ public:
     vector<Table> Tables;
     vector<string> TablesNames;
     bool process_command(const string &choice, const string &command);
-    bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
+    static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
     bool check_Table(const string &in, bool show_err=false);
 
@@ -31,17 +31,16 @@ public:
 
     ~Database()=default;
 
-    static void get_INSERT_INTO_data(string in, const int & Table_i, vector<string> &elementsNames,
-                              vector<string> &elementsValues);
+    static void get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
 
     bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
                               const vector<string> &elementsValues);
 
-    bool check_not_filled(const int &Table_i, const vector<string> & not_filled);
+    bool check_INSERT_INTO_data(const int &Table_i, const vector<string> & filled_elements);
 
     void auto_increment(const int &Table_i);
 
-    bool cast_data(Table &table, const int &col_i, const string &type, const string &data);
+    bool cast_data(Table &table, const int & Table_i, const int &col_i, const string &type, const string &data);
 
     static bool check_TableName(const string &name);
 };

@@ -17,13 +17,18 @@ int main(){
         cerr<<":(";
     }
 
-    choice="insert into phone (yor, name, sef) values (2020, \"oneplus 8 pro\");";
+    choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
     command=take_command(choice);
     if(d4.process_command(choice, command)){
         cout<<endl<<"INSERT command correctly processed!";
     }else{
         cerr<<":(";
     }
+    Column<string> b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<int> a=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
+    Column<float> c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
+    Column<int> d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
+    cout<<"a";
     return 0;
 }
 
