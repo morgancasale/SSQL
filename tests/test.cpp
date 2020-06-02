@@ -1,13 +1,70 @@
 #include <iostream>
-//#include "../Classes/Table/Table.h"
-//#include "../utility.h"
 using namespace std;
+#include "../Classes/Time/Time.cpp"
+#include "../Classes/Date/Date.cpp"
+#include "../utility.h"
+#include "../syntax.h"
+#include "../Classes/Table/Table.cpp"
+#include "../Classes/Database/Database.cpp"
 
 int main(){
-    char a=39;
-    cout<<a;
+    Database d4;
+    string choice="create table phone ( name text not null, yor int not null, price float, sef int auto_increment not null, primary key(name) );";
+    string command=take_command(choice);
+    if(d4.process_command(choice, command)){
+        cout<<endl<<"CREATE command correctly processed!";
+    }else{
+        cerr<<":(";
+    }
+
+    Column<string> g=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+
+    choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+
+    cout<<"a";
+
+    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+
+    choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
+    command=take_command(choice);
+    if(d4.process_command(choice, command)){
+        cout<<endl<<"INSERT command correctly processed!";
+    }else{
+        cerr<<":(";
+    }
+    Column<string> b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<int> a=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
+    Column<float> c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
+    Column<int> d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
+    cout<<"a";
     return 0;
 }
+
+/*
+    stringstream ss=data_ss("ciao,dsfhgj", ',');
+
+    Time time;
+    cout<<time.get_hours();
+
+    Date date;
+    cout<<date.get_day();
+
+    cout<<endl<<character_counter("ccccc", 'c');
+
+    if(!control_create("frguhk")) cout<<endl<<"A";
+
+    Table table;
+    table.set_name("ciao");
+    cout<<endl<<table.get_name();
+
+    Database aaaa;
+    cout<<endl<<aaaa.allowed_coms[0];
+
+    cout<<"a";
+*/
 
 /*
     vector<void *> a;

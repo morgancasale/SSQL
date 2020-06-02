@@ -1,64 +1,90 @@
 #include "Database.h"
-#include "../../syntax.h"
 
+bool Database::check_TableName(const string & name){
+    bool noErr=true;
+    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
+    if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
+    if(noErr){ if(name=="/err"){ noErr=false; } }
+    return noErr;
+}
 
-bool Database::check_Table(const string &in, const bool show_err) {
-    bool err=false;
-    string in_Table_name=substr_from_c_to_c(in,2,3);
+//if existence parameter is true the function checks if the table exists, else if doesn't exist
+bool Database::check_Table_existence(const string &in_Table_name, const bool & existence){
+    bool not_exists=true;
     int i=0;
-    do{
-        if(Tables[i].get_name()==in_Table_name){
-            err=true;
-        }
-        i++;
-    }while((i<Tables.size()) and !err);
-
-    if(err and show_err){
+    if(!Tables.empty()) {
+        do {
+            if (Tables[i].get_name() == in_Table_name) {
+                not_exists = false;
+            }
+            i++;
+        } while ((i < Tables.size()) and not_exists);
+    }
+    if(!existence and !not_exists){ //se devo controllare che esista e non esiste
         cerr<<"Table named"<<in_Table_name<<" already exists!"<<endl;
         cerr<<"Choose another name.";
     }
+    if(!existence and !not_exists){ //se devo controllare che non esista ed esiste
+        cerr<<"Table named "<<in_Table_name<<" doesn't exist!"<<endl;
+    }
 
-    return err;
+    return not_exists;
 }
 
 bool Database::process_command(const string &choice, const string &command) {
+    bool noErr=true;  int j=0;
     if(command=="quit()"){
+        //stampa su file il database
     } else
     if(command=="create table"){
-        if(check_Table(choice, true)){
-            Table temp(choice); //this creates a temporary Table
-            Tables.resize(Tables.size()+1);
-            Tables[Tables.size()]=temp; //that is copied to the last ( == new ) Table of the Database
+        string table_name=substr_from_c_to_c(choice, 0, 1);
+        noErr=check_TableName(table_name);
+        if(check_Table_existence(table_name, false) and noErr){
+            Table temp;//this creates a temporary Table
+            if(temp.set_Table(choice)){
+                Tables.push_back(temp);
+            }
+            else{
+                noErr=false;
+            }
         }
     } else
     if(command=="drop table" and control_drop(choice)){
-        bool err=true;  int j=0;
+        noErr=false;
         for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  err=false;   j=i;
+            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
         }
-        if(!err) Tables.erase(Tables.begin()+j);
+        if(noErr) Tables.erase(Tables.begin()+j);
         else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="truncate table" and control_truncate(choice)){
-        bool err=true;  int j=0;
+        noErr=false;
         for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  err=false;   j=i;
+            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
         }
-        if(!err)    Tables[j].empty_table();
+        if(noErr)    Tables[j].empty_table();
         else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
-        add_Row_to_Table(choice);
+        if(control_insert(choice)){
+            INSERT_INTO(choice);
+        }
+        else{
+            noErr=false;
+        }
     } else
     if(command=="delete from"){
-        delete_Row_from_Table(choice);
+       if(control_delete(choice)){
+           DELETE(choice);
+       }
     } else
     if(command=="update"){
-        update_Row_data(choice);
+        //update_Row_data(choice);
     } else
     if(command=="select"){
-        print_selected_data(choice);
+        //print_selected_data(choice);
     }
+    return noErr;
 }
 bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;
@@ -74,66 +100,54 @@ bool Database::check_command(const string &input, const bool &show_error, string
 }
 
 bool Database::INSERT_INTO(string in){
-    bool err=false;
+    bool err;
 
-    string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
-    erase_substr(in, Table+" (");
+    string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ');
+    in-=(Table+" ");
     int Table_i=find_Table(Table);
 
     if(Table_i!=-1) {
         vector<string> elementsNames;
         vector<string> elementsValues;
-        get_INSERT_INTO_data(in, Table_i, elementsNames, elementsValues);
-        set_INSERT_INTO_data(Table_i, elementsNames, elementsValues);
+        get_INSERT_INTO_data(in, elementsNames, elementsValues);
+        err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues);
+        if(!err){
+            err=Tables[Table_i].check_INSERT_INTO_data(elementsNames);
+        }
+        if(!err){
+            Tables[Table_i].auto_increment_col();
+        }
+        Tables[Table_i].rows++;
     } else{
         cerr<<endl<<"There is no Table with name "<<Table<<"!";
-        return false;
+        err=true;
     }
-
+    return err;
 }
 
-void Database::get_INSERT_INTO_data(string in, const int & Table_i, vector<string> & elementsNames, vector<string> & elementsValues){
-    for(; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" ";){
-        string elementName=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
-        if(elementName=="/err"){
-            elementName=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
+void Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues) {
+    for(; !substr_from_c_to_c(in, 1, 1, '(', ')').empty();){
+        string elementName=substr_from_c_to_c(in, 1, 1, '(', ',');
+        if(elementName=="/err" or num_of_words(elementName)>1){
+            elementName=substr_from_c_to_c(in, 1, 1, '(', ')');
             erase_substr(in, elementName);
         }else{
-            erase_substr(in, elementName+",");
+            erase_substr(in, elementName+", ");
         }
         elementsNames.push_back(elementName);
     }
 
-    erase_substr(in, " ) values (");
-    for(int i=0; substr_from_c_to_c(in, 0, 1, ' ', ')', false)!=" "; i++){
-        string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',', false);
+    in-="() values (";
+    for(int i=0; !substr_from_c_to_c(in, 0, 1, ' ', ')').empty(); i++){
+        string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',');
         if(elementValue=="/err"){
-            elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')', false);
+            elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')');
             erase_substr(in, elementValue);
         }else{
-            erase_substr(in, elementValue+",");
+            erase_substr(in, elementValue+", ");
         }
         elementsValues.push_back(elementValue);
     }
-}
-
-bool Database::set_INSERT_INTO_data(const int & Table_i, const vector<string> & elementsNames, const vector<string> & elementsValues){
-    bool err=false;
-    for(int i=0; i<elementsNames.size(); i++){
-        int col_i=Tables[Table_i].find_col_by_name(elementsNames[i]);
-        if(col_i!=-1) {
-            string type;
-            if(check_data_consistence(elementsValues[i], type=Tables[Table_i].elementsTypes[col_i])) {
-
-            } else{
-                err = true;
-            }
-        } else{
-            cerr<<endl<<"No column with name "<<elementsNames[i]<<" is in the table!";
-            err=true;
-        }
-    }
-
 }
 
 int Database::find_Table(const string &in) {
@@ -147,6 +161,20 @@ int Database::find_Table(const string &in) {
     if(!found){
         return -1;
     } else{
-        return i;
+        return i-1;
     }
+}
+
+bool Database::DELETE(string in) {
+    bool noErr=true;
+
+    string table_name=substr_from_c_to_c(in, 2, 3);
+    noErr=check_Table_existence(table_name, true);
+    int table_i=find_Table(table_name);
+
+    string element=substr_from_c_to_c(in, 4, 1, ' ', '=');
+    if(Tables[table_i].check_element_existence(element))
+
+    string data=substr_from_c_to_c(in, 1, 1, '=', ';');
+
 }

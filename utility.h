@@ -8,12 +8,6 @@ using namespace std;
 #include <vector>
 #include "Classes/Date/Date.h"
 
-stringstream data_ss(string in, const char &sub){ //remove char sub from string then returns a stringstream from the modified input string
-    replace(in.begin(), in.end(), sub, ' ');
-    stringstream ss(in);
-    return ss;
-}
-
 
 string tolower(string &in){ //converts all upper letters of a string to lower ones
     for(int i=0; i<in.size(); i++){
@@ -25,7 +19,7 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ', const bool &show_error=true) {
+string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -53,10 +47,6 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     if(counter2 == -1){
         end=in.size();
         found2=true;
-    }
-
-    if(!found1 or !found2 and show_error) {
-        cerr << endl << "One or the two characters weren't found!";
     }
     if(!found1 or !found2){ //if one or two characters aren't found then the function returns "/err"
         return "/err"; //Maybe we should add an exception for the use of "/err" as any name
@@ -125,6 +115,14 @@ string erase_substr(string &in, const string &to_erase){
     return in;
 }
 
+string operator -(string minuend, const string & subtrahend){
+    return erase_substr(minuend, subtrahend);
+}
+
+void operator -=(string & minuend, const string & subtrahend){
+    erase_substr(minuend, subtrahend);
+}
+
 string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
     int start=in.find(s1);
     int end=in.find(s2)+s2.size();
@@ -138,11 +136,17 @@ string get_substr_from_s_to_s(const string &in, const string &s1, const string &
 }
 
 int num_of_words(const string &in){
-    int num=0;
-    for(int i=0; i<in.size(); i++){
+    int num=0, i=0, k=0;
+
+    if(!isalpha(in[0]) and !isalpha(in[in.size()])){
+        i++;
+        k++;
+    }
+
+    for(; i<in.size()-k; i++){
         for(; isalpha(in[i]); i++){
         }
-        if(isalpha(in[i-1])){
+        if(in[i]!=0 and isalpha(in[i-1])){
             num++;
         }
     }
@@ -157,50 +161,139 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
     return found;
 }
 
-template <typename T=int>
-T string_to_type(const string& in, bool show_err=false){
-    T a;
-    if(in=="int") { int b; a=b; }
-    else if(in=="float")  { float b; a=b; }
-    else if(in=="char") { char b;a=b; }
-    else if(in=="string" or in=="text")  {string b; a=b;}
-    else if(in=="date") { Date b;a=b; }
-    else if(in=="time") { Time b; a=b; }
-    else if(show_err) { cerr<<endl<<"Type "<<in<<" not supported"<<endl; void* b;  a=b; }
-    return a;
-};
+bool is_a_Time(const string & var){
+    bool response=true;
 
-bool check_data_consistence(const string & var, const string & to_check){
-    bool response=false;
-    if(substr_from_c_to_c(var, 1, 2, '"', '"', false)!="/err"){
-        response = (to_check == "string");
-    } else
-    if(substr_from_c_to_c(var, 1, 2, 39, 39, false)!="/err"){ //char a=39 --> a='
-        response = (to_check == "char");
-    } else
-    if(var.find(".")!=-1){
-        bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
-            response = (to_check=="time");
-        }else
-        if(Date_resp){
-            response = (to_check=="date");
-        }else{
-            response = (to_check=="float");
+    int hours, min, sec;
+
+    char sub;
+    if(var.find(':')!=-1){
+        sub=':';
+    }
+    else if(var.find('.')!=-1){
+        sub='.';
+    }else{
+        response=false;
+    }
+    if(response){
+        stringstream ss=data_ss(var, sub);
+        ss>>hours>>min>>sec;
+        if(hours<0 or hours>24){ //checks hours
+            response=false;
         }
-    } else
-    if(var.find(":")!=-1){
-        bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){
-            response = (to_check=="time");
-        }else
-        if(Date_resp){
-            response = (to_check=="date");
+        if(min<0 or min>60){ //checks minutes
+            response=false;
         }
+        if(sec<0 or sec>60){
+            response=false;
+        }
+    }
+
+    return response;
+}
+bool is_a_Date(const string & var){
+    bool response=true;
+
+    int day, month, year;
+
+    char sub;
+    bool err=false;
+    if(var.find(':')!=-1){
+        sub=':';
+    } else if(var.find('.')!=-1){
+        sub='.';
+    } else if(var.find('/')!=-1){
+        sub='/';
     } else{
-        response = (to_check=="int");
+        response=false;
+    }
+
+    if(response){
+        stringstream ss=data_ss(var, sub);
+        ss>>day>>month>>year;
+
+        if(month<0 or month>12){
+            response=false;
+        }
+        if(response) {
+            switch (month) {
+                default:
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12:
+                    if (day < 0 or day > 31) {
+                        response = false;
+                    }
+                    break;
+                case 2:
+                    if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
+                        response = false;
+                    }
+                    break;
+                case 4:
+                case 6:
+                case 9:
+                case 11:
+                    if (day < 0 or day > 30) {
+                        response = false;
+                    }
+                    break;
+            }
+        }
     }
     return response;
 }
+
+bool check_data_consistence(const string & var, const string & to_check){
+    bool response=false;
+
+    if(substr_from_c_to_c(var, 1, 2, '"', '"')!="/err"){
+        response = (to_check == "string" or to_check =="text");
+    } else
+    if(substr_from_c_to_c(var, 1, 2, 39, 39)!="/err"){ //char a=39 --> a='
+        response = (to_check == "char");
+    } else
+    if(var.find('.')!=-1){
+        bool Date_resp;
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
+        else if(Date_resp){ response = (to_check=="date"); }
+        else{ response = (to_check=="float"); }
+    } else
+    if(var.find(':')!=-1){
+        bool Date_resp;
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
+        else if(Date_resp){ response = (to_check=="date"); }
+    } else
+    if(var.find('/')!=-1){ response = (to_check=="date"); }
+    else{
+        response = (to_check=="int");
+    }
+
+    return response;
+}
+
+template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
+
+    for(int i=0; i<subtrahend.size(); i++){
+        string sub=subtrahend[i];//prendo un sottraendo
+        bool found=false;
+        for(int j=0; j<minuend.size() and !found; j++){
+            string min=minuend[j]; //prendo il minuendo
+            if(min==sub){
+                for(int k=j; k<minuend.size()-1; k++){
+                    minuend[k]=minuend[k+1];
+                }
+                minuend.resize(minuend.size()-1);
+                found=true;
+            }
+        }
+    }
+    return minuend;
+}
+
 
 #endif

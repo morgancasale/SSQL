@@ -7,6 +7,7 @@ using namespace std;
 class Date{
 private:
     int day, month, year;
+    bool AC=false;
     Time time;
 public:
     void set_day(const int &d);
@@ -26,6 +27,8 @@ public:
         day=01, month=01, year=1970;
     };
     ~Date()= default;
+
+    void set_Date(string in);
 };
 
 #endif //CS_PROJECT_DATE_H

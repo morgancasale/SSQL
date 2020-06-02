@@ -1,5 +1,5 @@
 #include "Time.h"
-#include "../../utility.h"
+
 using namespace std;
 
 void Time::set_hours(const int &h) {
@@ -82,7 +82,7 @@ int Time::tot_mins() const {
 }
 
 bool Time::equal_sec(Time t2) const & { return this->tot_seconds()==t2.tot_seconds(); }
-bool Time::operator==(Time t2) const & { equal_sec(t2); }
+bool Time::operator==(Time t2) const & { return equal_sec(t2); }
 bool Time::equal_min(Time t2) const & { return this->tot_mins()==t2.tot_mins(); }
 
 bool Time::operator>(Time t2) const & { return this->tot_seconds()>t2.tot_seconds(); }
