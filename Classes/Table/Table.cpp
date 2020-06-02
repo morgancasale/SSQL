@@ -25,7 +25,7 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
 
     string key;
     if(noErr){
-        key=substr_from_c_to_c(in, 1, 1, '(', ')', false);
+        key=substr_from_c_to_c(in, 1, 1, '(', ')');
 
         if (key == "/err") { noErr = false; }
     }
@@ -78,9 +78,9 @@ bool Table::check_type(const string & type){
 int Table::count_data(const vector<string> & data, const string & type){ //conta quanti dati di tipo "type" ci sono in data
     int counter=0;
     for(int i=1; i<data.size()-1; i++){
-        string tmp=substr_from_c_to_c(data[i], 1, 2, ' ', ' ', false);
+        string tmp=substr_from_c_to_c(data[i], 1, 2);
         if(tmp=="/err"){
-            tmp=substr_from_c_to_c(data[i], 1, -1, ' ', ' ', false);
+            tmp=substr_from_c_to_c(data[i], 1, -1);
         }
         if(tmp==type){
             counter++;
@@ -107,7 +107,7 @@ bool Table::create_col(string in, const vector<string> & data) {
         erase_substr(in," not null");
     }
 
-    string key=substr_from_c_to_c(in, 0, 1, ' ', ' ', false);
+    string key=substr_from_c_to_c(in, 0, 1);
     err=!check_key(key);
 
     string type;
@@ -126,7 +126,7 @@ bool Table::create_col(string in, const vector<string> & data) {
     if(!err and type == "int"){
         static int int_i=0;
         static vector<Column<int>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<int> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
@@ -138,56 +138,56 @@ bool Table::create_col(string in, const vector<string> & data) {
     if(!err and type == "float"){
         static int float_i=0;
         static vector<Column<float>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<float> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
         tmp[float_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[tmp.size()-1]));
+        cols.push_back(static_cast<void *>(&tmp[float_i]));
         float_i++;
     } else
     if(!err and type == "char"){
         static int char_i=0;
         static vector<Column<char>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<char> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
         tmp[char_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[tmp.size()-1]));
+        cols.push_back(static_cast<void *>(&tmp[char_i]));
         char_i++;
     } else
     if(!err and (type == "string" or type == "text")){
         static int string_i=0;
         static vector<Column<string>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<string> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
         tmp[string_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[tmp.size()-1]));
+        cols.push_back(static_cast<void *>(&tmp[string_i]));
         string_i++;
     } else
     if(!err and type == "date") {
         static int date_i=0;
         static vector<Column<Date>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<Date> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
         tmp[date_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[tmp.size()-1]));
+        cols.push_back(static_cast<void *>(&tmp[date_i]));
         date_i++;
     } else
     if(!err and type == "time"){
         static int time_i=0;
         static vector<Column<Time>> tmp;
-        tmp.resize(count_data(data, type));
+        tmp.resize(tmp.size()+1);
         Column<Time> tmp2;
         tmp2.key=key;
         tmp2.not_null=notNull;
         tmp[time_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[tmp.size()-1]));
+        cols.push_back(static_cast<void *>(&tmp[time_i]));
         time_i++;
     } else{
         err=true;
@@ -210,11 +210,11 @@ vector<string> Table::get_CREATE_data(string in){
     data[0]=substr_from_c_to_c(in, 0, 1);
 
     string line;
-    for(int i=1; substr_from_c_to_c(in, 1, 1, '(', ')', false)!="  "; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substr_from_c_to_c(in, 1, 1, '(', ')')!="  "; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]=substr_from_c_to_c(in, 2, 1, ' ', ',', false);
+        data[i]=substr_from_c_to_c(in, 2, 1, ' ', ',');
         if(data[i]=="/err"){
-            data[i]=substr_from_c_to_c(in, 2, 7, ' ', ';', false);
+            data[i]=substr_from_c_to_c(in, 2, 7, ' ', ';');
             data[i].resize(data[i].size()-2);
             erase_substr(in, data[i]);
         }else{
@@ -257,7 +257,7 @@ void Table::cast_data_to_col(const int & col_i, const string & type, const strin
         (*static_cast<Column<char>*>(cols[col_i])).values.push_back(data[1]);
     } else
     if(type=="string" or type=="text"){
-        string data_tmp=substr_from_c_to_c(data, 1, 2, '"', '"', false);
+        string data_tmp=substr_from_c_to_c(data, 1, 2, '"', '"');
         (*static_cast<Column<string>*>(cols[col_i])).values.push_back(data_tmp);
     } else
     if(type=="time"){
@@ -383,4 +383,8 @@ bool Table::check_INSERT_INTO_data(const vector<string> &filled_elements) {
         cerr<<endl<<R"(An element set as "not null" was not filled!)";
     }
     return (fillErr and autoIncrAndNotNullErr);
+}
+
+bool Table::check_element_existence(const string & in){
+
 }

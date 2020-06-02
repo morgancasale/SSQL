@@ -19,7 +19,7 @@ string tolower(string &in){ //converts all upper letters of a string to lower on
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ', const bool &show_error=true) {
+string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -47,10 +47,6 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     if(counter2 == -1){
         end=in.size();
         found2=true;
-    }
-
-    if(!found1 or !found2 and show_error) {
-        cerr << endl << "One or the two characters weren't found!";
     }
     if(!found1 or !found2){ //if one or two characters aren't found then the function returns "/err"
         return "/err"; //Maybe we should add an exception for the use of "/err" as any name
@@ -255,10 +251,10 @@ bool is_a_Date(const string & var){
 bool check_data_consistence(const string & var, const string & to_check){
     bool response=false;
 
-    if(substr_from_c_to_c(var, 1, 2, '"', '"', false)!="/err"){
+    if(substr_from_c_to_c(var, 1, 2, '"', '"')!="/err"){
         response = (to_check == "string" or to_check =="text");
     } else
-    if(substr_from_c_to_c(var, 1, 2, 39, 39, false)!="/err"){ //char a=39 --> a='
+    if(substr_from_c_to_c(var, 1, 2, 39, 39)!="/err"){ //char a=39 --> a='
         response = (to_check == "char");
     } else
     if(var.find('.')!=-1){
