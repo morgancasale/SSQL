@@ -27,3 +27,5 @@ private:
     string Cognome;
 
 };
+
+#endif

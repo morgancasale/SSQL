@@ -18,7 +18,7 @@ void search();
 
 int main(){
     system("cls");                                                   //teoricamente prog morgan che si adatta
-         int choice:
+         int choice;
          cout << "1.Search customer" << endl;
          cout << "2.Exit program" << endl;
          cin >> choice;
@@ -288,29 +288,33 @@ void search() {
 // questo imbasso da vedere meglio
 // da definire ancora il char se necessario
 
-char orden = “a”;  /* a=ascending; d=descending */
+template <typename T>
+void ordinamento(vector<T> &input, const char & orden){
+    /* a=ascending; d=descending */
+    int n=input.size();
+    T aux;
 
-    for (i=0; i<n-1; i++)
-    {
-        for (j=i+1; j<n; j++)
-        {
+    for (int i=0; i<n-1; i++){
+        for (int j=i+1; j<n; j++){
+
             switch(orden)
-            {case "a":
-                if(strcmp(Vector[i],Vector[j])>0)
-                {
-                    aux  = Vector[i];
-                    Vector[i] = Vector[j];
-                    Vector[j] = aux;
-                }
-                break;
-                case "d":
-                    if(strcmp(Vector[i],Vector[j])<0)
+            {case 'a':
+                    if(input[i]>input[j])
                     {
-                        aux  = Vector[i];
-                        Vector[i] = Vector[j];
-                        Vector[j] = aux;
+                        aux  = input[i];
+                        input[i] = input[j];
+                        input[j] = aux;
+                    }
+                    break;
+                case 'd':
+                    if(input[i]<input[j])
+                    {
+                        aux  = input[i];
+                        input[i] = input[j];
+                        input[j] = aux;
                     }
                     break;
             }
         }
     }
+};
