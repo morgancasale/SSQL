@@ -124,71 +124,41 @@ bool Table::create_col(string in, const vector<string> & data) {
     }
 
     if(!err and type == "int"){
-        static int int_i=0;
-        static vector<Column<int>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<int> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp2.auto_increment=auto_increment;
-        tmp[int_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[int_i]));
-        int_i++;
+        auto * tmp2=new Column<int>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        (*tmp2).auto_increment=auto_increment;
+        cols.push_back(static_cast<void *>(tmp2));
     } else
     if(!err and type == "float"){
-        static int float_i=0;
-        static vector<Column<float>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<float> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp[float_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[float_i]));
-        float_i++;
+        auto * tmp2=new Column<float>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        cols.push_back(static_cast<void *>(tmp2));
     } else
     if(!err and type == "char"){
-        static int char_i=0;
-        static vector<Column<char>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<char> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp[char_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[char_i]));
-        char_i++;
+        auto * tmp2=new Column<char>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        cols.push_back(static_cast<void *>(tmp2));
     } else
     if(!err and (type == "string" or type == "text")){
-        static int string_i=0;
-        static vector<Column<string>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<string> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp[string_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[string_i]));
-        string_i++;
+        auto * tmp2=new Column<string>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        cols.push_back(static_cast<void *>(tmp2));
     } else
     if(!err and type == "date") {
-        static int date_i=0;
-        static vector<Column<Date>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<Date> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp[date_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[date_i]));
-        date_i++;
+        auto * tmp2=new Column<Date>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        cols.push_back(static_cast<void *>(tmp2));
     } else
     if(!err and type == "time"){
-        static int time_i=0;
-        static vector<Column<Time>> tmp;
-        tmp.resize(tmp.size()+1);
-        Column<Time> tmp2;
-        tmp2.key=key;
-        tmp2.not_null=notNull;
-        tmp[time_i]=tmp2;
-        cols.push_back(static_cast<void *>(&tmp[time_i]));
-        time_i++;
+        auto * tmp2=new Column<Time>;
+        (*tmp2).key=key;
+        (*tmp2).not_null=notNull;
+        cols.push_back(static_cast<void *>(tmp2));
     } else{
         err=true;
     }

@@ -176,5 +176,5 @@ bool Database::DELETE(string in) {
     if(Tables[table_i].check_element_existence(element))
 
     string data=substr_from_c_to_c(in, 1, 1, '=', ';');
-
+    return noErr;
 }
