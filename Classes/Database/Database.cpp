@@ -4,7 +4,7 @@ bool Database::check_TableName(const string & name){
     bool noErr=true;
     for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
     if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
-    if(noErr){ if(name=="/err"){ noErr=false; } }
+    if(noErr){ for(const string & tmp: reserved_words){ noErr=(name!=tmp); } }
     return noErr;
 }
 
@@ -109,8 +109,8 @@ bool Database::INSERT_INTO(string in){
     if(Table_i!=-1) {
         vector<string> elementsNames;
         vector<string> elementsValues;
-        get_INSERT_INTO_data(in, elementsNames, elementsValues);
-        err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues);
+        err=!get_INSERT_INTO_data(in, elementsNames, elementsValues);
+        if(!err){ err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues); }
         if(!err){
             err=Tables[Table_i].check_INSERT_INTO_data(elementsNames);
         }
@@ -125,7 +125,8 @@ bool Database::INSERT_INTO(string in){
     return err;
 }
 
-void Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues) {
+bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues) {
+    bool noErr=true;
     for(; !substr_from_c_to_c(in, 1, 1, '(', ')').empty();){
         string elementName=substr_from_c_to_c(in, 1, 1, '(', ',');
         if(elementName=="/err" or num_of_words(elementName)>1){
@@ -138,7 +139,7 @@ void Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     }
 
     in-="() values (";
-    for(int i=0; !substr_from_c_to_c(in, 0, 1, ' ', ')').empty(); i++){
+    for(int i=0; !substr_from_c_to_c(in, 0, 1, ' ', ')').empty() and noErr; i++){
         string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',');
         if(elementValue=="/err"){
             elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')');
@@ -146,7 +147,12 @@ void Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
         }else{
             erase_substr(in, elementValue+", ");
         }
-        elementsValues.push_back(elementValue);
+        for(const string & tmp: reserved_words){ if(elementValue==tmp){ noErr=false; } }
+        if(noErr){
+            elementsValues.push_back(elementValue);
+        } else{
+           cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
+        }
     }
 }
 
@@ -172,9 +178,25 @@ bool Database::DELETE(string in) {
     noErr=check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
-    string element=substr_from_c_to_c(in, 4, 1, ' ', '=');
-    if(Tables[table_i].check_element_existence(element))
+    if(noErr) {
+        string element = substr_from_c_to_c(in, 4, 1, ' ', '=');
+        int col_i;
+        if ((col_i=Tables[table_i].get_col_index(element))==-1) {
+            cerr<<"No colum with name "<<element<<" was found!";
+            noErr = false;
+        }
+        if(noErr){
+            string data = substr_from_c_to_c(in, 1, 1, '=', ';');
+            if(!check_data_consistence(data,Tables[table_i].elementsTypes[col_i])){
+                cerr<<"The type of the input data doesn't match the column type!";
+                noErr=false;
+            }
+            vector<int> foundRows;
+            if(!Tables[table_i].find_Rows_by_value(data, col_i, foundRows)){
+                cerr<<"No row containing \""<<data<<"\" was found!";
+            }
+        }
 
-    string data=substr_from_c_to_c(in, 1, 1, '=', ';');
+    }
     return noErr;
 }

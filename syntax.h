@@ -27,6 +27,11 @@ const string allowed_types[7]={
         "time"
 };
 
+const string reserved_words[2]{
+    "/delete",
+    "/err"
+};
+
 string take_command(string & in){
     bool err=false; string tmp;
     clean_input(in);

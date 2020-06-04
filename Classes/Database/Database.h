@@ -32,7 +32,7 @@ public:
 
     ~Database()=default;
 
-    static void get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
+    static bool get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
 
     bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
                               const vector<string> &elementsValues);

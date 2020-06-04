@@ -248,32 +248,33 @@ bool is_a_Date(const string & var){
     return response;
 }
 
+//The first parameter is the input data while the second one is the type to check
 bool check_data_consistence(const string & var, const string & to_check){
-    bool response=false;
+    bool noErr=false;
 
     if(substr_from_c_to_c(var, 1, 2, '"', '"')!="/err"){
-        response = (to_check == "string" or to_check =="text");
+        noErr = (to_check == "string" or to_check == "text");
     } else
     if(substr_from_c_to_c(var, 1, 2, 39, 39)!="/err"){ //char a=39 --> a='
-        response = (to_check == "char");
+        noErr = (to_check == "char");
     } else
     if(var.find('.')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
-        else if(Date_resp){ response = (to_check=="date"); }
-        else{ response = (to_check=="float"); }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (to_check == "time"); }
+        else if(Date_resp){ noErr = (to_check == "date"); }
+        else{ noErr = (to_check == "float"); }
     } else
     if(var.find(':')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ response = (to_check=="time"); }
-        else if(Date_resp){ response = (to_check=="date"); }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (to_check == "time"); }
+        else if(Date_resp){ noErr = (to_check == "date"); }
     } else
-    if(var.find('/')!=-1){ response = (to_check=="date"); }
+    if(var.find('/')!=-1){ noErr = (to_check == "date"); }
     else{
-        response = (to_check=="int");
+        noErr = (to_check == "int");
     }
 
-    return response;
+    return noErr;
 }
 
 template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
