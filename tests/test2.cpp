@@ -1,12 +1,14 @@
 #include <iostream>
 #include <vector>
+#include <list>
 #include "../utility.h"
 using namespace std;
 
+
 int main(){
-    vector<string> minuend={"name", "yor", "price", "sef"};
-    vector<string> subtrahend={"yor", "name", "sef"};
-    minuend=minuend-subtrahend;
+    static vector<int> a;
+    void * tmp= static_cast<void *>(&a);
+    (*static_cast<auto *>(tmp))
     cout<<"a";
     return 0;
 }

@@ -19,6 +19,7 @@ private:
     int primaryKey_index;
     static int count_data(const vector<string> &data, const string &type);
 
+
 public:
     bool find_check_primaryKey(const string & in);
     bool create_col(string in, const vector<string> & data);
@@ -46,10 +47,12 @@ public:
 
     void auto_increment_col();
 
-    bool set_INSERT_INTO_data( const vector<string> &elementsNames, const vector<string> &elementsValues);
+    bool set_INSERT_INTO_data(const vector<string> &elements_Names, const vector<string> &elementsValues);
 
     bool check_INSERT_INTO_data(const vector<string> &filled_elements);
 
+    int get_col_index(const string &in);
 
+    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
 };
 #endif //CS_PROJECT_TABLE_H
