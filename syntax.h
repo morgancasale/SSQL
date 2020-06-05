@@ -93,8 +93,18 @@ bool control_create(string in){
 
     return (!err and !primaryKeyErr);
 };
-bool control_drop(const string & in){return num_of_words(in)==1;};
-bool control_truncate(const string & in){return num_of_words(in)==1;};
+bool control_drop(const string & in){
+    bool noErr=true;
+    noErr=(in[in.size()-1]==';');
+    if(noErr){ noErr = (num_of_words(in) == 1); }
+
+    if(!noErr){
+        cerr<<endl<<"Drop Table command syntax error!";
+    }
+    return noErr;
+};
+
+bool control_truncate(const string & in){ return control_drop(in); };
 
 bool control_insert(string in){
     bool noErr=true;

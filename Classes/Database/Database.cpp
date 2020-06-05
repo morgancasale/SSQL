@@ -49,33 +49,24 @@ bool Database::process_command(const string &choice, const string &command) {
             }
         }
     } else
-    if(command=="drop table" and control_drop(choice)){
-        noErr=false;
-        for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
+    if(command=="drop table"){
+        if((noErr=control_drop(choice))){
+            noErr=DROP_TABLE(choice);
         }
-        if(noErr) Tables.erase(Tables.begin()+j);
-        else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="truncate table" and control_truncate(choice)){
-        noErr=false;
-        for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
+        if((noErr=control_truncate(choice))){
+            noErr=TRUNCATE_TABLE(choice);
         }
-        if(noErr)    Tables[j].empty_table();
-        else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
-        if(control_insert(choice)){
-            INSERT_INTO(choice);
-        }
-        else{
-            noErr=false;
+        if((noErr=control_insert(choice))){
+            noErr=!INSERT_INTO(choice);
         }
     } else
     if(command=="delete"){
-       if(control_delete(choice)){
-           DELETE(choice);
+       if((noErr=control_delete(choice))){
+           noErr=DELETE(choice);
        }
     } else
     if(command=="update"){
@@ -201,4 +192,35 @@ bool Database::DELETE(string in) {
 
     }
     return noErr;
+}
+
+bool Database::DROP_TABLE(const string & in){
+    bool noErr=true;
+    string tableName=in-";";
+    noErr=!check_Table_existence(tableName, true);
+    if(!noErr){
+        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+    } else{
+        int Table_i=find_Table(tableName);
+        Table & table=Tables[Table_i];
+        for(int i=table.elementsTypes.size(); i>0; i--){
+            table.clear_col(i);
+            table.elementsTypes.resize(table.elementsTypes.size()-1);
+        }
+        deleteElements_from_vec(Tables,{Table_i});
+    }
+    return noErr;
+}
+
+bool Database::TRUNCATE_TABLE(const string & in){
+    bool noErr=true;
+    string tableName=in-";";
+    noErr=!check_Table_existence(tableName, true);
+    if(!noErr){
+        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+    } else{
+        int Table_i=find_Table(tableName);
+        Table & table=Tables[Table_i];
+        table.empty_content();
+    }
 }

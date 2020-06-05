@@ -197,11 +197,6 @@ vector<string> Table::get_CREATE_data(string in){
     return data;
 }
 
-void Table::empty_table() {
-    //for (int i = 0; i < cols.size(); i++)
-        //static_cast<Column<typeof(string_to_type(elementsTypes[i]))> *>(cols[i])->values.resize(0);
-}
-
 int Table::find_col_by_name(const string &in) {
     int i=0;
     bool found=false;
@@ -493,6 +488,62 @@ void Table::deleteRows(const vector<int> & rows){
             Column<Time> & vec=(*static_cast<Column<Time>*>(cols[j]));
             deleteElements_from_vec(vec.values, rows);
             deleteElements_from_vec(vec.valuesNullity, rows);
+        }
+    }
+}
+
+void Table::clear_col(const int &i){ /*https://stackoverflow.com/questions/33805741/delete-pointer-and-object*/
+    if(elementsTypes[i]=="int"){
+        delete((static_cast<Column<int>*>(cols[i])));
+    }
+    if(elementsTypes[i]=="float"){
+        delete((static_cast<Column<float>*>(cols[i])));
+    }
+    if(elementsTypes[i]=="char"){
+        delete((static_cast<Column<char>*>(cols[i])));
+    }
+    if(elementsTypes[i]=="string" or elementsTypes[i]=="text"){
+        delete((static_cast<Column<string>*>(cols[i])));
+    }
+    if(elementsTypes[i]=="date"){
+        delete((static_cast<Column<Date>*>(cols[i])));
+    }
+    if(elementsTypes[i]=="time"){
+        delete((static_cast<Column<Time>*>(cols[i])));
+    }
+}
+
+void Table::empty_content(){
+    for(int i=0; i<elementsTypes.size(); i++){
+        if(elementsTypes[i]=="int"){
+            Column<int> & tmp=(*static_cast<Column<int>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
+        }
+        if(elementsTypes[i]=="float"){
+            Column<float> & tmp=(*static_cast<Column<float>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
+        }
+        if(elementsTypes[i]=="char"){
+            Column<char> & tmp=(*static_cast<Column<char>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
+        }
+        if(elementsTypes[i]=="string" or elementsTypes[i]=="text"){
+            Column<string> & tmp=(*static_cast<Column<string>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
+        }
+        if(elementsTypes[i]=="time"){
+            Column<Time> & tmp=(*static_cast<Column<Time>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
+        }
+        if(elementsTypes[i]=="date"){
+            Column<Date> & tmp=(*static_cast<Column<Date>*>(cols[i]));
+            tmp.values.clear();
+            tmp.valuesNullity.clear();
         }
     }
 }

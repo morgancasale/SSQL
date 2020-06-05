@@ -6,8 +6,8 @@ using namespace std;
 
 
 int main(){
-    vector<int> a= {1,2,3};
-    deleteElements_from_vec(a, {0, 2});
-
+    string a="fortaco", b="a";
+    delete (&a);
+    int c=a.size();
     return 0;
 }

@@ -11,6 +11,7 @@ public:
     string key;
     bool not_null=false;
     bool auto_increment=false;
+    ~Column()=default;
 };
 
 class Table{
@@ -28,6 +29,7 @@ public:
     vector<string> elementsTypes;
     vector<void *> cols;
     vector<string> elementsNames;
+    void clear_col(const int &i);
 
 public:
     bool set_Table(const string &in);
@@ -43,7 +45,6 @@ public:
 
     static bool check_type(const string & type);
 
-
     void cast_data_to_col(const int &col_i, const string &type, const string &data);
 
     void auto_increment_col();
@@ -57,5 +58,7 @@ public:
     bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
 
     void deleteRows(const vector<int> &rows);
+
+    void empty_content();
 };
 #endif //CS_PROJECT_TABLE_H
