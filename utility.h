@@ -280,10 +280,10 @@ bool check_data_consistence(const string & var, const string & to_check){
 template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
 
     for(int i=0; i<subtrahend.size(); i++){
-        string sub=subtrahend[i];//prendo un sottraendo
+        type sub=subtrahend[i];//prendo un sottraendo
         bool found=false;
         for(int j=0; j<minuend.size() and !found; j++){
-            string min=minuend[j]; //prendo il minuendo
+            type min=minuend[j]; //prendo il minuendo
             if(min==sub){
                 for(int k=j; k<minuend.size()-1; k++){
                     minuend[k]=minuend[k+1];
@@ -296,5 +296,29 @@ template<typename type> vector<type> operator -(vector<type> minuend, const vect
     return minuend;
 }
 
+template<typename type> void operator -=(vector<type> & minuend, const vector<type> & subtrahend){
+    for(int i=0; i<subtrahend.size(); i++){
+        type sub=subtrahend[i];//prendo un sottraendo
+        bool found=false;
+        for(int j=0; j<minuend.size() and !found; j++){
+            type min=minuend[j]; //prendo il minuendo
+            if(min==sub){
+                for(int k=j; k<minuend.size()-1; k++){
+                    minuend[k]=minuend[k+1];
+                }
+                minuend.resize(minuend.size()-1);
+                found=true;
+            }
+        }
+    }
+}
 
+template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
+    for(int i=0; i<rows.size(); i++){
+        for(int k=rows[i]; k<minuend.size()-1; k++){
+            minuend[k]=minuend[k+1];
+        }
+        minuend.resize(minuend.size()-1);
+    }
+}
 #endif

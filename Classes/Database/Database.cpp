@@ -73,7 +73,7 @@ bool Database::process_command(const string &choice, const string &command) {
             noErr=false;
         }
     } else
-    if(command=="delete from"){
+    if(command=="delete"){
        if(control_delete(choice)){
            DELETE(choice);
        }
@@ -112,7 +112,7 @@ bool Database::INSERT_INTO(string in){
         err=!get_INSERT_INTO_data(in, elementsNames, elementsValues);
         if(!err){ err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues); }
         if(!err){
-            err=Tables[Table_i].check_INSERT_INTO_data(elementsNames);
+            err= Tables[Table_i].checkINSERT_INTOData_and_Nullify(elementsNames);
         }
         if(!err){
             Tables[Table_i].auto_increment_col();
@@ -154,6 +154,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
            cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
         }
     }
+    return noErr;
 }
 
 int Database::find_Table(const string &in) {
@@ -174,12 +175,12 @@ int Database::find_Table(const string &in) {
 bool Database::DELETE(string in) {
     bool noErr=true;
 
-    string table_name=substr_from_c_to_c(in, 2, 3);
-    noErr=check_Table_existence(table_name, true);
+    string table_name=substr_from_c_to_c(in, 0, 1);
+    noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = substr_from_c_to_c(in, 4, 1, ' ', '=');
+        string element = substr_from_c_to_c(in, 2, 1, ' ', '=');
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";
@@ -195,6 +196,7 @@ bool Database::DELETE(string in) {
             if(!Tables[table_i].find_Rows_by_value(data, col_i, foundRows)){
                 cerr<<"No row containing \""<<data<<"\" was found!";
             }
+            Tables[table_i].deleteRows(foundRows);
         }
 
     }

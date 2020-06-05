@@ -24,7 +24,18 @@ int main(){
     }else{
         cerr<<":(";
     }
-    Column<string> b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    choice="insert into phone (yor, name, sef, price) values (2016, \"samsung s7\", 6, 729.99);";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+    choice="insert into phone (yor, name, sef, price) values (2013, \"iphone 5\", 5, 729.99);";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+    Column<string> & b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+
+    choice="delete phone where sef=6;";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+
     Column<int> a=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
     Column<float> c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
     Column<int> d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));

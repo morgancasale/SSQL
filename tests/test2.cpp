@@ -6,9 +6,8 @@ using namespace std;
 
 
 int main(){
-    static vector<int> a;
-    void * tmp= static_cast<void *>(&a);
-    (*static_cast<auto *>(tmp))
-    cout<<"a";
+    vector<int> a= {1,2,3};
+    deleteElements_from_vec(a, {0, 2});
+
     return 0;
 }

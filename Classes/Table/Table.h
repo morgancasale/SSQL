@@ -7,6 +7,7 @@ using namespace std;
 template<typename type> class Column {
 public:
     vector<type> values;
+    vector<bool> valuesNullity;
     string key;
     bool not_null=false;
     bool auto_increment=false;
@@ -49,10 +50,12 @@ public:
 
     bool set_INSERT_INTO_data(const vector<string> &elements_Names, const vector<string> &elementsValues);
 
-    bool check_INSERT_INTO_data(const vector<string> &filled_elements);
+    bool checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements);
 
     int get_col_index(const string &in);
 
     bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
+
+    void deleteRows(const vector<int> &rows);
 };
 #endif //CS_PROJECT_TABLE_H

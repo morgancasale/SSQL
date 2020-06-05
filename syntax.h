@@ -11,7 +11,7 @@ const string allowed_coms[8]={
         "drop table",
         "truncate table",
         "insert into",
-        "delete from",
+        "delete",
         "update",
         "select",
         "quit()"
@@ -33,15 +33,14 @@ const string reserved_words[2]{
 };
 
 string take_command(string & in){
-    bool err=false; string tmp;
+    bool err=true;
     clean_input(in);
     for(const string & s:allowed_coms) {
         if(in.find(s) != in.npos) {
             err=false;
-            tmp=in.substr(in.find(s), s.size());
-            in-=(tmp+" ");
-            return tmp;
-        }else   err=true;
+            in-=(s+" ");
+            return s;
+        }
     }
     if(err) cerr<<endl<<"Comando non riconosciuto!"<<endl;
     return "/err";
@@ -96,6 +95,7 @@ bool control_create(string in){
 };
 bool control_drop(const string & in){return num_of_words(in)==1;};
 bool control_truncate(const string & in){return num_of_words(in)==1;};
+
 bool control_insert(string in){
     bool noErr=true;
     int counter=0;
@@ -146,8 +146,8 @@ bool control_insert(string in){
 
 bool control_delete(string in){
     bool noErr=true;
-    if(in[in.size()]!=';' or in.find("=")==-1){ noErr=false; }
-    if(substr_from_c_to_c(in, 3, 4)!="where"){ noErr =false; }
+    if(in[in.size()-1]!=';' or in.find("=")==-1){ noErr=false; }
+    if(substr_from_c_to_c(in, 1, 2)!="where"){ noErr =false; }
     if(!noErr){
         cerr<<endl<<"DELETE command syntax error!";
     }
