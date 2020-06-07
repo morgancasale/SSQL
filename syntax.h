@@ -164,4 +164,42 @@ bool control_delete(string in){
     return noErr;
 }
 
+bool control_update(string in){
+    bool noErr=(in[in.size()-1]==';');
+    if(noErr){
+        int tmp;
+        noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
+        if(noErr){
+            in=in.substr(tmp+4, in.size()-1);
+            noErr=(in.find("where")!=-1);
+            if(noErr){
+                for(; in.find("where")!=0 and noErr;){
+                    string data1=substr_from_c_to_c(in, 0, 1, ' ', '=');
+                    noErr=(num_of_words(data1)==1);
+
+                    string data2=substr_from_c_to_c(in, 1, 1, '=', ',');
+                    data2+=",";
+                    if(data2=="/err,"){
+                        data2=get_substr_from_s_to_s(in, "=", "where");
+                    }
+
+                    if(noErr){
+                        string a=(data1+"="+data2+" ");
+                        in-=(data1+"="+data2+" ");
+                    }
+                }
+                if(noErr){
+                    in-="where ";
+                    string data=substr_from_c_to_c(in, 0, 1, ' ', '=');
+                    noErr=(num_of_words(data) == 1);
+                }
+            }
+        }
+    }
+    if(!noErr){
+        cerr<<endl<<"UPDATE command syntax error!";
+    }
+    return noErr;
+}
+
 #endif //CS_PROJECT_SYNTAX_H

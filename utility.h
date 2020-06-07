@@ -87,18 +87,21 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     return err;
 }
 
-string remove_endl(string &in){
-    int pos=in.find('\n');
-    while(pos!=-1){
-        in.replace(pos,1, " ");
-        pos=in.find('\n');
+string remove_chars(string &in, const vector<char> & sub){
+    for(const char & c: sub){
+        int pos=in.find(c);
+        while(pos!=-1){
+            in.replace(pos,1, " ");
+            pos=in.find(c);
+        }
     }
+
     return in;
 }
 
 bool clean_input(string &in){
     tolower(in);
-    remove_endl(in);
+    remove_chars(in, {'\n', '\t'});
     return remove_duplicate_chars(in, {' '});
 }
 
@@ -110,7 +113,7 @@ string erase_substr(string &in, const string &to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size());
-        remove_endl(in);
+        remove_chars(in, {'\n'});
     }
     return in;
 }
@@ -124,8 +127,8 @@ void operator -=(string & minuend, const string & subtrahend){
 }
 
 string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
-    int start=in.find(s1);
-    int end=in.find(s2)+s2.size();
+    int start=in.find(s1)+1;
+    int end=in.find(s2)-1;
 
     if(start==-1 or end==-1){
         return "/err";
@@ -321,4 +324,5 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
         minuend.resize(minuend.size()-1);
     }
 }
+
 #endif

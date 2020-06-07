@@ -70,7 +70,9 @@ bool Database::process_command(const string &choice, const string &command) {
        }
     } else
     if(command=="update"){
-        //update_Row_data(choice);
+        if((noErr=control_update(choice))){
+            noErr=UPDATE(choice);
+        }
     } else
     if(command=="select"){
         //print_selected_data(choice);
