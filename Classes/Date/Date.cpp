@@ -79,7 +79,7 @@ string Date::Date_to_string() const &{
     if(AC){ return to_string(day)+"-"+to_string(month)+"-"+to_string(abs(year))+"AC";}
     return to_string(day)+"-"+to_string(month)+"-"+to_string(year);
 }
-void Date::set_Date(string in){
+void Date::set_Date(const string & in){
     bool err=false;
     char sub;
 

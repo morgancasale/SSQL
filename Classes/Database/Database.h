@@ -44,6 +44,12 @@ public:
     bool cast_data(Table &table, const int & Table_i, const int &col_i, const string &type, const string &data);
 
     static bool check_TableName(const string &name);
+
+    bool DROP_TABLE(const string &in);
+
+    bool TRUNCATE_TABLE(const string &in);
+
+    bool UPDATE(string in);
 };
 
 void a(const string &in){

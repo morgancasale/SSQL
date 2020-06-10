@@ -49,37 +49,30 @@ bool Database::process_command(const string &choice, const string &command) {
             }
         }
     } else
-    if(command=="drop table" and control_drop(choice)){
-        noErr=false;
-        for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
+    if(command=="drop table"){
+        if((noErr=control_drop(choice))){
+            noErr=DROP_TABLE(choice);
         }
-        if(noErr) Tables.erase(Tables.begin()+j);
-        else     cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="truncate table" and control_truncate(choice)){
-        noErr=false;
-        for(int i=0; i<Tables.size(); i++){
-            if(Tables[i].get_name() == choice)  noErr=true;   j=i;
+        if((noErr=control_truncate(choice))){
+            noErr=TRUNCATE_TABLE(choice);
         }
-        if(noErr)    Tables[j].empty_table();
-        else cerr<<"la tabella non esiste"<<endl;
     } else
     if(command=="insert into") {
-        if(control_insert(choice)){
-            INSERT_INTO(choice);
-        }
-        else{
-            noErr=false;
+        if((noErr=control_insert(choice))){
+            noErr=!INSERT_INTO(choice);
         }
     } else
-    if(command=="delete from"){
-       if(control_delete(choice)){
-           DELETE(choice);
+    if(command=="delete"){
+       if((noErr=control_delete(choice))){
+           noErr=DELETE(choice);
        }
     } else
     if(command=="update"){
-        //update_Row_data(choice);
+        if((noErr=control_update(choice))){
+            noErr=UPDATE(choice);
+        }
     } else
     if(command=="select"){
         //print_selected_data(choice);
@@ -112,7 +105,7 @@ bool Database::INSERT_INTO(string in){
         err=!get_INSERT_INTO_data(in, elementsNames, elementsValues);
         if(!err){ err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues); }
         if(!err){
-            err=Tables[Table_i].check_INSERT_INTO_data(elementsNames);
+            err= Tables[Table_i].checkINSERT_INTOData_and_Nullify(elementsNames);
         }
         if(!err){
             Tables[Table_i].auto_increment_col();
@@ -154,6 +147,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
            cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
         }
     }
+    return noErr;
 }
 
 int Database::find_Table(const string &in) {
@@ -174,12 +168,12 @@ int Database::find_Table(const string &in) {
 bool Database::DELETE(string in) {
     bool noErr=true;
 
-    string table_name=substr_from_c_to_c(in, 2, 3);
-    noErr=check_Table_existence(table_name, true);
+    string table_name=substr_from_c_to_c(in, 0, 1);
+    noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = substr_from_c_to_c(in, 4, 1, ' ', '=');
+        string element = substr_from_c_to_c(in, 2, 1, ' ', '=');
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";
@@ -187,16 +181,96 @@ bool Database::DELETE(string in) {
         }
         if(noErr){
             string data = substr_from_c_to_c(in, 1, 1, '=', ';');
-            if(!check_data_consistence(data,Tables[table_i].elementsTypes[col_i])){
-                cerr<<"The type of the input data doesn't match the column type!";
-                noErr=false;
-            }
             vector<int> foundRows;
-            if(!Tables[table_i].find_Rows_by_value(data, col_i, foundRows)){
-                cerr<<"No row containing \""<<data<<"\" was found!";
+            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows);
+            if(noErr){
+                Tables[table_i].deleteRows(foundRows);
             }
         }
 
+    }
+    return noErr;
+}
+
+bool Database::DROP_TABLE(const string & in){
+    bool noErr=true;
+    string tableName=in-";";
+    noErr=!check_Table_existence(tableName, true);
+    if(!noErr){
+        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+    } else{
+        int Table_i=find_Table(tableName);
+        Table & table=Tables[Table_i];
+        for(int i=table.elementsTypes.size(); i>0; i--){
+            table.clear_col(i);
+            table.elementsTypes.resize(table.elementsTypes.size()-1);
+        }
+        deleteElements_from_vec(Tables,{Table_i});
+    }
+    return noErr;
+}
+
+bool Database::TRUNCATE_TABLE(const string & in){
+    bool noErr=true;
+    string tableName=in-";";
+    noErr=!check_Table_existence(tableName, true);
+    if(!noErr){
+        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+    } else{
+        int Table_i=find_Table(tableName);
+        Table & table=Tables[Table_i];
+        table.empty_content();
+    }
+    return noErr;
+}
+
+bool Database::UPDATE(string in){
+    bool noErr;
+    string tableName=substr_from_c_to_c(in, 0, 1);
+    noErr=!check_Table_existence(tableName, true);
+    Table & table=Tables[find_Table(tableName)];
+
+    if(noErr){
+        in-=(tableName+" set ");
+
+        string colToSearch= substr_from_s_to_s(in, "where ", "=", true);
+        replace_chars(colToSearch, {' '}, -1);
+        int col_index;
+        noErr=((col_index=table.get_col_index(colToSearch))!=-1);
+
+        if(noErr){
+            string searchData= substr_from_s_to_s(in, colToSearch, ";");
+            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
+            replace_chars(searchData, {' '}, -1);
+
+            vector<int> foundRows;
+            noErr=table.find_Rows_by_value(searchData, col_index, foundRows);
+            in-=(substr_from_s_to_s(in, " where", ";")+";");
+            if(noErr){
+                replace_chars(in, {' '}, -1);
+                vector<string> updateData;
+                for(; substr_from_c_to_c(in,0,-1)!="/err";){
+                    string tmp=substr_from_c_to_c(in, 0, 1, ' ', ',');
+                    tmp+=",";
+                    if(tmp=="/err,"){
+                        tmp=substr_from_c_to_c(in, 0,-1);
+                    }
+                    in-=tmp;
+                    if(tmp.find(',')){ tmp-=","; }
+                    updateData.push_back(tmp);
+
+                }
+                noErr= table.set_UPDATE_data(updateData, foundRows);
+            } else{
+                cerr<<"No row containing"<<searchData<<"was found!";
+            }
+
+        } else{
+            cerr<<endl<<"No column "<<colToSearch<<"was found!";
+        }
+
+    } else{
+        cerr<<"Table named "<<tableName<<" doesn't exist!";
     }
     return noErr;
 }

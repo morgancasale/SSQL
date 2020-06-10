@@ -2,13 +2,12 @@
 #include <vector>
 #include <list>
 #include "../utility.h"
+#include "../syntax.h"
 using namespace std;
 
 
 int main(){
-    static vector<int> a;
-    void * tmp= static_cast<void *>(&a);
-    (*static_cast<auto *>(tmp))
-    cout<<"a";
+    string a="masmm";
+    reverse(a.begin(), a.end());
     return 0;
 }
