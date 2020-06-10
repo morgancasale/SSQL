@@ -9,7 +9,7 @@ public:
     bool process_command(const string &choice, const string &command);
     static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
-    bool check_Table_existence(const string &in, const bool & existence);
+    bool check_Table_existence(string in_Table_name, const bool & existence);
 
     bool INSERT_INTO(string in);
     bool DELETE(string in);
@@ -26,7 +26,7 @@ public:
 
     bool print_selected_data(string command);
 
-    int find_Table(const string & in);
+    int find_Table(string in);
 
     Database() = default;
 

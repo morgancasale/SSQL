@@ -9,13 +9,14 @@ using namespace std;
 #include "Classes/Date/Date.h"
 
 
-string tolower(string &in, int stop=-1){ //converts all upper letters of a string to lower ones
+string tolower(string &in, int stop= -1){ //converts all upper letters of a string to lower ones
     stop = ((stop<0)? in.size()-1 : stop); //if stop<0 takes all the string
     for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
     }
     return in;
 }
+
 // it return the substring from the n(counter1) instance of char1
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
@@ -103,13 +104,15 @@ string replace_chars(string &in, const vector<char> &sub, const char &car) {
 
     return in;
 }
+
+
 bool clean_input(string &in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(string a: programKeyWords) {
         if (tmp.find(a)!=tmp.npos) in.replace(tmp.find(a),a.size(), a);
     }
-    remove_endl(in);
+    replace_chars(in, {'\n'}, ' ');
     return remove_duplicate_chars(in, {' '});
 }
 
@@ -342,6 +345,28 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
         }
         minuend.resize(minuend.size()-1);
     }
+}
+
+int num_of_chars(const string & in, const char & c){
+    int num=0;
+    for(const char tmp: in){
+        if(tmp==c){ num++; }
+    }
+    return num;
+}
+
+string replace_content(string in, const char & start, const char & end, const char & sub=' '){
+    int start_i=0, end_i=0;
+    while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){
+        string repl=" ";
+        string tmp=substr_from_c_to_c(in, start_i+1, end_i+1, start, end);
+        int s=tmp.size();
+        for(int j=0; j<s-1; j++){ repl.push_back(' '); }
+        in.replace(in.find(tmp), tmp.size(), repl);
+        start_i++;
+        end_i++;
+    }
+    return in;
 }
 
 #endif

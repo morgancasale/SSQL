@@ -6,6 +6,7 @@
 #define CS_PROJECT_SYNTAX_H
 #include "utility.h"
 
+
 const vector <string> allowed_coms={
         "create table",
         "drop table",
@@ -48,7 +49,7 @@ const vector <string> keyWords={
 };
 
 string take_command(string & in){
-    bool err=false; string tmp;
+    bool err=true; string tmp;
 
     vector <string> dictionary;
     dictionary.insert(dictionary.end(), allowed_types.begin(), allowed_types.end());
@@ -114,6 +115,18 @@ bool control_create(string in){
 
     return (!err and !primaryKeyErr);
 };
+
+bool control_CREATE_data(vector<string> in){
+    bool noErr=true;
+    for(string tmp: in){
+        tolower(tmp);
+        for(const string & word: allowed_coms){ noErr=(tmp!=word); }
+        for(const string & word: allowed_types){ noErr=(tmp!=word); }
+        for(const string & word: reserved_words){ noErr=(tmp!=word); }
+    }
+    return noErr;
+}
+
 bool control_drop(const string & in){
     bool noErr=true;
     noErr=(in[in.size()-1]==';');
@@ -131,47 +144,60 @@ bool control_insert(string in){
     bool noErr=true;
     int counter=0;
 
-    //controlla se ci sia il termine "values" e un ';' alla fine
-    if(in.find("values")==in.npos or in.find(';')==in.npos) noErr=false;
+    //controlla se ci sia il termine "values", un ';' alla fine, che ci sia solo una parola
+    //tra insert e la parentesi, che ci siano solo 2 '(' e 2 ')' e che l'ultimo carattere sia ')'
+    noErr=(in.find("values")!=in.npos and in[in.size()-1]==';') and
+            (num_of_words(substr_from_c_to_c(in, 0, 1, ' ', '('))) and
+            (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2) and
+            (in[in.size()-2]==')');
 
-    string secondLine = in.substr(in.find("values"), in.find(';'));
-    string firstLine = in-secondLine;
+    if(noErr){
+        string no_content= replace_content(in, '(', ')');
+        string tmp_line=in.substr(0, in.find("values"));
+        noErr=(num_of_chars(tmp_line, '(')==1 and num_of_chars(tmp_line,')')==1);
+        if(noErr) {
+            string secondLine = in.substr(no_content.find("values"), in.find(';') - no_content.find("values")+1);
+            string firstLine = in - secondLine;
+            noErr=(secondLine.find("values")!=-1);
 
-    //controllo prima riga
-    if(firstLine.find('(')==in.npos or firstLine.find(')')==in.npos
-        or num_of_words(firstLine.substr(0, firstLine.find('(')))!=1) noErr=false;
-    else {
-        counter = num_of_words(firstLine.substr(firstLine.find('('), firstLine.find(')')));
-    }
+            if(noErr) {
+                //controllo prima riga
+                if (firstLine.find('(') == in.npos or firstLine.find(')') == in.npos
+                    or num_of_words(firstLine.substr(0, firstLine.find('('))) != 1) { noErr = false; }
+                else {
+                    counter = num_of_words(firstLine.substr(firstLine.find('('), firstLine.find(')')));
+                }
 
-    //controllo la seconda riga
-    if(secondLine.find('(')==in.npos or secondLine.find(')')==in.npos
-       or num_of_words(secondLine.substr(0, secondLine.find('(')))!=1) { noErr=false; }
-    else {
-        //elimino le stringhe per non causare problemi al contatore dopo
-        for(int i=0; i<character_counter(secondLine,'"'); i++) {
-            string toErase="\""+substr_from_c_to_c(secondLine, 1, 2, '"', '"')+"\"";
-            erase_substr(secondLine, toErase);
-        }
+                //controllo la seconda riga
+                if (secondLine.find('(') == in.npos or secondLine.find(')') == in.npos
+                    or num_of_words(secondLine.substr(0, secondLine.find('('))) != 1) { noErr = false; }
+                else {
+                    //elimino le stringhe per non causare problemi al contatore dopo
+                    for (int i = 0; i < character_counter(secondLine, '"'); i++) {
+                        string toErase = "\"" + substr_from_c_to_c(secondLine, 1, 2, '"', '"') + "\"";
+                        erase_substr(secondLine, toErase);
+                    }
 
-        //elimino i caratteri per non causare problemi al contatore dopo
-        for(int i=0; i<character_counter(secondLine,39); i++) {
-            string toErase=substr_from_c_to_c(secondLine, 1, 2, 39, 39);
-            if(toErase.size()!=1){ noErr=false; } else{ //controlla se la stringa presa tra le virgolette è di un solo carattere
-                toErase="'"+toErase+"'";
-                erase_substr(secondLine, toErase);
+                    //elimino i caratteri per non causare problemi al contatore dopo
+                    for (int i = 0; i < character_counter(secondLine, 39); i++) {
+                        string toErase = substr_from_c_to_c(secondLine, 1, 2, 39, 39);
+                        if (toErase.size() != 1) { noErr = false; }
+                        else { //controlla se la stringa presa tra le virgolette è di un solo carattere
+                            toErase = "'" + toErase + "'";
+                            erase_substr(secondLine, toErase);
+                        }
+
+                    }
+
+                    //controllo il numero di dati inseriti che corrisponda a counter
+                    noErr = (character_counter(secondLine, ',') == (counter - 1));
+                }
             }
-
         }
-
-        //controllo il numero di dati inseriti che corrisponda a counter
-        noErr= (character_counter(secondLine, ',') == (counter-1));
     }
-
-    if(!noErr){
-        cerr<<"INSERT INTO syntax error!";
+    if (!noErr) {
+        cerr << "INSERT INTO syntax error!";
     }
-
     return noErr;
 }
 
@@ -191,7 +217,7 @@ bool control_update(string in){
         int tmp;
         noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
         if(noErr){
-            in=in.substr(tmp+4, in.size()-1);
+            in=in.substr(tmp+4, ((tmp+4)-(in.size()-1)));
             noErr=(in.find("where")!=-1);
             if(noErr){
                 for(; in.find("where")!=0 and noErr;){
@@ -221,5 +247,4 @@ bool control_update(string in){
     }
     return noErr;
 }
-
 #endif //CS_PROJECT_SYNTAX_H

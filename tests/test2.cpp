@@ -5,9 +5,11 @@
 #include "../syntax.h"
 using namespace std;
 
+class
 
 int main(){
-    string a="masmm";
-    reverse(a.begin(), a.end());
+    char a='2';
+    bool b=isalpha(a);
+
     return 0;
 }

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+
 using namespace std;
 #include "../Classes/Time/Time.cpp"
 #include "../Classes/Date/Date.cpp"
@@ -29,14 +31,23 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    Column<string> & b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<int> & a=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
-    Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
-    Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
+    ofstream file;
+    file.open("test.txt", ios::trunc);
+    if(!file){
+        cout<<"err";
+    }
+    file.write((char*)&d4, sizeof(d4));
+    file.close();
 
+    ifstream file2;
+    file2.open("test.txt", ios::in);
+    Database d5;
+    file2.read((char*)&d5, sizeof(d5));
 
-    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+    Column<string> & a=(*static_cast<Column<string>*>(d5.Tables[0].cols[0]));
+    Column<int> & b=(*static_cast<Column<int>*>(d5.Tables[0].cols[1]));
+    Column<float> & c=(*static_cast<Column<float>*>(d5.Tables[0].cols[2]));
+    Column<int> & d=(*static_cast<Column<int>*>(d5.Tables[0].cols[3]));
   
     choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
     command=take_command(choice);
@@ -45,6 +56,14 @@ int main(){
     } else{
         cout<<"Update :(";
     }
+
+
+    choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+
+    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
 
     choice="delete phone where sef=6;";
     command=take_command(choice);
@@ -58,12 +77,9 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
-    command=take_command(choice);
-    d4.process_command(choice, command);
 
-    Column<string> & h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<string> & r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
+
 
     choice="drop table car;";
     command=take_command(choice);

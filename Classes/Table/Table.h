@@ -39,7 +39,7 @@ public:
     string get_name(){ return name; }
     void empty_table();
 
-    int find_col_by_name(const string & in);
+    int find_col_by_name(string in);
 
     bool check_key(const string & in);
 

@@ -9,12 +9,13 @@ bool Database::check_TableName(const string & name){
 }
 
 //if existence parameter is true the function checks if the table exists, else if doesn't exist
-bool Database::check_Table_existence(const string &in_Table_name, const bool & existence){
+bool Database::check_Table_existence(string in_Table_name, const bool & existence){
     bool not_exists=true;
     int i=0;
     if(!Tables.empty()) {
         do {
-            if (Tables[i].get_name() == in_Table_name) {
+            string tmp=Tables[i].get_name();
+            if ( tolower(tmp) == tolower(in_Table_name)) {
                 not_exists = false;
             }
             i++;
@@ -95,8 +96,9 @@ bool Database::check_command(const string &input, const bool &show_error, string
 bool Database::INSERT_INTO(string in){
     bool err;
 
-    string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ');
-    in-=(Table+" ");
+    string Table=substr_from_c_to_c(in, 0, 1, ' ', '(');
+    in-=Table;
+    replace_chars(Table,{' '}, -1);
     int Table_i=find_Table(Table);
 
     if(Table_i!=-1) {
@@ -150,11 +152,12 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     return noErr;
 }
 
-int Database::find_Table(const string &in) {
+int Database::find_Table(string in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
-        if(Tables[i].get_name()==in){
+        string tmp=Tables[i].get_name();
+        if(tolower(tmp)==tolower(in)){
             found=true;
         }
     }
@@ -166,14 +169,13 @@ int Database::find_Table(const string &in) {
 }
 
 bool Database::DELETE(string in) {
-    bool noErr=true;
-
     string table_name=substr_from_c_to_c(in, 0, 1);
-    noErr=!check_Table_existence(table_name, true);
+    bool noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = substr_from_c_to_c(in, 2, 1, ' ', '=');
+        string element = substr_from_s_to_s(in,"where ","=");
+        replace_chars(element, {' '}, -1);
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";

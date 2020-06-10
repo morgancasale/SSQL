@@ -8,12 +8,17 @@ bool Table::set_Table(const string &in){
         noErr=false;
     } else{
         vector<string> data=get_CREATE_data(in);
-        name=data[0];
-        int dataSize=data.size();
-        for(int i=1; i<(dataSize-1) and noErr; i++){
-            noErr=!create_col(data[i], data);
+        noErr=control_CREATE_data(data);
+        if(noErr){
+            name=data[0];
+            int dataSize=data.size();
+            for(int i=1; i<(dataSize-1) and noErr; i++){
+                noErr=!create_col(data[i], data);
+            }
+            noErr=find_check_primaryKey(data[dataSize-1]);
+        } else{
+            cerr<<endl<<"Forbidden names were given to the columns!";
         }
-        noErr=find_check_primaryKey(data[dataSize-1]);
     }
     return noErr;
 }
@@ -21,7 +26,7 @@ bool Table::set_Table(const string &in){
 bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave primaria ha senso e se esiste
     bool noErr=true;
     primaryKey_index=-1;
-
+    string g=elementsNames[0];
     if(in.find("primary key(")==-1){ noErr=false; }
 
     string key;
@@ -34,7 +39,10 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
     if(noErr) {
         noErr = false;
         int i=0;
-        for (const string &tmp : elementsNames) { if (key == tmp) { noErr = true; primaryKey_index=i; } i++; }
+        for (int i=0; i<elementsNames.size() and !noErr; i++) {
+            string tmp=elementsNames[i];
+            if (tolower(key) == tolower(tmp)) { noErr = true; primaryKey_index=i; }
+        }
     }
 
     if(!noErr){
@@ -197,11 +205,12 @@ vector<string> Table::get_CREATE_data(string in){
     return data;
 }
 
-int Table::find_col_by_name(const string &in) {
+int Table::find_col_by_name(string in) {
     int i=0;
     bool found=false;
     for(; i<elementsNames.size() and !found; i++){
-        if(elementsNames[i]==in){
+        string tmp=elementsNames[i];
+        if(tolower(tmp)==tolower(in)){
             found=true;
         }
     }
@@ -304,8 +313,9 @@ void Table::auto_increment_col(){
 
 bool Table::checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements) {
     bool fillErr=false, autoIncrAndNotNullErr=false;
-
-    vector<string> notFilled= elementsNames - filled_elements;
+    vector<string> elements=elementsNames;
+    for(int i=0; i<elements.size(); i++){ tolower(elements[i]); }
+    vector<string> notFilled= elements - filled_elements;
 
     for(const string & emptyElement: notFilled){
         int j=find_col_by_name(emptyElement);
