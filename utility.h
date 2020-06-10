@@ -9,8 +9,9 @@ using namespace std;
 #include "Classes/Date/Date.h"
 
 
-string tolower(string &in){ //converts all upper letters of a string to lower ones
-    for(int i=0; i<in.size(); i++){
+string tolower(string &in, int stop=-1){ //converts all upper letters of a string to lower ones
+    stop = ((stop<0)? in.size()-1 : stop); //if stop<0 takes all the string
+    for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
     }
     return in;
@@ -102,10 +103,13 @@ string replace_chars(string &in, const vector<char> &sub, const char &car) {
 
     return in;
 }
-
-bool clean_input(string &in){
-    tolower(in);
-    replace_chars(in, {'\n', '\t'}, ' ');
+bool clean_input(string &in, const vector<string> & programKeyWords){
+    string tmp=in;
+    tolower(tmp);
+    for(string a: programKeyWords) {
+        if (tmp.find(a)!=tmp.npos) in.replace(tmp.find(a),a.size(), a);
+    }
+    remove_endl(in);
     return remove_duplicate_chars(in, {' '});
 }
 
@@ -129,10 +133,9 @@ string operator -(string minuend, const string & subtrahend){
 void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
 }
-
 string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false){
     int start, end;
-
+  
     if(reverse){
         std::reverse(in.begin(), in.end());
         std::reverse(s1.begin(), s1.end());
