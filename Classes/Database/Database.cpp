@@ -181,15 +181,11 @@ bool Database::DELETE(string in) {
         }
         if(noErr){
             string data = substr_from_c_to_c(in, 1, 1, '=', ';');
-            if(!check_data_consistence(data,Tables[table_i].elementsTypes[col_i])){
-                cerr<<"The type of the input data doesn't match the column type!";
-                noErr=false;
-            }
             vector<int> foundRows;
-            if(!Tables[table_i].find_Rows_by_value(data, col_i, foundRows)){
-                cerr<<"No row containing \""<<data<<"\" was found!";
+            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows);
+            if(noErr){
+                Tables[table_i].deleteRows(foundRows);
             }
-            Tables[table_i].deleteRows(foundRows);
         }
 
     }
@@ -225,4 +221,56 @@ bool Database::TRUNCATE_TABLE(const string & in){
         Table & table=Tables[Table_i];
         table.empty_content();
     }
+    return noErr;
+}
+
+bool Database::UPDATE(string in){
+    bool noErr;
+    string tableName=substr_from_c_to_c(in, 0, 1);
+    noErr=!check_Table_existence(tableName, true);
+    Table & table=Tables[find_Table(tableName)];
+
+    if(noErr){
+        in-=(tableName+" set ");
+
+        string colToSearch= substr_from_s_to_s(in, "where ", "=", true);
+        replace_chars(colToSearch, {' '}, -1);
+        int col_index;
+        noErr=((col_index=table.get_col_index(colToSearch))!=-1);
+
+        if(noErr){
+            string searchData= substr_from_s_to_s(in, colToSearch, ";");
+            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
+            replace_chars(searchData, {' '}, -1);
+
+            vector<int> foundRows;
+            noErr=table.find_Rows_by_value(searchData, col_index, foundRows);
+            in-=(substr_from_s_to_s(in, " where", ";")+";");
+            if(noErr){
+                replace_chars(in, {' '}, -1);
+                vector<string> updateData;
+                for(; substr_from_c_to_c(in,0,-1)!="/err";){
+                    string tmp=substr_from_c_to_c(in, 0, 1, ' ', ',');
+                    tmp+=",";
+                    if(tmp=="/err,"){
+                        tmp=substr_from_c_to_c(in, 0,-1);
+                    }
+                    in-=tmp;
+                    if(tmp.find(',')){ tmp-=","; }
+                    updateData.push_back(tmp);
+
+                }
+                noErr= table.set_UPDATE_data(updateData, foundRows);
+            } else{
+                cerr<<"No row containing"<<searchData<<"was found!";
+            }
+
+        } else{
+            cerr<<endl<<"No column "<<colToSearch<<"was found!";
+        }
+
+    } else{
+        cerr<<"Table named "<<tableName<<" doesn't exist!";
+    }
+    return noErr;
 }

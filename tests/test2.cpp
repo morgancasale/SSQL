@@ -7,10 +7,7 @@ using namespace std;
 
 
 int main(){
-    string a="UPDATE CUSTOMERS SET SALARY = 12000, NAME = \"Morgan\" WHERE AGE = 20;";
-    take_command(a);
-    if(control_update(a)){
-        cout<<":)";
-    }
+    string a="masmm";
+    reverse(a.begin(), a.end());
     return 0;
 }

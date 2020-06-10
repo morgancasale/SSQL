@@ -389,7 +389,7 @@ bool Table::checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elemen
     return (fillErr and autoIncrAndNotNullErr);
 }
 
-int Table::get_col_index(const string & in){ //returns 1 if no element with that name is found
+int Table::get_col_index(const string & in){ //returns -1 if no element with that name is found
     int index=-1;
     for(int i=0; i<elementsNames.size(); i++){
         if(elementsNames[i]==in){ index=i; }
@@ -399,59 +399,62 @@ int Table::get_col_index(const string & in){ //returns 1 if no element with that
 
 bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int> &foundRows) {
     bool noErr=true;
-    if(elementsTypes[col_i]=="int"){
-        vector<int> tmp = (* static_cast<Column<int> *>(cols[col_i])).values;
-        for(int i=0; i<tmp.size(); i++){
-            if(to_string(tmp[i])==data){
-                foundRows.push_back(i);
+    const string & type=elementsTypes[col_i];
+    noErr=check_data_consistence(data, type);
+
+    if(noErr) {
+        if (elementsTypes[col_i] == "int") {
+            vector<int> tmp = (*static_cast<Column<int> *>(cols[col_i])).values;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (to_string(tmp[i]) == data) {
+                    foundRows.push_back(i);
+                }
+            }
+        } else if (elementsTypes[col_i] == "float") {
+            vector<float> tmp = (*static_cast<Column<float> *>(cols[col_i])).values;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (tmp[i] == stof(data)) {
+                    foundRows.push_back(i);
+                }
+            }
+        } else if (elementsTypes[col_i] == "char") {
+            vector<char> tmp = (*static_cast<Column<char> *>(cols[col_i])).values;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (tmp[i] == data[0]) {
+                    foundRows.push_back(i);
+                }
+            }
+        } else if (elementsTypes[col_i] == "string" or elementsTypes[col_i] == "text") {
+            vector<string> tmp = (*static_cast<Column<string> *>(cols[col_i])).values;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (tmp[i] == data) {
+                    foundRows.push_back(i);
+                }
+            }
+        } else if (elementsTypes[col_i] == "date") {
+            vector<Date> tmp = (*static_cast<Column<Date> *>(cols[col_i])).values;
+            for (int i = 0; i < tmp.size(); i++) {
+                if (tmp[i].Date_to_string() == data) {
+                    foundRows.push_back(i);
+                }
+            }
+        } else if (elementsTypes[col_i] == "time") {
+            vector<Time> tmp = (*static_cast<Column<Time> *>(cols[col_i])).values;
+            Time tmp_time;
+            tmp_time.set_time(data);
+            for (int i = 0; i < tmp.size(); i++) {
+                if (tmp[i] == tmp_time) {
+                    foundRows.push_back(i);
+                }
             }
         }
-    } else
-    if(elementsTypes[col_i]=="float"){
-        vector<float> tmp = (* static_cast<Column<float> *>(cols[col_i])).values;
-        for(int i=0; i<tmp.size(); i++){
-            if(to_string(tmp[i])==data){
-                foundRows.push_back(i);
-            }
-        }
-    } else
-    if(elementsTypes[col_i]=="char"){
-        vector<char> tmp = (* static_cast<Column<char> *>(cols[col_i])).values;
-        for(int i=0; i<tmp.size(); i++){
-            if(tmp[i]==data[0]){
-                foundRows.push_back(i);
-            }
-        }
-    } else
-    if(elementsTypes[col_i]=="string" or elementsTypes[col_i]=="text"){
-        vector<string> tmp = (* static_cast<Column<string> *>(cols[col_i])).values;
-        for(int i=0; i<tmp.size(); i++){
-            if(tmp[i]==data){
-                foundRows.push_back(i);
-            }
-        }
-    } else
-    if(elementsTypes[col_i]=="date"){
-        vector<Date> tmp = (* static_cast<Column<Date> *>(cols[col_i])).values;
-        for(int i=0; i<tmp.size(); i++){
-            if(tmp[i].Date_to_string()==data){
-                foundRows.push_back(i);
-            }
-        }
-    } else
-    if(elementsTypes[col_i]=="time"){
-        vector<Time> tmp = (* static_cast<Column<Time> *>(cols[col_i])).values;
-        Time tmp_time;
-        tmp_time.set_time(data);
-        for(int i=0; i<tmp.size(); i++){
-            if(tmp[i]==tmp_time){
-                foundRows.push_back(i);
-            }
-        }
+    } else{
+        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")";
     }
 
     if(foundRows.empty()){
         noErr=false;
+        cerr<<"No row containing \""<<data<<"\" was found!";
     }
 
     return noErr;
@@ -546,4 +549,81 @@ void Table::empty_content(){
             tmp.valuesNullity.clear();
         }
     }
+}
+
+bool Table::get_rows_by_data(const int & col_i, const string & searchData, vector<int> & foundRows){
+    bool noErr=true;
+    const string & type=elementsTypes[col_i];
+    noErr=check_data_consistence(searchData, type);
+
+    if(noErr){
+        if(type=="int"){
+            vector<int> & colVal=(*static_cast<Column<int>*>(cols[col_i])).values;
+
+        }
+    } else{
+        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")";
+    }
+    return noErr;
+}
+
+bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &foundRows) {
+    int noErr=true;
+    for(int i=0; i<data.size() and noErr; i++){
+        string tmp=data[i];
+        string col=substr_from_c_to_c(tmp, 0, 1, ' ', '=');
+
+        int col_i;
+        noErr=((col_i=find_col_by_name(col))!=-1);
+        if(noErr){
+            string & type=elementsTypes[col_i];
+            tmp-=(col+"=");
+            noErr=check_data_consistence(tmp, type);
+            if(noErr){
+                if (type=="int") {
+                    vector<int> & values = (*static_cast<Column<int> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        values[row] = stoi(tmp);
+                    }
+                }
+                if (type=="float") {
+                    vector<float> & values = (*static_cast<Column<float> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        values[row] = stof(tmp);
+                    }
+                }
+                if (type=="char") {
+                    vector<char> &values = (*static_cast<Column<char> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        values[row] = stoi(tmp);
+                    }
+                }
+                if (type=="string" or type=="text") {
+                    vector<string> & values = (*static_cast<Column<string> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        values[row] = tmp;
+                    }
+                }
+                if (type=="date") {
+                    vector<Date> & values = (*static_cast<Column<Date> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        Date tmpDate(tmp);
+                        values[row] = tmpDate;
+                    }
+                }
+                if (type == "time") {
+                    vector<Time> &values = (*static_cast<Column<Time> *>(cols[col_i])).values;
+                    for (const auto & row: foundRows) {
+                        Time tmpTime(tmp);
+                        values[row] = tmpTime;
+                    }
+                }
+            } else{
+                cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)";
+            }
+        } else{
+            cerr<<endl<<"No column "<<col<<"was found!";
+        }
+    }
+    return noErr;
 }

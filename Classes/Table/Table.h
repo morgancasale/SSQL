@@ -60,5 +60,9 @@ public:
     void deleteRows(const vector<int> &rows);
 
     void empty_content();
+
+    bool get_rows_by_data(const int &col_i, const string &searchData, vector<int> &foundRows);
+
+    bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 };
 #endif //CS_PROJECT_TABLE_H

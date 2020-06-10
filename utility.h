@@ -87,11 +87,15 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     return err;
 }
 
-string remove_chars(string &in, const vector<char> & sub){
+string replace_chars(string &in, const vector<char> &sub, const char &car) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
-            in.replace(pos,1, " ");
+            string tmp="";
+            if(car!=-1){
+                tmp[0]=car;
+            }
+            in.replace(pos,1, tmp);
             pos=in.find(c);
         }
     }
@@ -101,7 +105,7 @@ string remove_chars(string &in, const vector<char> & sub){
 
 bool clean_input(string &in){
     tolower(in);
-    remove_chars(in, {'\n', '\t'});
+    replace_chars(in, {'\n', '\t'}, ' ');
     return remove_duplicate_chars(in, {' '});
 }
 
@@ -113,7 +117,7 @@ string erase_substr(string &in, const string &to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size());
-        remove_chars(in, {'\n'});
+        replace_chars(in, {'\n'}, ' ');
     }
     return in;
 }
@@ -126,15 +130,27 @@ void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
 }
 
-string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
-    int start=in.find(s1)+1;
-    int end=in.find(s2)-1;
+string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false){
+    int start, end;
 
+    if(reverse){
+        std::reverse(in.begin(), in.end());
+        std::reverse(s1.begin(), s1.end());
+        std::reverse(s2.begin(), s2.end());
+        start = in.find(s2) + 1;
+        end = in.find(s1);
+    } else{
+        start = in.find(s1) + 1;
+        end = in.find(s2);
+    }
+
+    string out=in.substr(start, end - start);;
     if(start==-1 or end==-1){
         return "/err";
     }
     else{
-        return in.substr(start, end - start);
+        if(reverse){ std::reverse(out.begin(), out.end()); }
+        return out;
     }
 }
 
@@ -147,12 +163,12 @@ int num_of_words(const string &in){
     }
 
     for(; i<in.size()-k; i++){
-        for(; isalpha(in[i]); i++){
-        }
+        for(; isalpha(in[i]); i++){}
         if(in[i]!=0 and isalpha(in[i-1])){
             num++;
         }
     }
+    if(num==0 and isalpha(in[in.size()-1])){ num++; }
     return num;
 }
 
@@ -252,29 +268,29 @@ bool is_a_Date(const string & var){
 }
 
 //The first parameter is the input data while the second one is the type to check
-bool check_data_consistence(const string & var, const string & to_check){
+bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
 
     if(substr_from_c_to_c(var, 1, 2, '"', '"')!="/err"){
-        noErr = (to_check == "string" or to_check == "text");
+        noErr = (type == "string" or type == "text");
     } else
     if(substr_from_c_to_c(var, 1, 2, 39, 39)!="/err"){ //char a=39 --> a='
-        noErr = (to_check == "char");
+        noErr = (type == "char");
     } else
     if(var.find('.')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (to_check == "time"); }
-        else if(Date_resp){ noErr = (to_check == "date"); }
-        else{ noErr = (to_check == "float"); }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); }
+        else if(Date_resp){ noErr = (type == "date"); }
+        else{ noErr = (type == "float"); }
     } else
     if(var.find(':')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (to_check == "time"); }
-        else if(Date_resp){ noErr = (to_check == "date"); }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); }
+        else if(Date_resp){ noErr = (type == "date"); }
     } else
-    if(var.find('/')!=-1){ noErr = (to_check == "date"); }
+    if(var.find('/')!=-1){ noErr = (type == "date"); }
     else{
-        noErr = (to_check == "int");
+        noErr = (type == "int");
     }
 
     return noErr;

@@ -165,7 +165,7 @@ bool control_delete(string in){
 }
 
 bool control_update(string in){
-    bool noErr=(in[in.size()-1]==';');
+    bool noErr=(in[in.size()-2]==';');
     if(noErr){
         int tmp;
         noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
@@ -180,11 +180,10 @@ bool control_update(string in){
                     string data2=substr_from_c_to_c(in, 1, 1, '=', ',');
                     data2+=",";
                     if(data2=="/err,"){
-                        data2=get_substr_from_s_to_s(in, "=", "where");
+                        data2= substr_from_s_to_s(in, "=", " where");
                     }
 
                     if(noErr){
-                        string a=(data1+"="+data2+" ");
                         in-=(data1+"="+data2+" ");
                     }
                 }

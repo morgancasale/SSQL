@@ -37,6 +37,14 @@ int main(){
     Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
     Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
 
+    choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
+    command=take_command(choice);
+    if(d4.process_command(choice, command)){
+        cout<<"Update command correctly processed!";
+    } else{
+        cout<<"Update :(";
+    }
+
     choice="delete phone where sef=6;";
     command=take_command(choice);
     if(d4.process_command(choice, command)){

@@ -48,6 +48,8 @@ public:
     bool DROP_TABLE(const string &in);
 
     bool TRUNCATE_TABLE(const string &in);
+
+    bool UPDATE(string in);
 };
 
 void a(const string &in){
