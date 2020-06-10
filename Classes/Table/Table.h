@@ -7,9 +7,11 @@ using namespace std;
 template<typename type> class Column {
 public:
     vector<type> values;
+    vector<bool> valuesNullity;
     string key;
     bool not_null=false;
     bool auto_increment=false;
+    ~Column()=default;
 };
 
 class Table{
@@ -27,6 +29,7 @@ public:
     vector<string> elementsTypes;
     vector<void *> cols;
     vector<string> elementsNames;
+    void clear_col(const int &i);
 
 public:
     bool set_Table(const string &in);
@@ -42,16 +45,24 @@ public:
 
     static bool check_type(const string & type);
 
-
     void cast_data_to_col(const int &col_i, const string &type, const string &data);
 
     void auto_increment_col();
 
-    bool set_INSERT_INTO_data( const vector<string> &elementsNames, const vector<string> &elementsValues);
+    bool set_INSERT_INTO_data(const vector<string> &elements_Names, const vector<string> &elementsValues);
 
-    bool check_INSERT_INTO_data(const vector<string> &filled_elements);
+    bool checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements);
 
-    bool check_element_existence(const string &in);
+    int get_col_index(const string &in);
 
+    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
+
+    void deleteRows(const vector<int> &rows);
+
+    void empty_content();
+
+    bool get_rows_by_data(const int &col_i, const string &searchData, vector<int> &foundRows);
+
+    bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 };
 #endif //CS_PROJECT_TABLE_H

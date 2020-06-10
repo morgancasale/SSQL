@@ -32,7 +32,7 @@ public:
 
     ~Database()=default;
 
-    static void get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
+    static bool get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
 
     bool set_INSERT_INTO_data(const int &Table_i, const vector<string> &elementsNames,
                               const vector<string> &elementsValues);
@@ -44,6 +44,12 @@ public:
     bool cast_data(Table &table, const int & Table_i, const int &col_i, const string &type, const string &data);
 
     static bool check_TableName(const string &name);
+
+    bool DROP_TABLE(const string &in);
+
+    bool TRUNCATE_TABLE(const string &in);
+
+    bool UPDATE(string in);
 };
 
 void a(const string &in){

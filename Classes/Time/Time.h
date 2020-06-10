@@ -16,7 +16,7 @@ public:
     int get_seconds() const;
 
     void set_time(const int &h, const int &m, const int &s);
-    void set_time(const string &time);
+    void set_time(const string & time);
 
     int tot_seconds() const;
     int tot_mins() const;
@@ -28,6 +28,9 @@ public:
     Time(){
         hours=0, minutes=0, seconds=0;
     };
+    Time(const string & in){
+        set_time(in);
+    }
     ~Time()=default;
 };
 

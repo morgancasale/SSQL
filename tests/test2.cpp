@@ -1,12 +1,13 @@
 #include <iostream>
 #include <vector>
+#include <list>
 #include "../utility.h"
+#include "../syntax.h"
 using namespace std;
 
+
 int main(){
-    vector<string> minuend={"name", "yor", "price", "sef"};
-    vector<string> subtrahend={"yor", "name", "sef"};
-    minuend=minuend-subtrahend;
-    cout<<"a";
+    string a="masmm";
+    reverse(a.begin(), a.end());
     return 0;
 }

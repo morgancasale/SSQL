@@ -28,7 +28,10 @@ public:
     };
     ~Date()= default;
 
-    void set_Date(string in);
+    void set_Date(const string & in);
+    Date(const string & in){
+        set_Date(in);
+    }
 };
 
 #endif //CS_PROJECT_DATE_H
