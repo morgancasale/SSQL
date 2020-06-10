@@ -9,13 +9,10 @@ using namespace std;
 
 int main(){
     Database d4;
-    string choice="create table phone ( name text not null, yor int not null, price float, sef int auto_increment not null, primary key(name) );";
+    
+    string choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
     string command=take_command(choice);
-    if(d4.process_command(choice, command)){
-        cout<<endl<<"CREATE command correctly processed!";
-    }else{
-        cerr<<":(";
-    }
+    d4.process_command(choice, command);
 
     Column<string> g=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
 
@@ -25,8 +22,9 @@ int main(){
 
     cout<<"a";
 
-    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
     Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
 
     choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
     command=take_command(choice);

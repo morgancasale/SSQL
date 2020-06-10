@@ -9,8 +9,9 @@ using namespace std;
 #include "Classes/Date/Date.h"
 
 
-string tolower(string &in){ //converts all upper letters of a string to lower ones
-    for(int i=0; i<in.size(); i++){
+string tolower(string &in, int stop=-1){ //converts all upper letters of a string to lower ones
+    stop = ((stop<0)? in.size()-1 : stop); //if stop<0 takes all the string
+    for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
     }
     return in;
@@ -96,8 +97,12 @@ string remove_endl(string &in){
     return in;
 }
 
-bool clean_input(string &in){
-    tolower(in);
+bool clean_input(string &in, const vector<string> & programKeyWords){
+    string tmp=in;
+    tolower(tmp);
+    for(string a: programKeyWords) {
+        if (tmp.find(a)!=tmp.npos) in.replace(tmp.find(a),a.size(), a);
+    }
     remove_endl(in);
     return remove_duplicate_chars(in, {' '});
 }
@@ -122,6 +127,7 @@ string operator -(string minuend, const string & subtrahend){
 void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
 }
+
 
 string get_substr_from_s_to_s(const string &in, const string &s1, const string &s2){
     int start=in.find(s1);

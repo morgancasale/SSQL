@@ -6,7 +6,7 @@
 #define CS_PROJECT_SYNTAX_H
 #include "utility.h"
 
-const string allowed_coms[8]={
+const vector <string> allowed_coms={
         "create table",
         "drop table",
         "truncate table",
@@ -17,7 +17,7 @@ const string allowed_coms[8]={
         "quit()"
 };
 
-const string allowed_types[7]={
+const vector <string> allowed_types={
         "int",
         "float",
         "char",
@@ -27,9 +27,30 @@ const string allowed_types[7]={
         "time"
 };
 
+const vector <string> keyWords={
+        "not null",
+        "auto_increment",
+        "primary key",
+        "values",
+        "where",
+        "set",
+        "from",
+        "order by",
+        "desc",
+        "asc",
+        "foreign key",
+        "references"
+};
+
 string take_command(string & in){
     bool err=false; string tmp;
-    clean_input(in);
+
+    vector <string> dictionary;
+    dictionary.insert(dictionary.end(), allowed_types.begin(), allowed_types.end());
+    dictionary.insert(dictionary.end(), allowed_coms.begin(), allowed_coms.end());
+    dictionary.insert(dictionary.end(), keyWords.begin(), keyWords.end());
+
+    clean_input(in, dictionary);
     for(const string & s:allowed_coms) {
         if(in.find(s) != in.npos) {
             err=false;
