@@ -14,7 +14,7 @@ int main(){
     d4.START();
     string choice,command;
 
-    /*choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
+    choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
     command=take_command(choice);
     d4.process_command(choice, command);
 
@@ -31,18 +31,13 @@ int main(){
     d4.process_command(choice, command);
     choice="insert into phone (yor, name, sef, price) values (2013, \"iphone 5\", 5, 729.99);";
     command=take_command(choice);
-    d4.process_command(choice, command);*/
+    d4.process_command(choice, command);
 
     Column<string> & a=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
     Column<int> & b=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
     Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
     Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
 
-    choice="quit();";
-    command=take_command(choice);
-    d4.process_command(choice, command);
-
-    return 0;
 
     /*choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
     command=take_command(choice);
@@ -50,7 +45,7 @@ int main(){
         cout<<"Update command correctly processed!";
     } else{
         cout<<"Update :(";
-    }
+    }*/
 
 
     choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
@@ -60,7 +55,7 @@ int main(){
     Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
     Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
 
-    choice="delete phone where sef=6;";
+    /*choice="delete phone where sef=6;";
     command=take_command(choice);
     if(d4.process_command(choice, command)){
         cout<<endl<<"DELETE command correctly processed!";
@@ -78,9 +73,13 @@ int main(){
 
     choice="drop table car;";
     command=take_command(choice);
+    d4.process_command(choice, command);*/
+
+    choice="quit();";
+    command=take_command(choice);
     d4.process_command(choice, command);
 
-    return 0;*/
+    return 0;
 }
 
 /*

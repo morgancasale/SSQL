@@ -815,31 +815,40 @@ void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
         Column<int> & tmp=(*static_cast<Column<int>*>(cols[col_i]));
         vector<string> tmp_data;
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.values.push_back(stoi(str)); }
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.values.push_back(stoi(str)); }
+        }
         getline(in, line);
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     if(type=="float"){
         Column<float> & tmp=(*static_cast<Column<float>*>(cols[col_i]));
         vector<string> tmp_data;
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.values.push_back(stof(str)); }
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.values.push_back(stof(str)); }
+        }
         getline(in, line);
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     if(type=="char"){
         Column<char> & tmp=(*static_cast<Column<char>*>(cols[col_i]));
         vector<string> tmp_data;
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.values.push_back(str[0]); }
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.values.push_back(str[0]); }
+        }
         getline(in, line);
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
@@ -851,40 +860,45 @@ void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
         getline(in, line);
         vector<string> tmp_data;
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     if(type=="date"){
         Column<Date> & tmp=(*static_cast<Column<Date>*>(cols[col_i]));
         vector<string> tmp_data;
         line>>tmp_data;
-        vector<Date> tmp_dates;
-        for(int i=0; i<tmp_data.size(); i++){
-            tmp_dates.resize(i+1);
-            tmp_dates[i].set_Date(tmp_data[i]);
+        if(!tmp_data.empty()) {
+            vector<Date> tmp_dates;
+            for (int i = 0; i < tmp_data.size(); i++) {
+                tmp_dates.resize(i + 1);
+                tmp_dates[i].set_Date(tmp_data[i]);
+            }
+            tmp.values = tmp_dates;
         }
-        tmp.values=tmp_dates;
-
         getline(in, line);
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     if(type=="time"){
         Column<Time> & tmp=(*static_cast<Column<Time>*>(cols[col_i]));
         vector<string> tmp_data;
         line>>tmp_data;
-        vector<Time> tmp_times;
-        for(int i=0; i<tmp_data.size(); i++){
-            tmp_times.resize(i+1);
-            tmp_times[i].set_time(tmp_data[i]);
+        if(!tmp_data.empty()) {
+            vector<Time> tmp_times;
+            for (int i = 0; i < tmp_data.size(); i++) {
+                tmp_times.resize(i + 1);
+                tmp_times[i].set_time(tmp_data[i]);
+            }
+            tmp.values = tmp_times;
         }
-        tmp.values=tmp_times;
-
         getline(in, line);
         line>>tmp_data;
-        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
-
+        if(!tmp_data.empty()) {
+            for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
+        }
     }
     getline(in, line);
 }

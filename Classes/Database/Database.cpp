@@ -298,12 +298,23 @@ bool Database::START() {
     }
     string line;
     int i=0;
-    while(line!="|"){
+    char end=42;
+    while(end!='|'){
         getline(in, line);
         this->Tables.resize(i+1);
         this->Tables[i].createTable_from_file(in, line);
         i++;
         getline(in, line);
+        end=line[0];
+        if(end!='|'){
+            streampos tmp = in.tellg();
+            getline(in, line);
+            if(line[0]=='|'){
+                end=line[0];
+            } else{
+               in.seekg(tmp);
+            }
+        }
     }
     return noErr;
 }
