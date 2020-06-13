@@ -1,6 +1,23 @@
 #include <memory>
 #include "Table.h"
 
+template<typename type>
+void Column<type>::printCol_to_file(ofstream & out) {
+    out<<key<<" ";
+    out<<not_null<<" ";
+    out<<auto_increment<<endl;
+    for(type value: values){
+
+        out<<to_string(value)<<" ";
+    }
+    out<<endl;
+
+    for(bool nullity: valuesNullity){
+        out<<nullity<<" ";
+    }
+    out<<endl;
+}
+
 bool Table::set_Table(const string &in){
     bool noErr=true;
     if(!control_create(in)){
@@ -13,7 +30,7 @@ bool Table::set_Table(const string &in){
             name=data[0];
             int dataSize=data.size();
             for(int i=1; i<(dataSize-1) and noErr; i++){
-                noErr=!create_col(data[i], data);
+                noErr=!create_col(data[i], false);
             }
             noErr=find_check_primaryKey(data[dataSize-1]);
         } else{
@@ -26,7 +43,6 @@ bool Table::set_Table(const string &in){
 bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave primaria ha senso e se esiste
     bool noErr=true;
     primaryKey_index=-1;
-    string g=elementsNames[0];
     if(in.find("primary key(")==-1){ noErr=false; }
 
     string key;
@@ -51,16 +67,16 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
     return noErr;
 }
 
-bool Table::check_key(const string & key){ //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
+bool Table::check_key(const string &key, const bool &existence) { //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
     bool noErr = true;
     bool existenceErr = false;
     if(key=="/err"){ noErr=false; }
-    for(const string & tmp: allowed_coms){ if(key==tmp){ noErr=false; } }
+    for(int i=0; i<allowed_coms.size(); i++){ if(key==allowed_coms[i]){ noErr=false; } }
     if(noErr){
-        for(const string & tmp: allowed_types){ if(key==tmp){ noErr=false; } }
+        for(int i=0; i<allowed_types.size(); i++){ if(key==allowed_types[i]){ noErr=false; } }
     }
-    if(noErr){
-        for(const string & tmp: elementsNames){ if(key==tmp){ noErr=false; existenceErr=true; } }
+    if(noErr and !existence){
+        for(int i=0; i<elementsNames.size(); i++){ if(key==elementsNames[i]){ noErr=false; existenceErr=true; } }
     }
 
 
@@ -101,27 +117,30 @@ int Table::count_data(const vector<string> & data, const string & type){ //conta
     return counter;
 }
 
-bool Table::create_col(string in, const vector<string> & data) {
+bool Table::create_col(string in, const bool &key_existence) {
     bool err=false;
 
     bool auto_increment=false;
     if(in.find("auto_increment")!=-1){
         auto_increment=true;
-        erase_substr(in," auto_increment");
+        in-=" auto_increment";
     }
 
     bool notNull=false;
     if(in.find("not null")!=-1){
         notNull=true;
-        erase_substr(in," not null");
+        in-=" not null";
     }
 
     string key=substr_from_c_to_c(in, 0, 1);
-    err=!check_key(key);
+    replace_chars(key, {' '}, -1);
+    err=!check_key(key, key_existence);
+    in-=key;
 
     string type;
     if(!err){
-        type=substr_from_c_to_c(in, 1, -1);
+        type=substr_from_c_to_c(in, 0, -1);
+        replace_chars(type, {' '}, -1);
         err=!check_type(type);
     }
 
@@ -176,7 +195,7 @@ bool Table::create_col(string in, const vector<string> & data) {
         cerr<<endl<<"CREATE input syntax error!";
     }
 
-    if(!err) {
+    if(!err and !key_existence) {
         elementsTypes.push_back(type);
         elementsNames.push_back(key);
     }
@@ -636,4 +655,236 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
         }
     }
     return noErr;
+}
+
+bool Table::printTable_to_file(ofstream & out) {
+    bool noErr=true;
+    out<<name<<" ";
+    out<<rows<<" ";
+    out<<primaryKey_index;
+    out<<endl;
+
+    for(const string & eltype : elementsTypes){
+        out<<eltype<<" ";
+    }
+    out<<endl;
+
+    for(const string & elname:elementsNames){
+        out<<elname<<" ";
+    }
+    out<<endl<<endl;
+
+    for(int i=0; i<elementsTypes.size(); i++){
+        if(elementsTypes[i]=="int"){
+            Column<int> & col=(*static_cast<Column<int>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const int & value: col.values){
+                out<<to_string(value)<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+        if(elementsTypes[i]=="float"){
+            Column<float> & col=(*static_cast<Column<float>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const float & value: col.values){
+                out<<to_string(value)<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+        if(elementsTypes[i]=="char"){
+            Column<char> & col=(*static_cast<Column<char>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const char & value: col.values){
+                out<<to_string(value)<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+        if(elementsTypes[i]=="string" or elementsTypes[i]=="text"){
+            Column<string> & col=(*static_cast<Column<string>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const string & value: col.values){
+                out<<value<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+        if(elementsTypes[i]=="time"){
+            Column<Time> & col=(*static_cast<Column<Time>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const Time & value: col.values){
+                out<<value.to_string()<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+        if(elementsTypes[i]=="date"){
+            Column<Date> & col=(*static_cast<Column<Date>*>(cols[i]));
+            out<<col.key<<" ";
+            out<<col.not_null<<" ";
+            out<<col.auto_increment<<endl;
+            for(const Date & value: col.values){
+                out<<value.Date_to_string()<<" ";
+            }
+            out<<endl;
+
+            for(bool nullity: col.valuesNullity){
+                out<<nullity<<" ";
+            }
+            out<<endl;
+            out<<"-"<<endl;
+        }
+
+    }
+    return noErr;
+}
+
+void Table::createTable_from_file(ifstream &in, string line) {
+    stringstream stream(line);
+    stream>>(this->name)>>(this->rows)>>(this->primaryKey_index);
+
+    getline(in, line);
+    line>>(this->elementsTypes);
+
+    getline(in, line);
+    line>>(this->elementsNames);
+    getline(in, line);
+
+    for(int i=0; i<elementsTypes.size(); i++){
+        createCol_from_file(in, elementsTypes[i], i);
+    }
+}
+
+void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
+    string key;
+    bool not_null, auto_increment;
+
+    string line;
+    getline(in, line);
+    stringstream stream(line);
+    stream>>key>>not_null>>auto_increment;
+
+    string input=key+" "+type;
+    if(not_null){
+        input+=" not null";
+    }
+    if(auto_increment){
+        input+=" auto_increment";
+    }
+    create_col(input, true);
+
+    getline(in, line);
+    if(type=="int"){
+        Column<int> & tmp=(*static_cast<Column<int>*>(cols[col_i]));
+        vector<string> tmp_data;
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.values.push_back(stoi(str)); }
+        getline(in, line);
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    if(type=="float"){
+        Column<float> & tmp=(*static_cast<Column<float>*>(cols[col_i]));
+        vector<string> tmp_data;
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.values.push_back(stof(str)); }
+        getline(in, line);
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    if(type=="char"){
+        Column<char> & tmp=(*static_cast<Column<char>*>(cols[col_i]));
+        vector<string> tmp_data;
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.values.push_back(str[0]); }
+        getline(in, line);
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    if(type=="string" or type=="text"){
+        Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
+        string data=line, element;
+        while((element=substr_from_c_to_c(data, 1, 2,'\"', '\"'))!="/err"){
+            tmp.values.push_back(element);
+            data-="\""+element+"\" ";
+        }
+        getline(in, line);
+        vector<string> tmp_data;
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    if(type=="date"){
+        Column<Date> & tmp=(*static_cast<Column<Date>*>(cols[col_i]));
+        vector<string> tmp_data;
+        line>>tmp_data;
+        vector<Date> tmp_dates;
+        for(int i=0; i<tmp_data.size(); i++){
+            tmp_dates.resize(i+1);
+            tmp_dates[i].set_Date(tmp_data[i]);
+        }
+        tmp.values=tmp_dates;
+
+        getline(in, line);
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    if(type=="time"){
+        Column<Time> & tmp=(*static_cast<Column<Time>*>(cols[col_i]));
+        vector<string> tmp_data;
+        line>>tmp_data;
+        vector<Time> tmp_times;
+        for(int i=0; i<tmp_data.size(); i++){
+            tmp_times.resize(i+1);
+            tmp_times[i].set_time(tmp_data[i]);
+        }
+        tmp.values=tmp_times;
+
+        getline(in, line);
+        line>>tmp_data;
+        for(const string & str: tmp_data){ tmp.valuesNullity.push_back(stoi(str)); }
+
+    }
+    getline(in, line);
 }

@@ -11,9 +11,11 @@ using namespace std;
 
 int main(){
     Database d4;
-    
-    string choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
-    string command=take_command(choice);
+    d4.START();
+    string choice,command;
+
+    /*choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
+    command=take_command(choice);
     d4.process_command(choice, command);
 
     choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
@@ -29,27 +31,20 @@ int main(){
     d4.process_command(choice, command);
     choice="insert into phone (yor, name, sef, price) values (2013, \"iphone 5\", 5, 729.99);";
     command=take_command(choice);
+    d4.process_command(choice, command);*/
+
+    Column<string> & a=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<int> & b=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
+    Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
+    Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
+
+    choice="quit();";
+    command=take_command(choice);
     d4.process_command(choice, command);
 
-    ofstream file;
-    file.open("test.txt", ios::trunc);
-    if(!file){
-        cout<<"err";
-    }
-    file.write((char*)&d4, sizeof(d4));
-    file.close();
+    return 0;
 
-    ifstream file2;
-    file2.open("test.txt", ios::in);
-    Database d5;
-    file2.read((char*)&d5, sizeof(d5));
-
-    Column<string> & a=(*static_cast<Column<string>*>(d5.Tables[0].cols[0]));
-    Column<int> & b=(*static_cast<Column<int>*>(d5.Tables[0].cols[1]));
-    Column<float> & c=(*static_cast<Column<float>*>(d5.Tables[0].cols[2]));
-    Column<int> & d=(*static_cast<Column<int>*>(d5.Tables[0].cols[3]));
-  
-    choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
+    /*choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
     command=take_command(choice);
     if(d4.process_command(choice, command)){
         cout<<"Update command correctly processed!";
@@ -85,7 +80,7 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    return 0;
+    return 0;*/
 }
 
 /*

@@ -25,16 +25,23 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
-    for(; i<in.size() and tmpCounter2 != counter2; i++){
-        if(in[i] == char1){
-            tmpCounter1++;
-        }
-        if(in[i] == char2){
-            tmpCounter2++;
-        }
-        if(tmpCounter1 == counter1 and !found1){
-            start=i+1;
-            found1=true;
+    if(counter1==0 and counter2==-1){
+        start=0;
+        end=in.size();
+        found1=true;
+        found2=true;
+    } else{
+        for (; i < in.size() and tmpCounter2 != counter2; i++) {
+            if (in[i] == char1) {
+                tmpCounter1++;
+            }
+            if (in[i] == char2) {
+                tmpCounter2++;
+            }
+            if (tmpCounter1 == counter1 and !found1) {
+                start = i + 1;
+                found1 = true;
+            }
         }
     }
 
@@ -367,6 +374,18 @@ string replace_content(string in, const char & start, const char & end, const ch
         end_i++;
     }
     return in;
+}
+
+void operator>>(const string & str, vector<string> & vec){
+    vec.resize(0);
+    stringstream ss(str);
+    string tmp;
+    ss>>tmp;
+    while(!tmp.empty()){
+        vec.push_back(tmp);
+        tmp="";
+        ss>>tmp;
+    }
 }
 
 #endif

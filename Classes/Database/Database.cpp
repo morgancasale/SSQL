@@ -1,8 +1,9 @@
 #include "Database.h"
 
+
 bool Database::check_TableName(const string & name){
     bool noErr=true;
-    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
+    for(string tmp: allowed_coms){ noErr=(name!=tmp); }
     if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
     if(noErr){ for(const string & tmp: reserved_words){ noErr=(name!=tmp); } }
     return noErr;
@@ -35,7 +36,7 @@ bool Database::check_Table_existence(string in_Table_name, const bool & existenc
 bool Database::process_command(const string &choice, const string &command) {
     bool noErr=true;  int j=0;
     if(command=="quit()"){
-        //stampa su file il database
+        QUIT();
     } else
     if(command=="create table"){
         string table_name=substr_from_c_to_c(choice, 0, 1);
@@ -273,6 +274,36 @@ bool Database::UPDATE(string in){
 
     } else{
         cerr<<"Table named "<<tableName<<" doesn't exist!";
+    }
+    return noErr;
+}
+
+void Database::QUIT(){
+    ofstream out;
+    out.open("../Database.txt", ios::trunc);
+    for(Table & table:Tables){
+       table.printTable_to_file(out);
+       out<<endl;
+    }
+    out<<"|";
+    out.close();
+}
+
+bool Database::START() {
+    bool noErr;
+    ifstream in;
+    in.open("../Database.txt", ios::in);
+    if(!in){
+        cerr<<endl<<"The file doesn't exist!";
+    }
+    string line;
+    int i=0;
+    while(line!="|"){
+        getline(in, line);
+        this->Tables.resize(i+1);
+        this->Tables[i].createTable_from_file(in, line);
+        i++;
+        getline(in, line);
     }
     return noErr;
 }

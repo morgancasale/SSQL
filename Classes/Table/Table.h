@@ -2,6 +2,7 @@
 #define CS_PROJECT_TABLE_H
 #include "../../syntax.h"
 #include <vector>
+#include <fstream>
 using namespace std;
 
 template<typename type> class Column {
@@ -12,36 +13,40 @@ public:
     bool not_null=false;
     bool auto_increment=false;
     ~Column()=default;
+    void printCol_to_file(ofstream & out);
 };
 
 class Table{
 private:
     string name;
-    static vector<string> get_CREATE_data(string in);
+
     int primaryKey_index;
+
+    static vector<string> get_CREATE_data(string in);
     static int count_data(const vector<string> &data, const string &type);
 
-
 public:
-    bool find_check_primaryKey(const string & in);
-    bool create_col(string in, const vector<string> & data);
     int rows=0;
+    vector<string> elementsNames;
     vector<string> elementsTypes;
     vector<void *> cols;
-    vector<string> elementsNames;
+
+    bool find_check_primaryKey(const string & in);
+    bool create_col(string in, const bool &key_existence);
     void clear_col(const int &i);
 
-public:
     bool set_Table(const string &in);
     Table()=default;
     ~Table()=default;
-    void set_name(string name_in){name=name_in;}
+
+    void set_name(string name_in){ name=name_in; }
     string get_name(){ return name; }
+
     void empty_table();
 
     int find_col_by_name(string in);
 
-    bool check_key(const string & in);
+    bool check_key(const string &key, const bool &existence);
 
     static bool check_type(const string & type);
 
@@ -64,5 +69,11 @@ public:
     bool get_rows_by_data(const int &col_i, const string &searchData, vector<int> &foundRows);
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
+
+    bool printTable_to_file(ofstream & out);
+
+    void createTable_from_file(ifstream &in, string line);
+
+    void createCol_from_file(ifstream &in, const string &type, int col_i);
 };
 #endif //CS_PROJECT_TABLE_H
