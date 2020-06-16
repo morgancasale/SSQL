@@ -1,20 +1,22 @@
 #include "Database.h"
 
+
 bool Database::check_TableName(const string & name){
     bool noErr=true;
-    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
+    for(string tmp: allowed_coms){ noErr=(name!=tmp); }
     if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
     if(noErr){ for(const string & tmp: reserved_words){ noErr=(name!=tmp); } }
     return noErr;
 }
 
 //if existence parameter is true the function checks if the table exists, else if doesn't exist
-bool Database::check_Table_existence(const string &in_Table_name, const bool & existence){
+bool Database::check_Table_existence(string in_Table_name, const bool & existence){
     bool not_exists=true;
     int i=0;
     if(!Tables.empty()) {
         do {
-            if (Tables[i].get_name() == in_Table_name) {
+            string tmp=Tables[i].get_name();
+            if ( tolower(tmp) == tolower(in_Table_name)) {
                 not_exists = false;
             }
             i++;
@@ -34,7 +36,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & e
 bool Database::process_command(const string &choice, const string &command) {
     bool noErr=true;  int j=0;
     if(command=="quit()"){
-        //stampa su file il database
+        QUIT();
     } else
     if(command=="create table"){
         string table_name=substr_from_c_to_c(choice, 0, 1);
@@ -95,8 +97,9 @@ bool Database::check_command(const string &input, const bool &show_error, string
 bool Database::INSERT_INTO(string in){
     bool err;
 
-    string Table=substr_from_c_to_c(in, 0, 1, ' ', ' ');
-    in-=(Table+" ");
+    string Table=substr_from_c_to_c(in, 0, 1, ' ', '(');
+    in-=Table;
+    replace_chars(Table,{' '}, -1);
     int Table_i=find_Table(Table);
 
     if(Table_i!=-1) {
@@ -150,11 +153,12 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     return noErr;
 }
 
-int Database::find_Table(const string &in) {
+int Database::find_Table(string in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
-        if(Tables[i].get_name()==in){
+        string tmp=Tables[i].get_name();
+        if(tolower(tmp)==tolower(in)){
             found=true;
         }
     }
@@ -166,14 +170,13 @@ int Database::find_Table(const string &in) {
 }
 
 bool Database::DELETE(string in) {
-    bool noErr=true;
-
     string table_name=substr_from_c_to_c(in, 0, 1);
-    noErr=!check_Table_existence(table_name, true);
+    bool noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = substr_from_c_to_c(in, 2, 1, ' ', '=');
+        string element = substr_from_s_to_s(in,"where ","=");
+        replace_chars(element, {' '}, -1);
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";
@@ -271,6 +274,47 @@ bool Database::UPDATE(string in){
 
     } else{
         cerr<<"Table named "<<tableName<<" doesn't exist!";
+    }
+    return noErr;
+}
+
+void Database::QUIT(){
+    ofstream out;
+    out.open("../Database.txt", ios::trunc);
+    for(Table & table:Tables){
+       table.printTable_to_file(out);
+       out<<endl;
+    }
+    out<<"|";
+    out.close();
+}
+
+bool Database::START() {
+    bool noErr;
+    ifstream in;
+    in.open("../Database.txt", ios::in);
+    if(!in){
+        cerr<<endl<<"The file doesn't exist!";
+    }
+    string line;
+    int i=0;
+    char end=42;
+    while(end!='|'){
+        getline(in, line);
+        this->Tables.resize(i+1);
+        this->Tables[i].createTable_from_file(in, line);
+        i++;
+        getline(in, line);
+        end=line[0];
+        if(end!='|'){
+            streampos tmp = in.tellg();
+            getline(in, line);
+            if(line[0]=='|'){
+                end=line[0];
+            } else{
+               in.seekg(tmp);
+            }
+        }
     }
     return noErr;
 }

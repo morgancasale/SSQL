@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+
 using namespace std;
 #include "../Classes/Time/Time.cpp"
 #include "../Classes/Date/Date.cpp"
@@ -9,9 +11,11 @@ using namespace std;
 
 int main(){
     Database d4;
-    
-    string choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
-    string command=take_command(choice);
+    d4.START();
+    string choice,command;
+
+    choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
+    command=take_command(choice);
     d4.process_command(choice, command);
 
     choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
@@ -29,24 +33,29 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    Column<string> & b=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<int> & a=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
+    Column<string> & a=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<int> & b=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
     Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
     Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
 
 
-    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
-  
-    choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
+    /*choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
     command=take_command(choice);
     if(d4.process_command(choice, command)){
         cout<<"Update command correctly processed!";
     } else{
         cout<<"Update :(";
-    }
+    }*/
 
-    choice="delete phone where sef=6;";
+
+    choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+
+    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
+    /*choice="delete phone where sef=6;";
     command=take_command(choice);
     if(d4.process_command(choice, command)){
         cout<<endl<<"DELETE command correctly processed!";
@@ -58,14 +67,15 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
-    command=take_command(choice);
-    d4.process_command(choice, command);
 
-    Column<string> & h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<string> & r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
+
 
     choice="drop table car;";
+    command=take_command(choice);
+    d4.process_command(choice, command);*/
+
+    choice="quit();";
     command=take_command(choice);
     d4.process_command(choice, command);
 
