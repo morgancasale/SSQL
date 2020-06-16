@@ -52,6 +52,7 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     end=i-1;
     if(counter1 == 0){
         start=0;
+        found1=true;
     }
     if(counter2 == -1){
         end=in.size();
@@ -353,6 +354,23 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
         minuend.resize(minuend.size()-1);
     }
 }
+
+string take_the_next_word(const string & in, string before){
+    string tmp, after;
+    stringstream iss(in);
+    if(in.find(before)==in.npos){
+        cerr<<endl<<"La parola non esiste nella frase";
+        return "/err";
+    }
+    while(iss>>tmp){
+        if(tmp==before){
+            iss>>after;
+        }
+        after-=";";
+    }
+    return after;
+}
+
 
 int num_of_chars(const string & in, const char & c){
     int num=0;

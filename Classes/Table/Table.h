@@ -70,6 +70,8 @@ public:
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
+    void printCols(const vector <string> & colSelection);
+
     bool printTable_to_file(ofstream & out);
 
     void createTable_from_file(ifstream &in, string line);

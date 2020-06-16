@@ -657,6 +657,30 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     return noErr;
 }
 
+void Table::printCols(const vector <string> & colSelection){
+    bool noErr;
+    int index;
+    for(int i=0; i<colSelection.size(); i++){
+        noErr=((index=find_col_by_name(colSelection[i]))!=-1);
+        if(noErr){
+            string & type=elementsTypes[index];
+            if (type=="int") {
+                vector<int> & values = (*static_cast<Column<int> *>(cols[index])).values;
+                for (const auto & b: values) {
+                    cout<<b<<endl;
+                }
+            }if (type=="text") {
+                vector<string> & values = (*static_cast<Column<string> *>(cols[index])).values;
+                for (const auto & b: values) {
+                    cout<<b<<endl;
+                }
+            }
+        } else{
+            cerr<<endl<<"No column "<<colSelection[i]<<" was found!";
+        }
+    }
+}
+
 bool Table::printTable_to_file(ofstream & out) {
     bool noErr=true;
     out<<name<<" ";
