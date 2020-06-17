@@ -29,7 +29,7 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="SELECT number, price, name, car FROM phone;";
+    choice="SELECT number, name, price, car FROM phone WHERE car = 'p';";
     command=take_command(choice);
     d4.process_command(choice, command);
 

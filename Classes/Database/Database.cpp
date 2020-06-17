@@ -284,8 +284,6 @@ bool Database::PRINT(string in) {
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
     if(noErr){
-        //SELECT *	FROM CUSTOMERS;
-        //SELECT ID,	AGE,	SALARY		FROM CUSTOMERS;
         //SELECT ID,	AGE,	SALARY		FROM CUSTOMERS	WHERE	AGE	=	20;
         vector <string> colNames;
         string tmp;
@@ -308,9 +306,9 @@ bool Database::PRINT(string in) {
         }while(exit);
 
         if(in.find("*")!=in.npos){
-            cout<<"mo lo faccio";
+            table.printCols({"*"});
         }else if(in.find("where")!=in.npos){
-            cout<<"mo lo faccio";
+            table.printCols(colNames, take_the_next_word(in,"where"), take_the_next_word(in,"="));
         }else{
             table.printCols(colNames);
         }

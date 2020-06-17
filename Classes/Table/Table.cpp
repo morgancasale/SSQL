@@ -675,15 +675,27 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     return noErr;
 }
 
-void Table::printCols(const vector <string> & colSelection){
+void Table::printCols(vector <string> colSelection, string whereToSearch, string whatToSearch){
     bool noErr;
-    int index;
+    int index, k=0;
+    vector <int> colsDiscovered;
+    bool whereFind = false;
+    if(colSelection[0]=="*"){   colSelection=elementsNames;}
 
     for(int j=-1;j<rows;j++) {
-        for (int i = 0; i < colSelection.size(); i++) {
-            noErr = ((index = find_col_by_name(colSelection[i])) != -1);
+
+        if(whereToSearch!="/err" and whatToSearch!="/err"){
+            whereFind = find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),colsDiscovered);
+            whereToSearch="/err"; whatToSearch="/err";
+        } else if(whereFind) {
+            j=colsDiscovered[k];
+            k++;
+        }
+
+        for (auto & colSelectedName : colSelection) {
+            noErr = ((index = find_col_by_name(colSelectedName)) != -1);
             if (noErr) {
-                if(j==-1) {cout<<colSelection[i]<<((elementsTypes[index]=="string" or elementsTypes[index]=="text")?"\t\t":"\t");}
+                if(j==-1) {cout<<colSelectedName<<((elementsTypes[index]=="string" or elementsTypes[index]=="text")?"\t\t":"\t");}
                 else {
                     string &type = elementsTypes[index];
                     if (type == "int") {
@@ -716,10 +728,11 @@ void Table::printCols(const vector <string> & colSelection){
                     }
                 }
             } else {
-                cerr << endl << "No column " << colSelection[i] << " was found!";
+                cerr << endl << "No column " << colSelectedName << " was found!";
             }
         }
         cout<<endl;
+    if(k==colsDiscovered.size()) j=rows-1;
     }
 }
 

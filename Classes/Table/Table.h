@@ -70,7 +70,7 @@ public:
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-    void printCols(const vector <string> & colSelection);
+    void printCols(vector <string> colSelection, string whereToSearch="/err", string whatToSearch="/err");
 
     bool printTable_to_file(ofstream & out);
 
