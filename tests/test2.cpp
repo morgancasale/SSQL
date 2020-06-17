@@ -10,15 +10,26 @@ using namespace std;
 
 int main(){
     Database d4;
-    string choice="CREATE table phone ( number int not null, name text not null, primary key(number) );";
+    string choice="CREATE table phone ( "
+                  "number int not null, "
+                  "name text not null, "
+                  "price float not null, "
+                  "car char, "
+                  "primary key(number) );";
     string command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="insert into phone (number, name) values (2020, \"carlo\");";
+    choice="insert into phone (number, name, price) values (2020, \"carlo\", 12.89);";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+    choice="insert into phone (number, name, price, car) values (2098, \"morgan\", 0.5, 's');";
+    command=take_command(choice);
+    d4.process_command(choice, command);
+    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'p');";
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="SELECT number, name FROM phone;";
+    choice="SELECT number, price, name, car FROM phone;";
     command=take_command(choice);
     d4.process_command(choice, command);
 

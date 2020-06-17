@@ -197,7 +197,7 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
 bool is_a_Time(const string & var){
     bool response=true;
 
-    int hours, min, sec;
+    int hours=-1, min=-1, sec=-1;
 
     char sub;
     if(var.find(':')!=-1){
@@ -227,7 +227,7 @@ bool is_a_Time(const string & var){
 bool is_a_Date(const string & var){
     bool response=true;
 
-    int day, month, year;
+    int day=-1, month=-1, year=-1;
 
     char sub;
     bool err=false;
@@ -244,7 +244,7 @@ bool is_a_Date(const string & var){
     if(response){
         stringstream ss=data_ss(var, sub);
         ss>>day>>month>>year;
-
+        if(day<=0 or day>31) response=false;
         if(month<0 or month>12){
             response=false;
         }
@@ -293,9 +293,15 @@ bool check_data_consistence(const string & var, const string & type){
     } else
     if(var.find('.')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); }
-        else if(Date_resp){ noErr = (type == "date"); }
-        else{ noErr = (type == "float"); }
+        bool Time_resp;
+        if(Time_resp=is_a_Time(var) and !(Date_resp=is_a_Date(var))){
+            noErr = (type == "time");
+            Time_resp=is_a_Time(var);
+        }
+        else if(Date_resp){
+            noErr = (type == "date"); }
+        else{
+            noErr = (type == "float"); }
     } else
     if(var.find(':')!=-1){
         bool Date_resp;

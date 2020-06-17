@@ -315,6 +315,7 @@ bool Database::PRINT(string in) {
             table.printCols(colNames);
         }
     }
+    return noErr;
 }
 
 void Database::QUIT(){
