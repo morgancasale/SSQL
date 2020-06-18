@@ -77,7 +77,7 @@ bool Database::process_command(const string &choice, const string &command) {
         }
     } else
     if(command=="select"){
-        //print_selected_data(choice);
+        PRINT(choice);
     }
     return noErr;
 }
@@ -274,6 +274,44 @@ bool Database::UPDATE(string in){
 
     } else{
         cerr<<"Table named "<<tableName<<" doesn't exist!";
+    }
+    return noErr;
+}
+
+bool Database::PRINT(string in) {
+    bool noErr;
+    string tableName = take_the_next_word(in, "from");
+    noErr = !check_Table_existence(tableName, true);
+    Table &table = Tables[find_Table(tableName)];
+    if(noErr){
+        //SELECT ID,	AGE,	SALARY		FROM CUSTOMERS	WHERE	AGE	=	20;
+        vector <string> colNames;
+        string tmp;
+        bool exit=true;
+        do{
+            tmp=substr_from_c_to_c(in, 0, 1, ' ', ',');
+            if(tmp=="/err") {
+                tmp=in.substr(0,in.find("from")-1);
+                if(num_of_words(tmp)==1) {
+                    in-=(tmp+" ");
+                    colNames.push_back(tmp);
+                }else  {
+                    exit=false;
+                }
+            }
+            else {
+                in-=(tmp+","+" ");
+                colNames.push_back(tmp);
+            }
+        }while(exit);
+
+        if(in.find("*")!=in.npos){
+            table.printCols({"*"});
+        }else if(in.find("where")!=in.npos){
+            table.printCols(colNames, take_the_next_word(in,"where"), take_the_next_word(in,"="));
+        }else{
+            table.printCols(colNames);
+        }
     }
     return noErr;
 }

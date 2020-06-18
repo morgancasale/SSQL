@@ -15,11 +15,11 @@ public:
     bool INSERT_INTO(string in);
     bool DELETE(string in);
 
+    bool PRINT(string in);
+
     int find_Table(string in);
 
-    Database()=default;
-
-    //Database(bool file);
+    Database() = default;
 
     ~Database()=default;
 

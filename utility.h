@@ -52,6 +52,7 @@ string substr_from_c_to_c(const string &in, const int &counter1, const int &coun
     end=i-1;
     if(counter1 == 0){
         start=0;
+        found1=true;
     }
     if(counter2 == -1){
         end=in.size();
@@ -196,7 +197,7 @@ template<typename type> bool check_existence(const vector<type> &vec, const type
 bool is_a_Time(const string & var){
     bool response=true;
 
-    int hours, min, sec;
+    int hours=-1, min=-1, sec=-1;
 
     char sub;
     if(var.find(':')!=-1){
@@ -226,7 +227,7 @@ bool is_a_Time(const string & var){
 bool is_a_Date(const string & var){
     bool response=true;
 
-    int day, month, year;
+    int day=-1, month=-1, year=-1;
 
     char sub;
     bool err=false;
@@ -243,7 +244,7 @@ bool is_a_Date(const string & var){
     if(response){
         stringstream ss=data_ss(var, sub);
         ss>>day>>month>>year;
-
+        if(day<=0 or day>31) response=false;
         if(month<0 or month>12){
             response=false;
         }
@@ -292,9 +293,15 @@ bool check_data_consistence(const string & var, const string & type){
     } else
     if(var.find('.')!=-1){
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); }
-        else if(Date_resp){ noErr = (type == "date"); }
-        else{ noErr = (type == "float"); }
+        bool Time_resp;
+        if(Time_resp=is_a_Time(var) and !(Date_resp=is_a_Date(var))){
+            noErr = (type == "time");
+            Time_resp=is_a_Time(var);
+        }
+        else if(Date_resp){
+            noErr = (type == "date"); }
+        else{
+            noErr = (type == "float"); }
     } else
     if(var.find(':')!=-1){
         bool Date_resp;
@@ -353,6 +360,23 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
         minuend.resize(minuend.size()-1);
     }
 }
+
+string take_the_next_word(const string & in, string before){
+    string tmp, after;
+    stringstream iss(in);
+    if(in.find(before)==in.npos){
+        cerr<<endl<<"La parola non esiste nella frase";
+        return "/err";
+    }
+    while(iss>>tmp){
+        if(tmp==before){
+            iss>>after;
+        }
+        after-=";";
+    }
+    return after;
+}
+
 
 int num_of_chars(const string & in, const char & c){
     int num=0;
