@@ -21,7 +21,7 @@ string tolower(string &in, int stop= -1){ //converts all upper letters of a stri
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substr_from_c_to_c(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2=' ') {
+string substrcc(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2= ' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -77,15 +77,18 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     bool err=false;
 
     for(const char & tmp: c){
-        int last_c=in.find(tmp); //finds the position of the first occurrence of the character tmp
-        if(last_c != -1){ //find returns -1 if the characters isn't found
-            for(int i= last_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from last_c
-                if((in[i]!=in[last_c]) or (in[i]!=tmp)){
-                    last_c++;
-                    in[last_c]=in[i];
+        int first_c=in.find(tmp); //finds the position of the first occurrence of the character tmp
+        if(first_c != -1){//find returns -1 if the characters isn't found
+            int found=0;
+            for(int i= first_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from first_c
+                if((in[i]!=in[first_c]) or (in[i] != tmp)){
+                    first_c++;
+                    in[first_c]=in[i];
+                } else{
+                    found++;
                 }
             }
-            in[++last_c]='\0';
+            in.resize(in.size()-found);
         } else{
           err=true;
         }
@@ -97,7 +100,7 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     return err;
 }
 
-string replace_chars(string &in, const vector<char> &sub, const char &car) {
+string replace_chars(string &in, const vector<char> sub, const char &car) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
@@ -117,10 +120,15 @@ string replace_chars(string &in, const vector<char> &sub, const char &car) {
 bool clean_input(string &in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
-    for(string a: programKeyWords) {
-        if (tmp.find(a)!=tmp.npos) in.replace(tmp.find(a),a.size(), a);
+    for(const string & a: programKeyWords) {
+        if (tmp.find(a)!=tmp.npos){
+            string big=in.substr(tmp.find(a), a.size());
+            while(big!=a and in.find(big)!=-1){
+                in.replace(in.find(big), a.size(), a);
+            }
+        }
     }
-    replace_chars(in, {'\n'}, ' ');
+    replace_chars(in, {'\n', '\t'}, ' ');
     return remove_duplicate_chars(in, {' '});
 }
 
@@ -144,17 +152,19 @@ string operator -(string minuend, const string & subtrahend){
 void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
 }
-string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false){
+string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false, bool fromZero=false){
     int start, end;
+    int shift=1;
+    if(fromZero){ shift=0; }
   
     if(reverse){
         std::reverse(in.begin(), in.end());
         std::reverse(s1.begin(), s1.end());
         std::reverse(s2.begin(), s2.end());
-        start = in.find(s2) + 1;
+        start = in.find(s2) + shift;
         end = in.find(s1);
     } else{
-        start = in.find(s1) + 1;
+        start = in.find(s1) + shift;
         end = in.find(s2);
     }
 
@@ -285,10 +295,10 @@ bool is_a_Date(const string & var){
 bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
 
-    if(substr_from_c_to_c(var, 1, 2, '"', '"')!="/err"){
+    if(substrcc(var, 1, 2, '"', '"') != "/err"){
         noErr = (type == "string" or type == "text");
     } else
-    if(substr_from_c_to_c(var, 1, 2, 39, 39)!="/err"){ //char a=39 --> a='
+    if(substrcc(var, 1, 2, 39, 39) != "/err"){ //char a=39 --> a='
         noErr = (type == "char");
     } else
     if(var.find('.')!=-1){
@@ -390,7 +400,7 @@ string replace_content(string in, const char & start, const char & end, const ch
     int start_i=0, end_i=0;
     while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){
         string repl=" ";
-        string tmp=substr_from_c_to_c(in, start_i+1, end_i+1, start, end);
+        string tmp= substrcc(in, start_i + 1, end_i + 1, start, end);
         int s=tmp.size();
         for(int j=0; j<s-1; j++){ repl.push_back(' '); }
         in.replace(in.find(tmp), tmp.size(), repl);

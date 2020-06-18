@@ -18,24 +18,19 @@ void Column<type>::printCol_to_file(ofstream & out) {
     out<<endl;
 }
 
-bool Table::set_Table(const string &in){
+bool Table::set_Table(string in){
     bool noErr=true;
-    if(!control_create(in)){
-        cerr<<endl<<"CREATE command syntax error!";
-        noErr=false;
-    } else{
-        vector<string> data=get_CREATE_data(in);
-        noErr=control_CREATE_data(data);
-        if(noErr){
-            name=data[0];
-            int dataSize=data.size();
-            for(int i=1; i<(dataSize-1) and noErr; i++){
-                noErr=!create_col(data[i], false);
-            }
-            noErr=find_check_primaryKey(data[dataSize-1]);
-        } else{
-            cerr<<endl<<"Forbidden names were given to the columns!";
+    vector<string> data = get_CREATE_data(in);
+    noErr = control_CREATE_data(data);
+    if (noErr) {
+        name = data[0];
+        int dataSize = data.size();
+        for (int i = 1; i < (dataSize - 1) and noErr; i++) {
+            noErr = !create_col(data[i], false);
         }
+        noErr = find_check_primaryKey(data[dataSize - 1]);
+    } else {
+        cerr << endl << "Forbidden names were given to the columns!";
     }
     return noErr;
 }
@@ -43,11 +38,11 @@ bool Table::set_Table(const string &in){
 bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave primaria ha senso e se esiste
     bool noErr=true;
     primaryKey_index=-1;
-    if(in.find("primary key(")==-1){ noErr=false; }
+    if(in.find("primary key(")==-1 and in.find("primary key (")==-1){ noErr=false; }
 
     string key;
     if(noErr){
-        key=substr_from_c_to_c(in, 1, 1, '(', ')');
+        key= substrcc(in, 1, 1, '(', ')');
 
         if (key == "/err") { noErr = false; }
     }
@@ -103,9 +98,9 @@ bool Table::check_type(const string & type){
 int Table::count_data(const vector<string> & data, const string & type){ //conta quanti dati di tipo "type" ci sono in data
     int counter=0;
     for(int i=1; i<data.size()-1; i++){
-        string tmp=substr_from_c_to_c(data[i], 1, 2);
+        string tmp= substrcc(data[i], 1, 2);
         if(tmp=="/err"){
-            tmp=substr_from_c_to_c(data[i], 1, -1);
+            tmp= substrcc(data[i], 1, -1);
         }
         if(tmp==type){
             counter++;
@@ -132,14 +127,14 @@ bool Table::create_col(string in, const bool &key_existence) {
         in-=" not null";
     }
 
-    string key=substr_from_c_to_c(in, 0, 1);
+    string key= substrcc(in, 0, 1);
     replace_chars(key, {' '}, -1);
     err=!check_key(key, key_existence);
     in-=key;
 
     string type;
     if(!err){
-        type=substr_from_c_to_c(in, 0, -1);
+        type= substrcc(in, 0, -1);
         replace_chars(type, {' '}, -1);
         err=!check_type(type);
     }
@@ -205,18 +200,19 @@ bool Table::create_col(string in, const bool &key_existence) {
 vector<string> Table::get_CREATE_data(string in){
     vector<string> data;
     data.resize(1);
-    data[0]=substr_from_c_to_c(in, 0, 1);
+    data[0]= substrcc(in, 0, 1);
 
     string line;
-    for(int i=1; substr_from_c_to_c(in, 1, 1, '(', ')')!="  "; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substrcc(in, 1, 1, '(', ')') != " "; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]=substr_from_c_to_c(in, 2, 1, ' ', ',');
+        data[i]= substrcc(in, 2, 1, ' ', ',');
         if(data[i]=="/err"){
-            data[i]=substr_from_c_to_c(in, 2, 7, ' ', ';');
-            data[i].resize(data[i].size()-2);
+            data[i]= substrcc(in, 2, 1, ' ', ')');
+            data[i]+=")";
             erase_substr(in, data[i]);
         }else{
             erase_substr(in, data[i]+", ");
+            remove_duplicate_chars(in, {' '});
         }
 
     }
@@ -618,7 +614,7 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     int noErr=true;
     for(int i=0; i<data.size() and noErr; i++){
         string tmp=data[i];
-        string col=substr_from_c_to_c(tmp, 0, 1, ' ', '=');
+        string col= substrcc(tmp, 0, 1, ' ', '=');
 
         int col_i;
         noErr=((col_i=find_col_by_name(col))!=-1);
@@ -932,7 +928,7 @@ void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
         string data=line, element;
-        while((element=substr_from_c_to_c(data, 1, 2,'\"', '\"'))!="/err"){
+        while((element= substrcc(data, 1, 2, '\"', '\"')) != "/err"){
             tmp.values.push_back(element);
             data-="\""+element+"\" ";
         }

@@ -7,7 +7,7 @@ class Database {
 public:
     vector<Table> Tables;
     vector<string> TablesNames;
-    bool process_command(const string &choice, const string &command);
+    bool process_command(string choice);
     static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
     bool check_Table_existence(string in_Table_name, const bool & existence);
@@ -36,6 +36,10 @@ public:
     bool START();
 
     void QUIT();
+
+    bool CREATE_TABLE(string in);
+
+    bool setForeignKeys(string data, Table &thisTable);
 };
 
 

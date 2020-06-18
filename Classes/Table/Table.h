@@ -30,12 +30,13 @@ public:
     vector<string> elementsNames;
     vector<string> elementsTypes;
     vector<void *> cols;
+    vector<int> ForeignTables, ConnectedCols, ForeignCols;
 
     bool find_check_primaryKey(const string & in);
     bool create_col(string in, const bool &key_existence);
     void clear_col(const int &i);
 
-    bool set_Table(const string &in);
+    bool set_Table(string in);
     Table()=default;
     ~Table()=default;
 

@@ -33,22 +33,18 @@ bool Database::check_Table_existence(string in_Table_name, const bool & existenc
     return not_exists;
 }
 
-bool Database::process_command(const string &choice, const string &command) {
+bool Database::process_command(string choice) {
     bool noErr=true;  int j=0;
+    string command=take_command(choice);
     if(command=="quit()"){
         QUIT();
     } else
     if(command=="create table"){
-        string table_name=substr_from_c_to_c(choice, 0, 1);
-        noErr=check_TableName(table_name);
-        if(check_Table_existence(table_name, false) and noErr){
-            Table temp;//this creates a temporary Table
-            if(temp.set_Table(choice)){
-                Tables.push_back(temp);
-            }
-            else{
-                noErr=false;
-            }
+        if(!control_create(choice)){
+            cerr<<endl<<"CREATE command syntax error!";
+            noErr=false;
+        } else{
+            noErr = CREATE_TABLE(choice);
         }
     } else
     if(command=="drop table"){
@@ -84,7 +80,7 @@ bool Database::process_command(const string &choice, const string &command) {
 bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;
     for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
-        if(((command= substr_from_c_to_c(input, 0, 1, ' ')) == tmp) or ((command= substr_from_c_to_c(input, 0, 2, ' ')) == tmp)){
+        if(((command= substrcc(input, 0, 1, ' ')) == tmp) or ((command= substrcc(input, 0, 2, ' ')) == tmp)){
             err=false;
         }
     }
@@ -97,7 +93,7 @@ bool Database::check_command(const string &input, const bool &show_error, string
 bool Database::INSERT_INTO(string in){
     bool err;
 
-    string Table=substr_from_c_to_c(in, 0, 1, ' ', '(');
+    string Table= substrcc(in, 0, 1, ' ', '(');
     in-=Table;
     replace_chars(Table,{' '}, -1);
     int Table_i=find_Table(Table);
@@ -123,10 +119,10 @@ bool Database::INSERT_INTO(string in){
 
 bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues) {
     bool noErr=true;
-    for(; !substr_from_c_to_c(in, 1, 1, '(', ')').empty();){
-        string elementName=substr_from_c_to_c(in, 1, 1, '(', ',');
+    for(; !substrcc(in, 1, 1, '(', ')').empty();){
+        string elementName= substrcc(in, 1, 1, '(', ',');
         if(elementName=="/err" or num_of_words(elementName)>1){
-            elementName=substr_from_c_to_c(in, 1, 1, '(', ')');
+            elementName= substrcc(in, 1, 1, '(', ')');
             erase_substr(in, elementName);
         }else{
             erase_substr(in, elementName+", ");
@@ -135,10 +131,10 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     }
 
     in-="() values (";
-    for(int i=0; !substr_from_c_to_c(in, 0, 1, ' ', ')').empty() and noErr; i++){
-        string elementValue=substr_from_c_to_c(in, 0, 1, ' ', ',');
+    for(int i=0; !substrcc(in, 0, 1, ' ', ')').empty() and noErr; i++){
+        string elementValue= substrcc(in, 0, 1, ' ', ',');
         if(elementValue=="/err"){
-            elementValue=substr_from_c_to_c(in, 0, 1, ' ', ')');
+            elementValue= substrcc(in, 0, 1, ' ', ')');
             erase_substr(in, elementValue);
         }else{
             erase_substr(in, elementValue+", ");
@@ -170,7 +166,7 @@ int Database::find_Table(string in) {
 }
 
 bool Database::DELETE(string in) {
-    string table_name=substr_from_c_to_c(in, 0, 1);
+    string table_name= substrcc(in, 0, 1);
     bool noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
@@ -183,7 +179,7 @@ bool Database::DELETE(string in) {
             noErr = false;
         }
         if(noErr){
-            string data = substr_from_c_to_c(in, 1, 1, '=', ';');
+            string data = substrcc(in, 1, 1, '=', ';');
             vector<int> foundRows;
             noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows);
             if(noErr){
@@ -229,7 +225,7 @@ bool Database::TRUNCATE_TABLE(const string & in){
 
 bool Database::UPDATE(string in){
     bool noErr;
-    string tableName=substr_from_c_to_c(in, 0, 1);
+    string tableName= substrcc(in, 0, 1);
     noErr=!check_Table_existence(tableName, true);
     Table & table=Tables[find_Table(tableName)];
 
@@ -243,7 +239,7 @@ bool Database::UPDATE(string in){
 
         if(noErr){
             string searchData= substr_from_s_to_s(in, colToSearch, ";");
-            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
+            searchData= substrcc(searchData, 1, -1, '=', ' ');
             replace_chars(searchData, {' '}, -1);
 
             vector<int> foundRows;
@@ -252,11 +248,11 @@ bool Database::UPDATE(string in){
             if(noErr){
                 replace_chars(in, {' '}, -1);
                 vector<string> updateData;
-                for(; substr_from_c_to_c(in,0,-1)!="/err";){
-                    string tmp=substr_from_c_to_c(in, 0, 1, ' ', ',');
+                for(; substrcc(in, 0, -1) != "/err";){
+                    string tmp= substrcc(in, 0, 1, ' ', ',');
                     tmp+=",";
                     if(tmp=="/err,"){
-                        tmp=substr_from_c_to_c(in, 0,-1);
+                        tmp= substrcc(in, 0, -1);
                     }
                     in-=tmp;
                     if(tmp.find(',')){ tmp-=","; }
@@ -289,7 +285,7 @@ bool Database::PRINT(string in) {
         string tmp;
         bool exit=true;
         do{
-            tmp=substr_from_c_to_c(in, 0, 1, ' ', ',');
+            tmp= substrcc(in, 0, 1, ' ', ',');
             if(tmp=="/err") {
                 tmp=in.substr(0,in.find("from")-1);
                 if(num_of_words(tmp)==1) {
@@ -352,6 +348,76 @@ bool Database::START() {
             } else{
                in.seekg(tmp);
             }
+        }
+    }
+    return noErr;
+}
+
+bool Database::CREATE_TABLE(string in){
+    bool noErr=true;
+    string table_name= substrcc(in, 0, 1);
+    noErr=check_TableName(table_name);
+    if(check_Table_existence(table_name, false) and noErr){
+        Table temp;//this creates a temporary Table
+
+        string foreignKeys;
+        if(in.find("foreign key")!=-1){
+            foreignKeys = substr_from_s_to_s(in, "foreign key", ");", false, true);
+            in -= ", " + foreignKeys;
+        }
+
+        if(temp.set_Table(in)){
+            if(!foreignKeys.empty()){
+                noErr=setForeignKeys(foreignKeys, temp);
+            }
+            Tables.push_back(temp);
+        }
+        else{
+            noErr=false;
+        }
+    }
+    return noErr;
+}
+
+bool Database::setForeignKeys(string data, Table &thisTable) {
+    bool noErr=true;
+    string line = substrcc(data, 0, 1, ' ', ',');
+    while(noErr and !data.empty()) {
+        line += ", ";
+        if (line == "/err, ") {
+            line = substrcc(data, 0, -1);
+        }
+        data-=line;
+
+        string thisTableElement=substrcc(line, 1, 1, '(', ')');
+        int thisCol_i=thisTable.find_col_by_name(thisTableElement);
+        if(thisCol_i != -1){
+            string foreignTableName = substrcc(line, 4, 5);
+            int foreignTable_i = find_Table(foreignTableName);
+
+            if (foreignTable_i != -1){
+                Table & foreignTable=Tables[foreignTable_i];
+
+                string foreignTableElement=substrcc(line, 2, 2, '(', ')');
+                int foreignCol_i=foreignTable.find_col_by_name(foreignTableElement);
+
+                if(foreignCol_i != -1){
+                    thisTable.ForeignTables.push_back(foreignTable_i);
+                    thisTable.ConnectedCols.push_back(thisCol_i);
+                    thisTable.ForeignCols.push_back(foreignCol_i);
+                    line = substrcc(data, 0, 1, ' ', ',');
+                } else{
+                    cerr<<endl<<"Uncaught reference to a non existence Column in";
+                    cerr<<" the foreign Table "<<foreignTableName;
+                    cerr<<"! (Column name: " << foreignTableElement<< ")";
+                }
+            }else {
+                cerr << endl << "Uncaught reference to a non existence Table! (Table name: " << foreignTableName << ")";
+                noErr=false;
+            }
+        } else{
+            cerr << "No element called " << thisTableElement << " exists in this Table!";
+            noErr=false;
         }
     }
     return noErr;
