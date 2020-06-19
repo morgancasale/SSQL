@@ -20,10 +20,10 @@
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="CS_Project" targetName="CS_Project_meta" />
-      <config projectName="CS_Project" targetName="CS_Project" />
       <config projectName="CS_Project" targetName="CS_project_test" />
-      <config projectName="CS_Project" targetName="Cs_Project_testjonathan" />
+      <config projectName="CS_Project" targetName="CS_Project" />
+      <config projectName="CS_Project" targetName="CS_Project_meta" />
+      <config projectName="CS_Project" targetName="CS_project_test2" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -32,10 +32,18 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc0bd6ea-1aa1-4aec-934c-f6e5c7ca676b" name="Default Changelist" comment="risolti alcuni bug(solo sul mio pc lol)">
+    <list default="true" id="cc0bd6ea-1aa1-4aec-934c-f6e5c7ca676b" name="Default Changelist" comment="Completed TRUNCATE and DROP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Classes/Name/Name.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Name/Name.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testjonathan/customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/testjonathan/customer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Database/Database.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Database/Database.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Database/Database.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Database/Database.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Date/Date.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Date/Date.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Date/Date.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Date/Date.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Table/Table.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Table/Table.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Table/Table.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Table/Table.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/Time/Time.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/Time/Time.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/syntax.h" beforeDir="false" afterPath="$PROJECT_DIR$/syntax.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test2.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +57,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="morgancasale &lt;morgan.casale@gmail.com&gt;" />
         <option value="Morgan Casale &lt;56939636+morgancasale@users.noreply.github.com&gt;" />
       </list>
     </option>
@@ -58,9 +67,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="OCResolveContextSettings">
-    <option name="configuration" value="0-Debug-CS_Project" />
   </component>
   <component name="ProjectId" id="1bUpOqKFuctNpkTYrA5chakydak" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -109,7 +115,7 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Cs_Project_testjonathan" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="Cs_Project_testjonathan" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="Cs_Project_testjonathan">
+    <configuration name="CS_project_test2" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="CS_Project" TARGET_NAME="CS_project_test2" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="CS_Project" RUN_TARGET_NAME="CS_project_test2">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -118,7 +124,7 @@
       <item itemvalue="CMake Application.CS_Project" />
       <item itemvalue="CMake Application.CS_Project_meta" />
       <item itemvalue="CMake Application.CS_project_test" />
-      <item itemvalue="CMake Application.Cs_Project_testjonathan" />
+      <item itemvalue="CMake Application.CS_project_test2" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -144,6 +150,20 @@
       <workItem from="1589995826523" duration="2570000" />
       <workItem from="1590005748952" duration="2459000" />
       <workItem from="1590048328429" duration="31618000" />
+      <workItem from="1590422343507" duration="8105000" />
+      <workItem from="1590602042408" duration="8133000" />
+      <workItem from="1590663202070" duration="10617000" />
+      <workItem from="1590690684617" duration="10209000" />
+      <workItem from="1590742174249" duration="5804000" />
+      <workItem from="1591265870480" duration="7521000" />
+      <workItem from="1591278567033" duration="14659000" />
+      <workItem from="1591344777599" duration="13982000" />
+      <workItem from="1591363991809" duration="8264000" />
+      <workItem from="1591388271954" duration="761000" />
+      <workItem from="1591611189836" duration="6796000" />
+      <workItem from="1591639447114" duration="9808000" />
+      <workItem from="1591718815338" duration="775000" />
+      <workItem from="1591792151886" duration="2556000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit 2">
       <created>1588696726523</created>
@@ -208,7 +228,56 @@
       <option name="project" value="LOCAL" />
       <updated>1590165133383</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fixed something in Database.cpp">
+      <created>1590421327004</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1590421327004</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Made up an infinite number of bugs!">
+      <created>1590425121684</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1590425121684</updated>
+    </task>
+    <task id="LOCAL-00012" summary="New create bug involving generic pointers">
+      <created>1590702930217</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1590702930217</updated>
+    </task>
+    <task id="LOCAL-00013" summary="A new bug involving memory sovrasciption was found in function create_col">
+      <created>1590703987635</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1590703987635</updated>
+    </task>
+    <task id="LOCAL-00014" summary="I made some progress in DELETE">
+      <created>1591286488912</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1591286488912</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Debugged DELETE and INSERT INTO">
+      <created>1591363749995</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1591363749995</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Completed TRUNCATE and DROP">
+      <created>1591388823760</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1591388823760</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,7 +333,14 @@
     <MESSAGE value="Nuova funzione in utility per la gestione dei tipi" />
     <MESSAGE value="Aggiornamenti di syntax" />
     <MESSAGE value="Progressi parziali di syntax" />
-    <option name="LAST_COMMIT_MESSAGE" value="Progressi parziali di syntax" />
+    <MESSAGE value="fixed something in Database.cpp" />
+    <MESSAGE value="Made up an infinite number of bugs!" />
+    <MESSAGE value="New create bug involving generic pointers" />
+    <MESSAGE value="A new bug involving memory sovrasciption was found in function create_col" />
+    <MESSAGE value="I made some progress in DELETE" />
+    <MESSAGE value="Debugged DELETE and INSERT INTO" />
+    <MESSAGE value="Completed TRUNCATE and DROP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Completed TRUNCATE and DROP" />
   </component>
   <component name="WindowStateProjectService">
     <state x="-91" y="303" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589986937749">
@@ -276,18 +352,18 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="673" y="321" key="#com.intellij.fileTypes.FileTypeChooser/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588774015874" />
-    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1590007497280">
+    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1590421589750">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007497280" />
+    <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590421589750" />
     <state x="848" y="272" key="#xdebugger.XInspectDialog" timestamp="1589911761907">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="848" y="272" key="#xdebugger.XInspectDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589911761907" />
-    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1589987118560">
+    <state x="473" y="107" key="CommitChangelistDialog2" timestamp="1590703993358">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589987118560" />
+    <state x="473" y="107" key="CommitChangelistDialog2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590703993358" />
     <state x="270" y="-7" width="1536" height="860" maximized="true" key="DiffContextDialog" timestamp="1590006636893">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -304,49 +380,65 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="632" y="218" key="Github.UntrackedFilesDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1588696548662" />
-    <state width="1323" height="179" key="GridCell.Tab.0.bottom" timestamp="1590043974084">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1877" height="328" key="GridCell.Tab.0.bottom" timestamp="1591793785120">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1493" height="344" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192085" />
+    <state width="1875" height="344" key="GridCell.Tab.0.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747829730" />
     <state width="1323" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1590043974084" />
+    <state width="1877" height="328" key="GridCell.Tab.0.bottom/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785120" />
     <state width="1878" height="245" key="GridCell.Tab.0.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1323" height="179" key="GridCell.Tab.0.center" timestamp="1590043974083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1877" height="328" key="GridCell.Tab.0.center" timestamp="1591793785119">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1493" height="344" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192085" />
+    <state width="1875" height="344" key="GridCell.Tab.0.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747829730" />
     <state width="1323" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
+    <state width="1877" height="328" key="GridCell.Tab.0.center/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785119" />
     <state width="1878" height="245" key="GridCell.Tab.0.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1323" height="179" key="GridCell.Tab.0.left" timestamp="1590043974083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1877" height="328" key="GridCell.Tab.0.left" timestamp="1591793785119">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1493" height="344" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192084" />
+    <state width="1875" height="344" key="GridCell.Tab.0.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747829730" />
     <state width="1323" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
+    <state width="1877" height="328" key="GridCell.Tab.0.left/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785119" />
     <state width="1878" height="245" key="GridCell.Tab.0.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1323" height="179" key="GridCell.Tab.0.right" timestamp="1590043974083">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1877" height="328" key="GridCell.Tab.0.right" timestamp="1591793785120">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007620741" />
+    <state width="1493" height="344" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192085" />
+    <state width="1875" height="344" key="GridCell.Tab.0.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747829730" />
     <state width="1323" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1590043974083" />
+    <state width="1877" height="328" key="GridCell.Tab.0.right/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785120" />
     <state width="1878" height="245" key="GridCell.Tab.0.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1590007621433">
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom" timestamp="1591793785636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007621433" />
+    <state width="1493" height="344" key="GridCell.Tab.1.bottom/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192761" />
+    <state width="1875" height="344" key="GridCell.Tab.1.bottom/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747830292" />
+    <state width="1877" height="328" key="GridCell.Tab.1.bottom/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785636" />
     <state width="1878" height="245" key="GridCell.Tab.1.bottom/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1590007621433">
+    <state width="1877" height="328" key="GridCell.Tab.1.center" timestamp="1591793785636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007621433" />
+    <state width="1493" height="344" key="GridCell.Tab.1.center/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192761" />
+    <state width="1875" height="344" key="GridCell.Tab.1.center/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747830291" />
+    <state width="1877" height="328" key="GridCell.Tab.1.center/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785636" />
     <state width="1878" height="245" key="GridCell.Tab.1.center/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1590007621433">
+    <state width="1877" height="328" key="GridCell.Tab.1.left" timestamp="1591793785636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007621433" />
+    <state width="1493" height="344" key="GridCell.Tab.1.left/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192761" />
+    <state width="1875" height="344" key="GridCell.Tab.1.left/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747830291" />
+    <state width="1877" height="328" key="GridCell.Tab.1.left/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785636" />
     <state width="1878" height="245" key="GridCell.Tab.1.left/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1590007621433">
+    <state width="1877" height="328" key="GridCell.Tab.1.right" timestamp="1591793785636">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="347" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590007621433" />
+    <state width="1493" height="344" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@-1920.0.1536.832" timestamp="1590746192761" />
+    <state width="1875" height="344" key="GridCell.Tab.1.right/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590747830292" />
+    <state width="1877" height="328" key="GridCell.Tab.1.right/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591793785636" />
     <state width="1878" height="245" key="GridCell.Tab.1.right/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589751198163" />
     <state x="212" y="54" width="1107" height="619" key="MergeDialog" timestamp="1590165400388">
       <screen x="0" y="0" width="1366" height="728" />
@@ -365,36 +457,109 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="783" y="433" key="VCS.ChangelistChooser/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590004964610" />
-    <state x="393" y="176" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1590165424152">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="552" y="252" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1591388829106">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589987129378" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590704007127" />
     <state x="393" y="176" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1590165424152" />
+    <state x="-1197" y="158" key="Vcs.Push.Dialog.v2/0.0.1920.1040/-1680.-87.1680.1010@-1680.-87.1680.1010" timestamp="1591286497268" />
+    <state x="552" y="252" key="Vcs.Push.Dialog.v2/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591388829106" />
     <state x="2472" y="262" width="800" height="535" key="Vcs.Push.Dialog.v2/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589736198570" />
     <state width="960" height="526" key="XDebugger.FullValuePopup" timestamp="1589735010668">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state width="960" height="526" key="XDebugger.FullValuePopup/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589735010668" />
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590006328305">
+
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1591611901630">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590006328305" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590422356466" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591611901630" />
+    <state x="-1530" y="-15" width="708" height="653" maximized="true" key="dock-window-1" timestamp="1590702827266">
+      <screen x="-1920" y="0" width="1536" height="832" />
+    </state>
+    <state x="-1530" y="-15" width="708" height="653" maximized="true" key="dock-window-1/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590702827266" />
+    <state x="769" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1590006328305">
     <state x="461" y="153" key="git4idea.branch.GitSmartOperationDialog" timestamp="1590160868616">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="648" y="232" key="git4idea.branch.GitSmartOperationDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589986989024" />
     <state x="461" y="153" key="git4idea.branch.GitSmartOperationDialog/0.0.1366.728@0.0.1366.728" timestamp="1590160868616" />
-    <state x="736" y="305" key="refactoring.ChangeSignatureDialog" timestamp="1589549338042">
+    <state x="736" y="305" key="refactoring.ChangeSignatureDialog" timestamp="1591647097779">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="736" y="305" key="refactoring.ChangeSignatureDialog/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589549338042" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1589570832949">
+    <state x="736" y="305" key="refactoring.ChangeSignatureDialog/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591647097779" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1591364573461">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1589570832949" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/-1920.0.1536.832/0.0.1920.1040@0.0.1920.1040" timestamp="1590672115510" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/-1680.-87.1680.1010@0.0.1920.1040" timestamp="1591364573461" />
     <state x="2605" y="468" width="540" height="178" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1589732958047">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2605" y="468" width="540" height="178" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1589732958047" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/tests/test2.cpp</url>
+          <line>9</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Database/Database.cpp</url>
+          <line>194</line>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Table/Table.cpp</url>
+          <line>497</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Table/Table.cpp</url>
+          <line>518</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/tests/test.cpp</url>
+          <line>55</line>
+          <option name="timeStamp" value="84" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Database/Database.cpp</url>
+          <line>212</line>
+          <option name="timeStamp" value="85" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/tests/test.cpp</url>
+          <line>39</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Database/Database.cpp</url>
+          <line>226</line>
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Classes/Table/Table.cpp</url>
+          <line>569</line>
+          <option name="timeStamp" value="94" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="CMakeRunConfiguration">
+        <watch expression="(static_cast&lt;Column&lt;string&gt;*&gt;(this-&gt;cols[2]))" language="ObjectiveC" />
+        <watch expression="this-&gt;cols[0]" language="ObjectiveC" />
+        <watch expression="this-&gt;cols[1]" language="ObjectiveC" />
+        <watch expression="(*static_cast&lt;Column&lt;int&gt;*&gt;(this-&gt;cols[1]))" language="ObjectiveC" />
+        <watch expression="elementsTypes[i]" />
+        <watch expression="in[10]" language="ObjectiveC" />
+        <watch expression="in[in.size()-2]" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

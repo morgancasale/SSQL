@@ -6,18 +6,41 @@
 class Database {
 public:
     vector<Table> Tables;
+    vector<string> TablesNames;
+    bool process_command(string choice);
+    static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
+
+    bool check_Table_existence(string in_Table_name, const bool & existence);
+
+    bool INSERT_INTO(string in);
+    bool DELETE(string in);
+
+    bool PRINT(string in);
+
+    int find_Table(string in);
+
+    Database() = default;
+
+    ~Database()=default;
+
+    static bool get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
+
+    static bool check_TableName(const string &name);
+
+    bool DROP_TABLE(const string &in);
+
+    bool TRUNCATE_TABLE(const string &in);
+
+    bool UPDATE(string in);
+
+    bool START();
+
+    void QUIT();
+
+    bool CREATE_TABLE(string in);
+
+    bool setForeignKeys(string data, Table &thisTable);
 };
 
-bool delete_Table(string command);
-
-bool empty_Table(string command);
-
-bool add_Row_to_Table(string command);
-
-bool delete_Row_from_Table(string command);
-
-bool update_Row_data(string command);
-
-bool print_selected_data(string command);
 
 #endif //CS_PROJECT_DATABASE_H

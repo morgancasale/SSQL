@@ -1,4 +1,5 @@
 #include "Date.h"
+
 bool Date::equal_date(const Date &d2) const &{
     bool response=false;
     if(this->get_day()==d2.get_day() and this->get_month()==d2.get_month() and this->get_year()==d2.get_year()){
@@ -39,7 +40,7 @@ void Date::set_day(const int &d) {
             }
         break;
         case 2:
-            if(d<0 or d>28+year%4){ //this account also for leap years
+            if(d<0 or d>28+(1-abs(year)%4)){ //this account also for leap years
                 day_err=true;
             }
         break;
@@ -71,9 +72,35 @@ void Date::set_month(const int &m) {
 }
 int Date::get_month() const{ return month; }
 
-void Date::set_year(const int &y) { year=y; }
+void Date::set_year(const int &y) { year=y; if(year<0){ AC=true; } }
 int Date::get_year() const{ return year; }
 
 string Date::Date_to_string() const &{
+    if(AC){ return to_string(day)+"-"+to_string(month)+"-"+to_string(abs(year))+"AC";}
     return to_string(day)+"-"+to_string(month)+"-"+to_string(year);
+}
+void Date::set_Date(const string & in){
+    bool err=false;
+    char sub;
+
+    if(in.find(':')!=-1){
+        sub=':';
+    } else if(in.find('.')!=-1){
+        sub='.';
+    } else if(in.find('/')!=-1){
+        sub='/';
+    } else{
+        err=true;
+    }
+
+    if(!err){
+        stringstream ss=data_ss(in, sub);
+        int d, m, y;
+        ss>>d>>m>>y;
+        set_day(d);
+        set_month(m);
+        set_year(y);
+    } else{
+        cerr<<endl<<"No date was found in this string!";
+    }
 }

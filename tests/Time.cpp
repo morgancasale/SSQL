@@ -1,5 +1,14 @@
 #include "Time.h"
+#include "../Classes/Time/Time.h"
+
+
 using namespace std;
+
+stringstream data_ss(string in, const char &sub){
+    replace(in.begin(), in.end(), sub, ' ');
+    stringstream ss(in);
+    return ss;
+}
 
 void Time::set_hours(const int &h) {
     try{
@@ -87,12 +96,11 @@ bool Time::equal_min(Time t2) const & { return this->tot_mins()==t2.tot_mins(); 
 bool Time::operator>(Time t2) const & { return this->tot_seconds()>t2.tot_seconds(); }
 bool Time::operator<(Time t2) const & { return this->tot_seconds()<t2.tot_seconds(); }
 
-string Time::to_string() const{
+string Time::to_string() const {
     string tmp;
     if(seconds!=0){
         tmp=std::to_string(hours)+":"+std::to_string(minutes)+":"+std::to_string(seconds);
-    }
-    else{
+    } else{
         tmp=std::to_string(hours)+":"+std::to_string(minutes);
     }
     return tmp;
