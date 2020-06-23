@@ -11,14 +11,44 @@ using namespace std;
 
 int main(){
     Database d4;
-    //d4.START();
+    d4.START();
     string choice,command;
 
+    Column<string> & Europian_Countries=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+    Column<string> & American_Countries=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
+    Column<int> & Countries_ID=(*static_cast<Column<int>*>(d4.Tables[2].cols[0]));
+    Column<string> & Countries_EU=(*static_cast<Column<string>*>(d4.Tables[2].cols[1]));
+    Column<string> & Countries_AM=(*static_cast<Column<string>*>(d4.Tables[2].cols[2]));
+
+    Column<string> & phone_name=(*static_cast<Column<string>*>(d4.Tables[3].cols[0]));
+    Column<int> & Yor=(*static_cast<Column<int>*>(d4.Tables[3].cols[1]));
+    Column<float> & price=(*static_cast<Column<float>*>(d4.Tables[3].cols[2]));
+    Column<int> & Sef=(*static_cast<Column<int>*>(d4.Tables[3].cols[3]));
+
     choice="Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));";
-    d4.process_command(choice);
+    bool noErr=d4.process_command(choice);
+
+    //Column<string> & Europian_Countries=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
+
+    choice="insert into EUROPE (EUROPIAN_COUNTRIES) values (\"Italy\");";
+    noErr=d4.process_command(choice);
+    choice="insert into EUROPE (EUROPIAN_COUNTRIES) values (\"France\");";
+    noErr=d4.process_command(choice);
+    choice="insert into EUROPE (EUROPIAN_COUNTRIES) values (\"Greece\");";
+    noErr=d4.process_command(choice);
 
     choice="Create table AMERICA ( AMERICAN_COUNTRIES text, PRIMARY KEY (AMERICAN_COUNTRIES));";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
+
+    //Column<string> & American_Countries=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+
+    choice="insert into AMERICA (AMERICAN_COUNTRIES) values (\"USA\");";
+    noErr=d4.process_command(choice);
+    choice="insert into AMERICA (AMERICAN_COUNTRIES) values (\"Canada\");";
+    noErr=d4.process_command(choice);
+    choice="insert into AMERICA (AMERICAN_COUNTRIES) values (\"Mexico\");";
+    noErr=d4.process_command(choice);
 
     choice="CREATE TABLE COUNTRIES ("
            " ID INT               NOT NULL,"
@@ -28,10 +58,23 @@ int main(){
            " FOREIGN KEY (NAME_EUROPE) REFERENCES EUROPE (EUROPIAN_COUNTRIES),"
            " FOREIGN KEY (NAME_AMERICAN) REFERENCES AMERICA (AMERICAN_COUNTRIES)"
            ");";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
+
+    /*Column<int> & Countries_ID=(*static_cast<Column<int>*>(d4.Tables[2].cols[0]));
+    Column<string> & Countries_EU=(*static_cast<Column<string>*>(d4.Tables[2].cols[1]));
+    Column<string> & Countries_AM=(*static_cast<Column<string>*>(d4.Tables[2].cols[2]));*/
+
+    choice=R"(insert Into COUNTRIES (ID, NAME_EUROPE, NAME_AMERICAN) VALUES ( 23, "Italy", "Mexico");)";
+    noErr=d4.process_command(choice);
+
+    choice="Update COUNTRIES "
+           "seT NAME_EUROPE=\"Greece\", "
+           "NAME_AMERICAN=\"USA\" "
+           "WheRe ID= 23;";
+    noErr=d4.process_command(choice);
 
     choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
 
     choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
     if(d4.process_command(choice)){
@@ -41,14 +84,14 @@ int main(){
     }
 
     choice="insert into phone (yor, name, sef, price) values (2016, \"samsung s7\", 6, 729.99);";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
     choice="insert into phone (yor, name, sef, price) values (2013, \"iphone 5\", 5, 729.99);";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
 
-    Column<string> & a=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<int> & b=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
-    Column<float> & c=(*static_cast<Column<float>*>(d4.Tables[0].cols[2]));
-    Column<int> & d=(*static_cast<Column<int>*>(d4.Tables[0].cols[3]));
+    /*Column<string> & phone_name=(*static_cast<Column<string>*>(d4.Tables[3].cols[0]));
+    Column<int> & Yor=(*static_cast<Column<int>*>(d4.Tables[3].cols[1]));
+    Column<float> & price=(*static_cast<Column<float>*>(d4.Tables[3].cols[2]));
+    Column<int> & Sef=(*static_cast<Column<int>*>(d4.Tables[3].cols[3]));*/
 
 
     /*choice="update phone set  name=\"mmama\", yor=2017 where price = 729.99;";
@@ -61,7 +104,7 @@ int main(){
 
 
     choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
 
     Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
     Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
@@ -87,7 +130,7 @@ int main(){
     d4.process_command(choice, command);*/
 
     choice="quit();";
-    d4.process_command(choice);
+    noErr=d4.process_command(choice);
 
     return 0;
 }

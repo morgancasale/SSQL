@@ -1,4 +1,51 @@
+EUROPE 3 0
+
+
+
+text 
+EUROPIAN_COUNTRIES 
+
+EUROPIAN_COUNTRIES 0 0
+"Italy" "France" "Greece" 
+0 0 0 
+-
+
+AMERICA 3 0
+
+
+
+text 
+AMERICAN_COUNTRIES 
+
+AMERICAN_COUNTRIES 0 0
+"USA" "Canada" "Mexico" 
+0 0 0 
+-
+
+COUNTRIES 1 0
+0 1 
+0 0 
+1 2 
+int text text 
+ID NAME_EUROPE NAME_AMERICAN 
+
+ID 1 0
+23 
+0 
+-
+NAME_EUROPE 0 0
+"Greece" 
+0 
+-
+NAME_AMERICAN 0 0
+"USA" 
+0 
+-
+
 pHone 3 0
+
+
+
 text int float int 
 Name yOr price sef 
 
@@ -20,6 +67,9 @@ sef 1 1
 -
 
 car 0 0
+
+
+
 text text int float float 
 model company yor price speed 
 

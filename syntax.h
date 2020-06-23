@@ -188,10 +188,10 @@ bool control_insert(string in){
 
     //controlla se ci sia il termine "values", un ';' alla fine, che ci sia solo una parola
     //tra insert e la parentesi, che ci siano solo 2 '(' e 2 ')' e che l'ultimo carattere sia ')'
-    noErr= (in.find("values")!=in.npos and in[in.size()-1]==';') and
-           (num_of_words(substrcc(in, 0, 1, ' ', '('))) and
-           (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2) and
-            (in[in.size()-2]==')');
+    noErr= (in.find("values")!=in.npos and in[in.size()-1]==';');
+    noErr&=(num_of_words(substrcc(in, 0, 1, ' ', '(')));
+    noErr= noErr and (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2);
+    noErr= noErr and (in[in.size()-2]==')');
 
     if(noErr){
         string no_content= replace_content(in, '(', ')');
@@ -254,7 +254,7 @@ bool control_delete(string in){
 }
 
 bool control_update(string in){
-    bool noErr=(in[in.size()-2]==';');
+    bool noErr=(in[in.size()-1]==';');
     if(noErr){
         int tmp;
         noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);

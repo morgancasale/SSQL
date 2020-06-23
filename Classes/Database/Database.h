@@ -40,6 +40,8 @@ public:
     bool CREATE_TABLE(string in);
 
     bool setForeignKeys(string data, Table &thisTable);
+
+    bool checkForeignKeys(const Table &table, int row=-1);
 };
 
 
