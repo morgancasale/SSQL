@@ -820,7 +820,8 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.key<<" ";
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
-            for(const string & value: col.values){
+            for(string value: col.values){
+                if(value.empty()){ value="\"/empty\"";}
                 out<<value<<" ";
             }
             out<<endl;
@@ -837,7 +838,9 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
             for(const Time & value: col.values){
-                out<<value.to_string()<<" ";
+                string time_str=value.to_string();
+                if(time_str.empty()){ time_str="\"/empty\""; }
+                out<<time_str<<" ";
             }
             out<<endl;
 
@@ -853,7 +856,9 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
             for(const Date & value: col.values){
-                out<<value.Date_to_string()<<" ";
+                string date_str=value.Date_to_string();
+                if(date_str.empty()){ date_str="\"/empty\""; }
+                out << date_str << " ";
             }
             out<<endl;
 

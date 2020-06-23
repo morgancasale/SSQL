@@ -137,6 +137,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
         }else{
             erase_substr(in, elementName+", ");
         }
+        replace_chars(elementName, {' '}, -1);
         elementsNames.push_back(elementName);
     }
 

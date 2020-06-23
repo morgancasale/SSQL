@@ -26,6 +26,13 @@ int main(){
     Column<float> & price=(*static_cast<Column<float>*>(d4.Tables[3].cols[2]));
     Column<int> & Sef=(*static_cast<Column<int>*>(d4.Tables[3].cols[3]));
 
+    Column<string> & model=(*static_cast<Column<string>*>(d4.Tables[4].cols[0]));
+    Column<string> & company=(*static_cast<Column<string>*>(d4.Tables[4].cols[1]));
+    Column<int> & yor=(*static_cast<Column<int>*>(d4.Tables[4].cols[2]));
+    Column<float> & carPrice=(*static_cast<Column<float>*>(d4.Tables[4].cols[3]));
+    Column<float> & speed=(*static_cast<Column<float>*>(d4.Tables[4].cols[4]));
+
+
     choice="Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));";
     bool noErr=d4.process_command(choice);
 
@@ -106,8 +113,20 @@ int main(){
     choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
     noErr=d4.process_command(choice);
 
-    Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
-    Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
+    /*Column<string> & model=(*static_cast<Column<string>*>(d4.Tables[4].cols[0]));
+    Column<string> & company=(*static_cast<Column<string>*>(d4.Tables[4].cols[1]));
+    Column<int> & yor=(*static_cast<Column<int>*>(d4.Tables[4].cols[2]));
+    Column<float> & price=(*static_cast<Column<float>*>(d4.Tables[4].cols[3]));
+    Column<float> & speed=(*static_cast<Column<float>*>(d4.Tables[4].cols[4]));*/
+
+    choice=R"(insert iNTo car ( model, company, yor, price, speed) values ( "Panda", "Fiat", 2012, 3000.0, 120.5);)";
+    noErr=d4.process_command(choice);
+
+    choice=R"(insert iNTo car ( model, yor, price) values ( "C3 Picasso", 2006, 5000.5);)";
+    noErr=d4.process_command(choice);
+
+    choice=R"(insert iNTo car ( model, company, yor, price, speed) values ( "Grand Cherokee", "Jeep", 2012, 68000.0, 140.0);)";
+    noErr=d4.process_command(choice);
 
     /*choice="delete phone where sef=6;";
     command=take_command(choice);
