@@ -117,7 +117,7 @@ string replace_chars(string &in, const vector<char> sub, const char &car) {
 }
 
 
-bool clean_input(string &in, const vector<string> & programKeyWords){
+bool clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
@@ -128,7 +128,7 @@ bool clean_input(string &in, const vector<string> & programKeyWords){
             }
         }
     }
-    replace_chars(in, {'\n', '\t'}, ' ');
+    replace_chars(in, {'\n', '\t', '\r'}, ' ');
     return remove_duplicate_chars(in, {' '}, false);
 }
 

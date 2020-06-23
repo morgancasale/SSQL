@@ -42,6 +42,8 @@ public:
     bool setForeignKeys(string data, Table &thisTable);
 
     bool checkForeignKeys(const Table &table, int row=-1);
+
+    bool readCommands_from_file(const string &filepath);
 };
 
 

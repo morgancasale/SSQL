@@ -51,6 +51,10 @@ const vector <string> keyWords={
 string take_command(string & in){
     bool err=true; string tmp;
 
+    int start_i=0;
+    while(!isalpha(in[start_i])){ start_i++; }
+    in=in.substr(start_i,in.size());
+
     vector <string> dictionary;
     dictionary.insert(dictionary.end(), allowed_types.begin(), allowed_types.end());
     dictionary.insert(dictionary.end(), allowed_coms.begin(), allowed_coms.end());

@@ -544,3 +544,50 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
     return noErr;
 }
 
+bool Database::readCommands_from_file(const string &filepath){
+    bool noErr=true;
+    ifstream in;
+    in.open(filepath, ios::in);
+    if(!in){
+        cerr<<endl<<"The file "<< filepath <<" doesn't exist!";
+        noErr=false;
+    }
+
+    if(noErr){
+        string line="the cake is a lie", command;
+        int line_i=0, startLine_i=0, endLine_i;
+        bool start=true;
+        while(line!="~" and noErr) {
+            command="";
+            do{
+                if(start){ startLine_i=line_i; start=false;}
+                getline(in, line);
+                if(line!="~"){
+                    if(line=="\r"){
+                        getline(in, line);
+                        line_i++;
+                    }
+                    replace_chars(line, {'\r'}, -1);
+                    command += " " + line;
+                    line_i++;
+                }
+            } while (line.find(';') == -1 and line!="~");
+
+            if(line!="~"){
+                endLine_i = line_i - 1;
+                start = true;
+
+                noErr = process_command(command);
+                if (!noErr) {
+                    if (endLine_i == startLine_i) {
+                        cerr << endl << "Error at line " << startLine_i;
+                    } else {
+                        cerr << endl << "Error from line " << startLine_i
+                             << " to line " << endLine_i << "!";
+                    }
+                }
+            }
+        }
+    }
+    return noErr;
+}
