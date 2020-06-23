@@ -29,10 +29,9 @@ int main(){
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="SELECT number, name, price, car FROM phone WHERE car = 'p';";
+    choice="SELECT number, name, price, car FROM phone WHERE car = 'p' order by number desc;";
     command=take_command(choice);
     d4.process_command(choice, command);
-
 
     return 0;
 }

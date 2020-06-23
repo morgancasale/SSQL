@@ -413,34 +413,21 @@ void operator>>(const string & str, vector<string> & vec){
 }
 
 template <typename T>
-void ordinamento(vector<T> &input, const char & orden){
-    /* a=ascending; d=descending */
-    int n=input.size();
-    T aux;
+vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
+    /* +1=ascending; -1=descending */
+    int n=input.size(), aux=0;
+    vector <int> output(n);
 
-    for (int i=0; i<n-1; i++){
-        for (int j=i+1; j<n; j++){
-
-            switch(orden)
-            {case 'a':
-                    if(input[i]>input[j])
-                    {
-                        aux  = input[i];
-                        input[i] = input[j];
-                        input[j] = aux;
-                    }
-                    break;
-                case 'd':
-                    if(input[i]<input[j])
-                    {
-                        aux  = input[i];
-                        input[i] = input[j];
-                        input[j] = aux;
-                    }
-                    break;
-            }
+    for (int i=0; i<n; i++){
+        aux=0;
+        for (int j=0; j<n; j++){
+            if(input[i]>input[j] and orden==+1) aux++;
+            else if(input[i]<input[j] and orden==-1)  aux++;
+            else if(input[i]==input[j]) aux = j==i ? aux : aux+1;
+            else if(!orden) cerr<<endl<<"errore";
         }
+        output[aux]=i;
     }
-};
-
+    return output;
+}
 #endif

@@ -674,27 +674,49 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     }
     return noErr;
 }
-void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
 
+void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
+    string &type = elementsTypes[colIndex];
+    vector <int> tmp;
+    if (type == "int") {
+        vector<int> &values = (*static_cast<Column<int> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<int>(values, order);
+    }
+    if (type == "float") {
+        vector<float> &values = (*static_cast<Column<float> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<float>(values, order);
+    }
+    if (type == "char") {
+        vector<char> &values = (*static_cast<Column<char> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<char>(values, order);
+    }
+    if (type=="string" or type=="text") {
+        vector<string> &values = (*static_cast<Column<string> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<string>(values, order);
+    }
+    rowsIndexes = tmp - ( tmp - rowsIndexes);
 }
+
 void Table::printCols(vector <string> colSelection, const string & whereToSearch, const string & whatToSearch, const string &colToOrder, const int &order ){
     bool noErr;
     int index;
     vector <int> rowsOrder;
-    for(int k=-1; k<rows; k++) rowsOrder.push_back(k);
+    for(int k=0; k<rows; k++) rowsOrder.push_back(k);
 
     if(colSelection[0]=="*"){
         colSelection=elementsNames;
     }
 
     if(whereToSearch!="/err" and whatToSearch!="/err"){
-        rowsOrder={-1};
+        rowsOrder.erase(rowsOrder.begin(), rowsOrder.end());
         find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),rowsOrder);
     }
 
     if(order and colToOrder!="/err"){
         col_orderer(find_col_by_name(colToOrder), rowsOrder, order);
     }
+
+    rowsOrder.insert(rowsOrder.begin(), -1);
 
     for(int j: rowsOrder) {
         for (auto & colSelectedName : colSelection) {

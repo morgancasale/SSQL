@@ -283,6 +283,8 @@ bool Database::PRINT(string in) {
     string tableName = take_the_next_word(in, "from");
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
+    string colToOrder="/err";
+    int orden=0;
     if(noErr){
         //SELECT ID,	AGE,	SALARY		FROM CUSTOMERS	WHERE	AGE	=	20;
         vector <string> colNames;
@@ -305,12 +307,18 @@ bool Database::PRINT(string in) {
             }
         }while(exit);
 
+        if(in.find("order by")!=in.npos){
+            if(in.find("desc")!=in.npos) orden = 1;
+            else if(in.find("asc")!=in.npos) orden = -1;
+            colToOrder = take_the_next_word(in, "by");
+        }
+
         if(in.find("*")!=in.npos){
-            table.printCols({"*"});
+            table.printCols({"*"},"/err","/err", colToOrder, orden);
         }else if(in.find("where")!=in.npos){
-            table.printCols(colNames, take_the_next_word(in,"where"), take_the_next_word(in,"="));
+            table.printCols(colNames, take_the_next_word(in,"where"), take_the_next_word(in,"="), colToOrder, orden);
         }else{
-            table.printCols(colNames);
+            table.printCols(colNames,"/err","/err", colToOrder, orden);
         }
     }
     return noErr;
