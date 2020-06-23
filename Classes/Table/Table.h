@@ -70,7 +70,9 @@ public:
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-    void printCols(vector <string> colSelection, string whereToSearch="/err", string whatToSearch="/err");
+    void col_orderer(int colIndex, vector <int> & rowsIndexes, int order);
+
+    void printCols(vector <string> colSelection, const string & whereToSearch="/err", const string & whatToSearch="/err", const string &colToOrder="/err", const int &order=0 );
 
     bool printTable_to_file(ofstream & out);
 

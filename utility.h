@@ -412,4 +412,35 @@ void operator>>(const string & str, vector<string> & vec){
     }
 }
 
+template <typename T>
+void ordinamento(vector<T> &input, const char & orden){
+    /* a=ascending; d=descending */
+    int n=input.size();
+    T aux;
+
+    for (int i=0; i<n-1; i++){
+        for (int j=i+1; j<n; j++){
+
+            switch(orden)
+            {case 'a':
+                    if(input[i]>input[j])
+                    {
+                        aux  = input[i];
+                        input[i] = input[j];
+                        input[j] = aux;
+                    }
+                    break;
+                case 'd':
+                    if(input[i]<input[j])
+                    {
+                        aux  = input[i];
+                        input[i] = input[j];
+                        input[j] = aux;
+                    }
+                    break;
+            }
+        }
+    }
+};
+
 #endif

@@ -467,7 +467,7 @@ bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int
         } else if (elementsTypes[col_i] == "char") {
             vector<char> tmp = (*static_cast<Column<char> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == data[0]) {
+                if (tmp[i] == data[1]) {
                     foundRows.push_back(i);
                 }
             }
@@ -674,24 +674,29 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     }
     return noErr;
 }
+void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
 
-void Table::printCols(vector <string> colSelection, string whereToSearch, string whatToSearch){
+}
+void Table::printCols(vector <string> colSelection, const string & whereToSearch, const string & whatToSearch, const string &colToOrder, const int &order ){
     bool noErr;
-    int index, k=0;
-    vector <int> colsDiscovered;
-    bool whereFind = false;
-    if(colSelection[0]=="*"){   colSelection=elementsNames;}
+    int index;
+    vector <int> rowsOrder;
+    for(int k=-1; k<rows; k++) rowsOrder.push_back(k);
 
-    for(int j=-1;j<rows;j++) {
+    if(colSelection[0]=="*"){
+        colSelection=elementsNames;
+    }
 
-        if(whereToSearch!="/err" and whatToSearch!="/err"){
-            whereFind = find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),colsDiscovered);
-            whereToSearch="/err"; whatToSearch="/err";
-        } else if(whereFind) {
-            j=colsDiscovered[k];
-            k++;
-        }
+    if(whereToSearch!="/err" and whatToSearch!="/err"){
+        rowsOrder={-1};
+        find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),rowsOrder);
+    }
 
+    if(order and colToOrder!="/err"){
+        col_orderer(find_col_by_name(colToOrder), rowsOrder, order);
+    }
+
+    for(int j: rowsOrder) {
         for (auto & colSelectedName : colSelection) {
             noErr = ((index = find_col_by_name(colSelectedName)) != -1);
             if (noErr) {
@@ -732,7 +737,6 @@ void Table::printCols(vector <string> colSelection, string whereToSearch, string
             }
         }
         cout<<endl;
-    if(k==colsDiscovered.size()) j=rows-1;
     }
 }
 
