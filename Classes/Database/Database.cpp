@@ -77,7 +77,9 @@ bool Database::process_command(const string &choice, const string &command) {
         }
     } else
     if(command=="select"){
-        PRINT(choice);
+        if((noErr=control_select(choice))){
+            PRINT(choice);
+        }
     }
     return noErr;
 }

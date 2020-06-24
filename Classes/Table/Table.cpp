@@ -694,6 +694,14 @@ void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
         vector<string> &values = (*static_cast<Column<string> *>(cols[colIndex])).values;
         tmp = order_vector_indexes<string>(values, order);
     }
+    if (type=="date") {
+        vector<Date> & values = (*static_cast<Column<Date> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<Date>(values, order);
+    }
+    if (type=="time") {
+        vector<Time> & values = (*static_cast<Column<Time> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<Time>(values, order);
+    }
     rowsIndexes = tmp - ( tmp - rowsIndexes);
 }
 
