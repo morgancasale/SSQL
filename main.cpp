@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
         }
 
         command=take_command(choice);
-        if(command!="/err") data1.process_command(choice, command);
+        if(command!="/err") data1.process_command(choice);
 
     }while(command!="quit()");
 

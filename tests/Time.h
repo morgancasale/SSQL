@@ -1,7 +1,8 @@
 #ifndef CS_PROJECT_TIME_H
 #define CS_PROJECT_TIME_H
 #include <iostream>
-#include "../../core.h"
+#include <sstream>
+#include <algorithm>
 using namespace std;
 
 class Time{
@@ -25,13 +26,16 @@ public:
     bool equal_min(Time t2) const &;
     bool operator > (Time t2) const &;
     bool operator < (Time t2) const &;
-    string to_string() const;
-    Time(){
-        hours=0, minutes=0, seconds=0;
-    };
     Time(const string & in){
         set_time(in);
     }
     ~Time()=default;
+    Time(){
+        hours=0, minutes=0, seconds=0;
+    };
+
+    string to_string() const;
 };
+
+
 #endif //CS_PROJECT_TIME_H
