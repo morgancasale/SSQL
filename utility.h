@@ -117,7 +117,7 @@ string replace_chars(string &in, const vector<char> sub, const char &car) {
 }
 
 
-bool clean_input(string &in, const vector<string> & programKeyWords){
+bool clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
@@ -128,8 +128,8 @@ bool clean_input(string &in, const vector<string> & programKeyWords){
             }
         }
     }
-    replace_chars(in, {'\n', '\t'}, ' ');
-    return remove_duplicate_chars(in, {' '});
+    replace_chars(in, {'\n', '\t', '\r'}, ' ');
+    return remove_duplicate_chars(in, {' '}, false);
 }
 
 string get_command_from_file(string in, const int &comm_i){
@@ -178,21 +178,38 @@ string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=
     }
 }
 
-int num_of_words(const string &in){
-    int num=0, i=0, k=0;
+int num_of_words(string in){
+    int num=0, i=0, k=0, end=in.size()-1;
 
-    if(!isalpha(in[0]) and !isalpha(in[in.size()])){
+    for(; !isalpha(in[end]); end--){}
+    end++;
+    in=in.substr(0, end);
+    in.push_back(' ');
+
+    if(!isalpha(in[0]) and !isalpha(in[in.size()-1])){
         i++;
         k++;
     }
 
     for(; i<in.size()-k; i++){
         for(; isalpha(in[i]); i++){}
-        if(in[i]!=0 and isalpha(in[i-1])){
+        if(i!=0 and isalpha(in[i-1])){
             num++;
         }
     }
     if(num==0 and isalpha(in[in.size()-1])){ num++; }
+
+    char characters[2]={'_', '-'};
+    while(in.find('_')!=-1 or in.find('-')!=-1){
+        for(const char & ch: characters){
+            int pos=in.find(ch);
+            if(pos!=-1 and isalpha(in[pos-1]) and isalpha(in[pos+1])){
+                num--;
+                in[pos]=' ';
+            }
+        }
+    }
+
     return num;
 }
 

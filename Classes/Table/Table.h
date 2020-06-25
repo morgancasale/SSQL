@@ -41,7 +41,7 @@ public:
     ~Table()=default;
 
     void set_name(string name_in){ name=name_in; }
-    string get_name(){ return name; }
+    string get_name() const{ return name; }
 
     void empty_table();
 
@@ -57,7 +57,7 @@ public:
 
     bool set_INSERT_INTO_data(const vector<string> &elements_Names, const vector<string> &elementsValues);
 
-    bool checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements);
+    bool checkINSERT_INTOData_and_Nullify(vector<string> filled_elements);
 
     int get_col_index(const string &in);
 

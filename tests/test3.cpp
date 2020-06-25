@@ -7,9 +7,8 @@ using namespace std;
 
 
 int main(){
-    string a="ciaoo   mamma";
-
-    remove_duplicate_chars(a, {' '});
+    bool a=true, b=false;
+    a&=b;
 
     return 0;
 }

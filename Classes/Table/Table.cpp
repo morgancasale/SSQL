@@ -212,8 +212,8 @@ vector<string> Table::get_CREATE_data(string in){
             erase_substr(in, data[i]);
         }else{
             erase_substr(in, data[i]+", ");
-            remove_duplicate_chars(in, {' '});
         }
+        remove_duplicate_chars(in, {' '});
 
     }
 
@@ -326,10 +326,12 @@ void Table::auto_increment_col(){
     }
 }
 
-bool Table::checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements) {
+bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
+    //Column<string> & col=(*static_cast<Column<string> *>(cols[0]));
     bool fillErr=false, autoIncrAndNotNullErr=false;
     vector<string> elements=elementsNames;
-    for(int i=0; i<elements.size(); i++){ tolower(elements[i]); }
+    for(int i=0; i<elements.size(); i++){ tolower(elements[i]);}
+    for(int i=0; i<filled_elements.size(); i++){ tolower(filled_elements[i]); }
     vector<string> notFilled= elements - filled_elements;
 
     for(const string & emptyElement: notFilled){
@@ -739,12 +741,27 @@ bool Table::printTable_to_file(ofstream & out) {
     out<<primaryKey_index;
     out<<endl;
 
+    for(const int & FTable_i : ForeignTables){
+        out<<FTable_i<<" ";
+    }
+    out<<endl;
+
+    for(const int & FCols_i : ForeignCols){
+        out<<FCols_i<<" ";
+    }
+    out<<endl;
+
+    for(const int & ConCols_i : ConnectedCols){
+        out<<ConCols_i<<" ";
+    }
+    out<<endl;
+
     for(const string & eltype : elementsTypes){
         out<<eltype<<" ";
     }
     out<<endl;
 
-    for(const string & elname:elementsNames){
+    for(const string & elname : elementsNames){
         out<<elname<<" ";
     }
     out<<endl<<endl;
@@ -803,7 +820,8 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.key<<" ";
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
-            for(const string & value: col.values){
+            for(string value: col.values){
+                if(value.empty()){ value="\"/empty\"";}
                 out<<value<<" ";
             }
             out<<endl;
@@ -820,7 +838,9 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
             for(const Time & value: col.values){
-                out<<value.to_string()<<" ";
+                string time_str=value.to_string();
+                if(time_str.empty()){ time_str="\"/empty\""; }
+                out<<time_str<<" ";
             }
             out<<endl;
 
@@ -836,7 +856,9 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
             for(const Date & value: col.values){
-                out<<value.Date_to_string()<<" ";
+                string date_str=value.Date_to_string();
+                if(date_str.empty()){ date_str="\"/empty\""; }
+                out << date_str << " ";
             }
             out<<endl;
 
@@ -854,6 +876,20 @@ bool Table::printTable_to_file(ofstream & out) {
 void Table::createTable_from_file(ifstream &in, string line) {
     stringstream stream(line);
     stream>>(this->name)>>(this->rows)>>(this->primaryKey_index);
+
+    vector<string> tmp_data;
+
+    getline(in, line);
+    line>>(tmp_data);
+    for(const string & el : tmp_data){ this->ForeignTables.push_back(stoi(el)); }
+
+    getline(in, line);
+    line>>(tmp_data);
+    for(const string & el : tmp_data){ this->ForeignCols.push_back(stoi(el)); }
+
+    getline(in, line);
+    line>>(tmp_data);
+    for(const string & el : tmp_data){ this->ConnectedCols.push_back(stoi(el)); }
 
     getline(in, line);
     line>>(this->elementsTypes);

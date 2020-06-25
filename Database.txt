@@ -1,4 +1,51 @@
+EUROPE 3 0
+
+
+
+text 
+EUROPIAN_COUNTRIES 
+
+EUROPIAN_COUNTRIES 0 0
+"Italy" "France" "Greece" 
+0 0 0 
+-
+
+AMERICA 3 0
+
+
+
+text 
+AMERICAN_COUNTRIES 
+
+AMERICAN_COUNTRIES 0 0
+"USA" "Canada" "Mexico" 
+0 0 0 
+-
+
+COUNTRIES 1 0
+0 1 
+0 0 
+1 2 
+int text text 
+ID NAME_EUROPE NAME_AMERICAN 
+
+ID 1 0
+23 
+0 
+-
+NAME_EUROPE 0 0
+"Greece" 
+0 
+-
+NAME_AMERICAN 0 0
+"USA" 
+0 
+-
+
 pHone 3 0
+
+
+
 text int float int 
 Name yOr price sef 
 
@@ -19,29 +66,32 @@ sef 1 1
 0 0 0 
 -
 
-car 0 0
+car 3 0
+
+
+
 text text int float float 
 model company yor price speed 
 
 model 1 0
-
-
+ "Panda"  "C3 Picasso"  "Grand Cherokee" 
+0 0 0 
 -
 company 0 0
-
-
+"Fiat" "/empty" "Jeep" 
+0 1 0 
 -
 yor 0 0
-
-
+2012 2006 2012 
+0 0 0 
 -
 price 0 0
-
-
+3000.000000 5000.500000 68000.000000 
+0 0 0 
 -
 speed 0 0
-
-
+120.500000 0.000000 140.000000 
+0 1 0 
 -
 
 |
