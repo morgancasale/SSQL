@@ -160,7 +160,7 @@ bool control_create(string in){
     }
 
     return (!err and !primaryKeyErr);
-};
+}
 
 bool control_CREATE_data(vector<string> in){
     bool noErr=true;

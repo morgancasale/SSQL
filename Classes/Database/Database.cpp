@@ -9,25 +9,31 @@ bool Database::check_TableName(const string & name){
     return noErr;
 }
 
-//if existence parameter is true the function checks if the table exists, else if doesn't exist
-bool Database::check_Table_existence(string in_Table_name, const bool & existence){
+//if check_existence parameter is true the function checks if the table exists, else, if the function doesn't exist
+bool Database::check_Table_existence(const string &in_Table_name, const bool & check_existence){
     bool not_exists=true;
     int i=0;
     if(!Tables.empty()) {
         do {
             string tmp=Tables[i].get_name();
-            if ( tolower(tmp) == tolower(in_Table_name)) {
+            string in_Table_nameCopy=in_Table_name;
+            if ( tolower(tmp) == tolower(in_Table_nameCopy)) {
                 not_exists = false;
             }
             i++;
         } while ((i < Tables.size()) and not_exists);
     }
-    if(!existence and !not_exists){ //se devo controllare che esista e non esiste
-        cerr<<"Table named"<<in_Table_name<<" already exists!"<<endl;
-        cerr<<"Choose another name.";
+
+    if(check_existence){ //devo controllare che esista la tabella
+        if(not_exists){ //la tabella non esiste
+            cerr<<endl<<"Table named "<<in_Table_name<<" doesn't exist!"<<endl;
+        }
     }
-    if(!existence and !not_exists){ //se devo controllare che non esista ed esiste
-        cerr<<"Table named "<<in_Table_name<<" doesn't exist!"<<endl;
+    if(!check_existence){ //devo controllare se la tabella non esista
+        if(!not_exists){ //la tabella esiste
+            cerr<<endl<<"Table named "<<in_Table_name<<" already exists!"<<endl;
+            cerr<<"Choose another name.";
+        }
     }
 
     return not_exists;
@@ -567,9 +573,11 @@ bool Database::readCommands_from_file(const string &filepath){
                         getline(in, line);
                         line_i++;
                     }
-                    replace_chars(line, {'\r'}, -1);
-                    command += " " + line;
-                    line_i++;
+                    if(line!="~"){
+                        replace_chars(line, {'\r'}, -1);
+                        command += " " + line;
+                        line_i++;
+                    }
                 }
             } while (line.find(';') == -1 and line!="~");
 

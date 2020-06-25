@@ -136,11 +136,9 @@ string get_command_from_file(string in, const int &comm_i){
     return in;
 }
 
-string erase_substr(string &in, const string &to_erase){
-    string tmp=in;
-    reverse(tmp.begin(), tmp.end());
 
-    int pos=in.size()-1-tmp.find(to_erase);
+string erase_substr(string &in, string to_erase){
+    int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size());
         replace_chars(in, {'\n'}, ' ');
@@ -159,7 +157,7 @@ string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=
     int start, end;
     int shift=1;
     if(fromZero){ shift=0; }
-  
+
     if(reverse){
         std::reverse(in.begin(), in.end());
         std::reverse(s1.begin(), s1.end());
