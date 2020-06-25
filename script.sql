@@ -1,4 +1,4 @@
-Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));
+CREATE table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Italy");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("France");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Greece");
@@ -8,7 +8,7 @@ insert into AMERICA (AMERICAN_COUNTRIES) values ("USA");
 insert into AMERICA (AMERICAN_COUNTRIES) values ("Canada");
 insert into AMERICA (AMERICAN_COUNTRIES) values ("Mexico");
 
-CREATE TABLE COUNTRIES (
+create TABLE COUNTRIES (
             ID INT               NOT NULL,
             NAME_EUROPE TEXT,
             NAME_AMERICAN TEXT,
@@ -31,7 +31,7 @@ insert iNTo car ( model, company, yor, price, speed) values ( "Panda", "Fiat", 2
 insert iNTo car ( model, yor, price) values ( "C3 Picasso", 2006, 5000.5);
 insert iNTo car ( model, company, yor, price, speed) values ( "Grand Cherokee", "Jeep", 2012, 68000.0, 140.0);
 
-create TABLE moto (Name text not null, company1 text, color text, wheels int, primary key(Name));
+create TABLE moto ( Name text not null, company1 text, color text, wheels int, primary key(Name));
 insert into moto (Name, company1, color, wheels) values ("gina", "piaggio", "rosso", 2);
 insert into moto (Name, company1, color, wheels) values ("figa ", "yamaha", "nera", 4);
 

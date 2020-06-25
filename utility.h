@@ -136,6 +136,7 @@ string get_command_from_file(string in, const int &comm_i){
     return in;
 }
 
+
 string erase_substr(string &in, string to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){

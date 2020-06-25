@@ -33,6 +33,12 @@ int main(){
     Column<float> & carPrice=(*static_cast<Column<float>*>(d4.Tables[4].cols[3]));
     Column<float> & speed=(*static_cast<Column<float>*>(d4.Tables[4].cols[4]));
 
+    Column<string> & moto=(*static_cast<Column<string>*>(d4.Tables[5].cols[0]));
+    Column<string> & nome=(*static_cast<Column<string>*>(d4.Tables[5].cols[1]));
+    Column<string> & company1=(*static_cast<Column<string>*>(d4.Tables[5].cols[2]));
+    Column<string> & color=(*static_cast<Column<string>*>(d4.Tables[5].cols[3]));
+    Column<int> & wheels=(*static_cast<Column<int>*>(d4.Tables[5].cols[4]));
+
 
     command="Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));";
     bool noErr=d4.process_command(command);
@@ -67,6 +73,7 @@ int main(){
            " FOREIGN KEY (NAME_AMERICAN) REFERENCES AMERICA (AMERICAN_COUNTRIES)"
            ");";
     noErr=d4.process_command(command);
+
 
     /*Column<int> & Countries_ID=(*static_cast<Column<int>*>(d4.Tables[2].cols[0]));
     Column<string> & Countries_EU=(*static_cast<Column<string>*>(d4.Tables[2].cols[1]));
