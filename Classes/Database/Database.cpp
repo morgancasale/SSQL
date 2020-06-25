@@ -39,10 +39,11 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
     return not_exists;
 }
 
-bool Database::process_command(string choice) {
+bool Database::process_command(string choice, bool &quit) {
     bool noErr=true;  int j=0;
     string command=take_command(choice);
     if(command=="quit()"){
+        quit=true;
         QUIT();
     } else
     if(command=="create table"){
@@ -550,8 +551,10 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
     return noErr;
 }
 
-bool Database::readCommands_from_file(const string &filepath){
+bool Database::readCommands_from_file(const string &filepath, bool &quit) {
     bool noErr=true;
+    quit=false;
+
     ifstream in;
     in.open(filepath, ios::in);
     if(!in){
@@ -563,7 +566,7 @@ bool Database::readCommands_from_file(const string &filepath){
         string line="the cake is a lie", command;
         int line_i=0, startLine_i=0, endLine_i;
         bool start=true;
-        while(line!="~" and noErr) {
+        while(line!="~" and noErr and !quit) {
             command="";
             do{
                 if(start){ startLine_i=line_i; start=false;}
@@ -585,7 +588,7 @@ bool Database::readCommands_from_file(const string &filepath){
                 endLine_i = line_i - 1;
                 start = true;
 
-                noErr = process_command(command);
+                noErr = process_command(command, quit);
                 if (!noErr) {
                     if (endLine_i == startLine_i) {
                         cerr << endl << "Error at line " << startLine_i;
@@ -593,6 +596,9 @@ bool Database::readCommands_from_file(const string &filepath){
                         cerr << endl << "Error from line " << startLine_i
                              << " to line " << endLine_i << "!";
                     }
+                }
+                if(quit){
+                    cout<<endl<<"QUIT command has been executed"<<endl<<"Goodbye!";
                 }
             }
         }

@@ -15,7 +15,7 @@ string tolower(string &in, int stop= -1){ //converts all upper letters of a stri
         in[i]=tolower(in[i]);
     }
     return in;
-}
+}/** O(xn) */
 
 // it return the substring from the n(counter1) instance of char1
 // to the n(counter2) instance of char2
@@ -31,7 +31,7 @@ string substrcc(const string &in, const int &counter1, const int &counter2, cons
         found1=true;
         found2=true;
     } else{
-        for (; i < in.size() and tmpCounter2 != counter2; i++) {
+        for (; i < in.size() and tmpCounter2 != counter2; i++) { /** O(x) */
             if (in[i] == char1) {
                 tmpCounter1++;
             }
@@ -63,7 +63,7 @@ string substrcc(const string &in, const int &counter1, const int &counter2, cons
     } else{
         return in.substr(start,end-start);
     }
-}
+} /** O(n) */
 
 int character_counter(const string & in, char char_to_count){
     int counter=0;
@@ -71,13 +71,13 @@ int character_counter(const string & in, char char_to_count){
         if(c==char_to_count) counter++;
     }
     return counter;
-}
+} /** O(in.size) --> O(x) */
 
 bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=true){
     bool err=false;
 
     for(const char & tmp: c){
-        int first_c=in.find(tmp); //finds the position of the first occurrence of the character tmp
+        int first_c=in.find(tmp); /*finds the position of the first occurrence of the character tmp*/ /** O(n) */
         if(first_c != -1){//find returns -1 if the characters isn't found
             int found=0;
             for(int i= first_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from first_c
@@ -87,18 +87,18 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
                 } else{
                     found++;
                 }
-            }
-            in.resize(in.size()-found);
+            } /** O(n) */
+            in.resize(in.size()-found); /** O(n) */
         } else{
           err=true;
         }
-    }
+    }/** O(3xn) */
 
     if(err and show_err){
         cerr<<"Can't find one or more of the characters to delete!"<<endl;
     }
     return err;
-}
+} /** O(xn) */
 
 string replace_chars(string &in, const vector<char> sub, const char &car) {
     for(const char & c: sub){
@@ -114,7 +114,7 @@ string replace_chars(string &in, const vector<char> sub, const char &car) {
     }
 
     return in;
-}
+} /** O(sub.size()*n*(n+n)) --> O(xn^2) */
 
 
 bool clean_input(string & in, const vector<string> & programKeyWords){
@@ -124,95 +124,91 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
         if (tmp.find(a)!=tmp.npos){
             string big=in.substr(tmp.find(a), a.size());
             while(big!=a and in.find(big)!=-1){
-                in.replace(in.find(big), a.size(), a);
+                in.replace(in.find(big), a.size(), a); /** O(n^2) */
             }
         }
-    }
-    replace_chars(in, {'\n', '\t', '\r'}, ' ');
-    return remove_duplicate_chars(in, {' '}, false);
-}
-
-string get_command_from_file(string in, const int &comm_i){
-    return in;
-}
-
+    } /** O(programKeyWords.size()*n^2) --> O(p*n^2) */
+    replace_chars(in, {'\n', '\t', '\r'}, ' '); /** O(3n^2) */
+    return remove_duplicate_chars(in, {' '}, false); /** O(3n) */
+} /** O(xn^2) */
 
 string erase_substr(string &in, string to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
-        in.erase(pos, to_erase.size());
-        replace_chars(in, {'\n'}, ' ');
+        in.erase(pos, to_erase.size()); /** O(n) */
+        replace_chars(in, {'\n'}, ' '); /** O(n^2) */ //we should delete this line
     }
     return in;
-}
+} /** O(n^2) */
 
 string operator -(string minuend, const string & subtrahend){
     return erase_substr(minuend, subtrahend);
-}
+} /** O(n^2) */
 
 void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
-}
+} /** O(n^2) */
+
 string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false, bool fromZero=false){
     int start, end;
     int shift=1;
     if(fromZero){ shift=0; }
 
     if(reverse){
-        std::reverse(in.begin(), in.end());
-        std::reverse(s1.begin(), s1.end());
-        std::reverse(s2.begin(), s2.end());
-        start = in.find(s2) + shift;
-        end = in.find(s1);
+        std::reverse(in.begin(), in.end()); /** O(n) */
+        std::reverse(s1.begin(), s1.end()); /** O(n) */
+        std::reverse(s2.begin(), s2.end()); /** O(n) */
+        start = in.find(s2) + shift; /** O(n) */
+        end = in.find(s1); /** O(n) */
     } else{
-        start = in.find(s1) + shift;
-        end = in.find(s2);
+        start = in.find(s1) + shift; /** O(n) */
+        end = in.find(s2); /** O(n) */
     }
 
-    string out=in.substr(start, end - start);;
+    string out=in.substr(start, end - start); /** O(n) */
     if(start==-1 or end==-1){
         return "/err";
     }
     else{
-        if(reverse){ std::reverse(out.begin(), out.end()); }
+        if(reverse){ std::reverse(out.begin(), out.end()); } /** O(n) */
         return out;
     }
-}
+} /** O(9n) */
 
 int num_of_words(string in){
     int num=0, i=0, k=0, end=in.size()-1;
 
-    for(; !isalpha(in[end]); end--){}
+    for(; !isalpha(in[end]); end--){} /** O(in.size()) --> O(x) */
     end++;
-    in=in.substr(0, end);
+    in=in.substr(0, end); /** O(n) */
     in.push_back(' ');
 
-    if(!isalpha(in[0]) and !isalpha(in[in.size()-1])){
+    if(!isalpha(in[0]) and !isalpha(in[in.size()-1])){ /** O(2x) */
         i++;
         k++;
     }
 
-    for(; i<in.size()-k; i++){
-        for(; isalpha(in[i]); i++){}
-        if(i!=0 and isalpha(in[i-1])){
+    for(; i<in.size()-k; i++){ /** O(x) */
+        for(; isalpha(in[i]); i++){} /** O(x) */
+        if(i!=0 and isalpha(in[i-1])){ /** O(x) */
             num++;
         }
-    }
-    if(num==0 and isalpha(in[in.size()-1])){ num++; }
+    }/** O(2x^2) */
+    if(num==0 and isalpha(in[in.size()-1])){ num++; } /** O(x) */
 
     char characters[2]={'_', '-'};
-    while(in.find('_')!=-1 or in.find('-')!=-1){
-        for(const char & ch: characters){
-            int pos=in.find(ch);
-            if(pos!=-1 and isalpha(in[pos-1]) and isalpha(in[pos+1])){
+    while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
+        for(const char & ch: characters){ /** O(x) */
+            int pos=in.find(ch); /** O(n) */
+            if(pos!=-1 and isalpha(in[pos-1]) and isalpha(in[pos+1])){ /** O(2x) */
                 num--;
                 in[pos]=' ';
             }
         }
-    }
+    } /** O(2n^2) */
 
     return num;
-}
+} /** O(2n^2) */
 
 template<typename type> bool check_existence(const vector<type> &vec, const type &el){
     bool found=false;
@@ -228,10 +224,10 @@ bool is_a_Time(const string & var){
     int hours=-1, min=-1, sec=-1;
 
     char sub;
-    if(var.find(':')!=-1){
+    if(var.find(':')!=-1){ /** O(n) */
         sub=':';
     }
-    else if(var.find('.')!=-1){
+    else if(var.find('.')!=-1){ /** O(n) */
         sub='.';
     }else{
         response=false;
@@ -251,7 +247,8 @@ bool is_a_Time(const string & var){
     }
 
     return response;
-}
+} /** O(2n) */
+
 bool is_a_Date(const string & var){
     bool response=true;
 
@@ -259,11 +256,11 @@ bool is_a_Date(const string & var){
 
     char sub;
     bool err=false;
-    if(var.find(':')!=-1){
+    if(var.find(':')!=-1){ /** O(n) */
         sub=':';
-    } else if(var.find('.')!=-1){
+    } else if(var.find('.')!=-1){ /** O(n) */
         sub='.';
-    } else if(var.find('/')!=-1){
+    } else if(var.find('/')!=-1){ /** O(n) */
         sub='/';
     } else{
         response=false;
@@ -307,52 +304,51 @@ bool is_a_Date(const string & var){
         }
     }
     return response;
-}
+} /** O(3n) */
 
 //The first parameter is the input data while the second one is the type to check
 bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
 
-    if(substrcc(var, 1, 2, '"', '"') != "/err"){
+    if(substrcc(var, 1, 2, '"', '"') != "/err"){ /** O(n) */
         noErr = (type == "string" or type == "text");
     } else
-    if(substrcc(var, 1, 2, 39, 39) != "/err"){ //char a=39 --> a='
+    if(substrcc(var, 1, 2, 39, 39) != "/err"){ /** O(n) */ //char a=39 --> a='
         noErr = (type == "char");
     } else
-    if(var.find('.')!=-1){
+    if(var.find('.')!=-1){ /** O(n) */
         bool Date_resp;
         bool Time_resp;
-        if(Time_resp=is_a_Time(var) and !(Date_resp=is_a_Date(var))){
+        if((Time_resp=is_a_Time(var)) and !(Date_resp=is_a_Date(var))){ /** O(5n) */
             noErr = (type == "time");
-            Time_resp=is_a_Time(var);
         }
         else if(Date_resp){
             noErr = (type == "date"); }
         else{
             noErr = (type == "float"); }
     } else
-    if(var.find(':')!=-1){
+    if(var.find(':')!=-1){ /** O(n) */
         bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); }
+        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); } /** O(3n) */
         else if(Date_resp){ noErr = (type == "date"); }
     } else
-    if(var.find('/')!=-1){ noErr = (type == "date"); }
+    if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */
     else{
         noErr = (type == "int");
     }
 
     return noErr;
-}
+} /** O(14n) */
 
 template<typename type> vector<type> operator -(vector<type> minuend, const vector<type> & subtrahend){
 
-    for(int i=0; i<subtrahend.size(); i++){
+    for(int i=0; i<subtrahend.size(); i++){ /** O(x) */
         type sub=subtrahend[i];//prendo un sottraendo
         bool found=false;
-        for(int j=0; j<minuend.size() and !found; j++){
+        for(int j=0; j<minuend.size() and !found; j++){ /** O(y) */
             type min=minuend[j]; //prendo il minuendo
             if(min==sub){
-                for(int k=j; k<minuend.size()-1; k++){
+                for(int k=j; k<minuend.size()-1; k++){ /** O(y) */
                     minuend[k]=minuend[k+1];
                 }
                 minuend.resize(minuend.size()-1);
@@ -361,16 +357,16 @@ template<typename type> vector<type> operator -(vector<type> minuend, const vect
         }
     }
     return minuend;
-}
+}/** O(xy^2) */
 
 template<typename type> void operator -=(vector<type> & minuend, const vector<type> & subtrahend){
-    for(int i=0; i<subtrahend.size(); i++){
+    for(int i=0; i<subtrahend.size(); i++){ /** O(x) */
         type sub=subtrahend[i];//prendo un sottraendo
         bool found=false;
-        for(int j=0; j<minuend.size() and !found; j++){
+        for(int j=0; j<minuend.size() and !found; j++){ /** O(y) */
             type min=minuend[j]; //prendo il minuendo
             if(min==sub){
-                for(int k=j; k<minuend.size()-1; k++){
+                for(int k=j; k<minuend.size()-1; k++){ /** O(y) */
                     minuend[k]=minuend[k+1];
                 }
                 minuend.resize(minuend.size()-1);
@@ -378,32 +374,32 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
             }
         }
     }
-}
+} /** O(xy^2) */
 
 template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
-    for(int i=0; i<rows.size(); i++){
-        for(int k=rows[i]; k<minuend.size()-1; k++){
+    for(int i=0; i<rows.size(); i++){ /** O(n) */
+        for(int k=rows[i]; k<minuend.size()-1; k++){ /** O(x) */
             minuend[k]=minuend[k+1];
         }
         minuend.resize(minuend.size()-1);
     }
-}
+}/** O(x*n) */
 
 string take_the_next_word(const string & in, string before){
     string tmp, after;
     stringstream iss(in);
-    if(in.find(before)==in.npos){
+    if(in.find(before)==in.npos){ /** O(n) */
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
-    while(iss>>tmp){
+    while(iss>>tmp){ /** O(n) */
         if(tmp==before){
             iss>>after;
         }
         after-=";";
     }
     return after;
-}
+} /** O(2n) */
 
 
 int num_of_chars(const string & in, const char & c){
@@ -412,41 +408,41 @@ int num_of_chars(const string & in, const char & c){
         if(tmp==c){ num++; }
     }
     return num;
-}
+} /** O(x) */
 
 string replace_content(string in, const char & start, const char & end, const char & sub=' '){
     int start_i=0, end_i=0;
-    while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){
+    while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){ /** O(x) */
         string repl=" ";
-        string tmp= substrcc(in, start_i + 1, end_i + 1, start, end);
+        string tmp= substrcc(in, start_i + 1, end_i + 1, start, end); /** O(n) */
         int s=tmp.size();
-        for(int j=0; j<s-1; j++){ repl.push_back(' '); }
-        in.replace(in.find(tmp), tmp.size(), repl);
+        for(int j=0; j<s-1; j++){ repl.push_back(' '); } /** O(y) */
+        in.replace(in.find(tmp), tmp.size(), repl); /** O(n) */
         start_i++;
         end_i++;
     }
     return in;
-}
+} /** O(xn^2) */
 
 void operator>>(const string & str, vector<string> & vec){
     vec.resize(0);
     stringstream ss(str);
     string tmp;
     ss>>tmp;
-    while(!tmp.empty()){
+    while(!tmp.empty()){ /** O(n) */
         vec.push_back(tmp);
         tmp="";
         ss>>tmp;
     }
-}
+} /** O(n) */
 
 string removeSpaces_fromStart_andEnd(string & in){
     int start=0, end=in.size()-1;
-    for(; in[start]==' '; start++){}
-    for(; in[end]==' '; end--){}
+    for(; in[start]==' '; start++){} /** O(x) */
+    for(; in[end]==' '; end--){} /** O(x) */
     in=in.substr(start, end-start+1);
 
     return in;
-}
+} /** O(2x) */
 
 #endif

@@ -15,10 +15,10 @@ int main(){
     string choice,command;
 
     choice="Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     choice="Create table AMERICA ( AMERICAN_COUNTRIES text, PRIMARY KEY (AMERICAN_COUNTRIES));";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     choice="CREATE TABLE COUNTRIES ("
            " ID INT               NOT NULL,"
@@ -28,22 +28,22 @@ int main(){
            " FOREIGN KEY (NAME_EUROPE) REFERENCES EUROPE (EUROPIAN_COUNTRIES),"
            " FOREIGN KEY (NAME_AMERICAN) REFERENCES AMERICA (AMERICAN_COUNTRIES)"
            ");";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     choice="CREATE table pHone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(name) );";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     choice="insert into phone (yor, name, sef, price) values (2020, \"oneplus 8 pro\", 6, 1019.01);";
-    if(d4.process_command(choice)){
+    if(d4.process_command(choice, <#initializer#>)){
         cout<<endl<<"INSERT command correctly processed!";
     }else{
         cerr<<":(";
     }
 
     choice="insert into phone (yor, name, sef, price) values (2016, \"samsung s7\", 6, 729.99);";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
     choice="insert into phone (yor, name, sef, price) values (2013, \"iphone 5\", 5, 729.99);";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     Column<string> & a=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
     Column<int> & b=(*static_cast<Column<int>*>(d4.Tables[0].cols[1]));
@@ -61,7 +61,7 @@ int main(){
 
 
     choice="create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     Column<string> h=(*static_cast<Column<string>*>(d4.Tables[0].cols[0]));
     Column<string> r=(*static_cast<Column<string>*>(d4.Tables[1].cols[0]));
@@ -87,7 +87,7 @@ int main(){
     d4.process_command(choice, command);*/
 
     choice="quit();";
-    d4.process_command(choice);
+    d4.process_command(choice, <#initializer#>);
 
     return 0;
 }
