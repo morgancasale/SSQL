@@ -10,7 +10,7 @@ public:
     bool process_command(string choice);
     static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
-    bool check_Table_existence(string in_Table_name, const bool & existence);
+    bool check_Table_existence(const string &in_Table_name, const bool & check_existence);
 
     bool INSERT_INTO(string in);
     bool DELETE(string in);

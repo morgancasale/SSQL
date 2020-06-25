@@ -203,16 +203,18 @@ vector<string> Table::get_CREATE_data(string in){
     data[0]= substrcc(in, 0, 1);
 
     string line;
-    for(int i=1; substrcc(in, 1, 1, '(', ')') != " "; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substrcc(in, 1, 1, '(', ';') != ")"; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]= substrcc(in, 2, 1, ' ', ',');
+        data[i]= substrcc(in, 1, 1, '(', ',');
         if(data[i]=="/err"){
-            data[i]= substrcc(in, 2, 1, ' ', ')');
-            data[i]+=")";
+            data[i]= substrcc(in, 1, 1, '(', ';');
+            data[i].resize(data[i].size()-1);
             erase_substr(in, data[i]);
+            removeSpaces_fromStart_andEnd(data[i]);
         }else{
             erase_substr(in, data[i]+", ");
         }
+        removeSpaces_fromStart_andEnd(data[i]);
         remove_duplicate_chars(in, {' '});
 
     }

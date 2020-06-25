@@ -1,3 +1,7 @@
+create TABLE moto (Name text not null, company1 text, color text, wheels int, primary key(Name));
+insert into moto (Name, company1, color, wheels) values ("gina", "piaggio", "rosso", 2);
+insert into moto (Name, company1, color, wheels) values ("figa ", "yamaha", "nera", 4);
+
 Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Italy");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("France");
