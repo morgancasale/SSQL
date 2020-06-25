@@ -1,7 +1,3 @@
-create TABLE moto (Name text not null, company1 text, color text, wheels int, primary key(Name));
-insert into moto (Name, company1, color, wheels) values ("gina", "piaggio", "rosso", 2);
-insert into moto (Name, company1, color, wheels) values ("figa ", "yamaha", "nera", 4);
-
 Create table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES));
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Italy");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("France");
@@ -33,6 +29,10 @@ insert into phone (yor, name, sef, price) values (2013, "iphone 5", 5, 729.99);
 create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );
 insert iNTo car ( model, company, yor, price, speed) values ( "Panda", "Fiat", 2012, 3000.0, 120.5);
 insert iNTo car ( model, yor, price) values ( "C3 Picasso", 2006, 5000.5);
-
 insert iNTo car ( model, company, yor, price, speed) values ( "Grand Cherokee", "Jeep", 2012, 68000.0, 140.0);
+
+create TABLE moto (Name text not null, company1 text, color text, wheels int, primary key(Name));
+insert into moto (Name, company1, color, wheels) values ("gina", "piaggio", "rosso", 2);
+insert into moto (Name, company1, color, wheels) values ("figa ", "yamaha", "nera", 4);
+
 ~

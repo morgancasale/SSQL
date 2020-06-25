@@ -573,9 +573,11 @@ bool Database::readCommands_from_file(const string &filepath){
                         getline(in, line);
                         line_i++;
                     }
-                    replace_chars(line, {'\r'}, -1);
-                    command += " " + line;
-                    line_i++;
+                    if(line!="~"){
+                        replace_chars(line, {'\r'}, -1);
+                        command += " " + line;
+                        line_i++;
+                    }
                 }
             } while (line.find(';') == -1 and line!="~");
 
