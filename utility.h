@@ -137,7 +137,10 @@ string get_command_from_file(string in, const int &comm_i){
 }
 
 string erase_substr(string &in, const string &to_erase){
-    int pos=in.find(to_erase);
+    string tmp=in;
+    reverse(tmp.begin(), tmp.end());
+
+    int pos=in.size()-1-tmp.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size());
         replace_chars(in, {'\n'}, ' ');
@@ -437,6 +440,15 @@ void operator>>(const string & str, vector<string> & vec){
         tmp="";
         ss>>tmp;
     }
+}
+
+string removeSpaces_fromStart_andEnd(string & in){
+    int start=0, end=in.size()-1;
+    for(; in[start]==' '; start++){}
+    for(; in[end]==' '; end--){}
+    in=in.substr(start, end-start+1);
+
+    return in;
 }
 
 #endif

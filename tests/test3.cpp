@@ -7,8 +7,10 @@ using namespace std;
 
 
 int main(){
-    bool a=true, b=false;
-    a&=b;
+    string a = "ciao";
+    a.erase(2,2);
+    string b = "primary key(name) )";
+    b.erase(18,1);
 
     return 0;
 }
