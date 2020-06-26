@@ -45,7 +45,18 @@ const vector <string> keyWords={
         "desc",
         "asc",
         "foreign key",
-        "references"
+        "references",
+        "between"
+};
+
+vector <string> possibleOperators={
+        "=",
+        "<",
+        ">",
+        "<=",
+        ">=",
+        "<>",
+        "between"
 };
 
 string take_command(string & in){
@@ -293,26 +304,42 @@ bool control_update(string in){
     }
     return noErr;
 }
-//SELECT ID, NAME FROM CUSTOMERS WHERE ID = 20 ORDER BY ID ASC;
+
 bool control_select(string in){
     bool noErr=(in[in.size()-1]==';');
-    string tmp;
+    int c=0;
+    string s;
+    string tmp=" ";
     if(noErr){
         in-=";";
         if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1) {
             in-=tmp;
             if(in.find("where") != in.npos and num_of_words(substr_from_s_to_s(in, "from", "where")) == 1){
-                in-= "from" + substr_from_s_to_s(in, "from", "where") + "where";
-                if(num_of_words(in) > 2) {
-                    if (in.find("order by") != in.npos) {
-                        tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
-                        if((num_of_words(tmp))==4){
-                            tmp=take_the_N_nextWord(tmp,"by", 2);
-                            if(tmp!="asc" and tmp!="desc") noErr=false;
+                noErr=false;
+                for(string oper: possibleOperators){
+                    if((tmp = take_the_N_nextWord(in, "where", 2))==oper){
+                        noErr=true;
+                        if(tmp=="between"){
+                            tmp = take_the_N_nextWord(in, "where", 4);
+                            if(tmp == "and"){
+                                s = substr_from_s_to_s(in, "between", take_the_N_nextWord(in, tmp, 1), false, true);
+                                in-= s;
+                            } else noErr=false;
                         }
-                        else noErr=false;
-                    } else noErr = false;
-                }else if(num_of_words(in) < 2) noErr = false;
+                    }
+                }
+                if(noErr) {
+                    in -= "from" + substr_from_s_to_s(in, "from", "where") + "where";
+                    if (num_of_words(in) > 2) {
+                        if (in.find("order by") != in.npos) {
+                            tmp = in.substr(in.find("order by"), in.size() - in.find("order by"));
+                            if ((num_of_words(tmp)) == 4) {
+                                tmp = take_the_N_nextWord(tmp, "by", 2);
+                                if (tmp != "asc" and tmp != "desc") noErr = false;
+                            } else noErr = false;
+                        } else noErr = false;
+                    } else if (num_of_words(in) < 2) noErr = false;
+                }
             }
             else if(num_of_words(in) > 2){
                 if(in.find("order by") != in.npos){

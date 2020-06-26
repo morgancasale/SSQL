@@ -151,7 +151,8 @@ void operator -=(string & minuend, const string & subtrahend){
 
 string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false, bool fromZero=false){
     int start, end;
-    int shift=1;
+    //int shift = 1;
+    int shift = s1.size();
     if(fromZero){ shift=0; }
 
     if(reverse){
@@ -469,4 +470,17 @@ vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
     }
     return output;
 }
+template <typename T>
+bool between(const T & in, const T & val1, const T & val2){
+    if(val1 < val2){
+        return (in >= val1 and in <= val2);
+    }
+    else if(val1 > val2){
+        return (in >= val2 and in <= val1);
+    }
+    else if(val1 == val2){
+        return (in == val2);
+    } else return false;
+}
+
 #endif

@@ -39,7 +39,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
     return not_exists;
 }
 
-bool Database::process_command(string choice, bool &quit) {
+bool Database::process_command(string choice, bool & quit) {
     bool noErr=true;  int j=0;
     string command=take_command(choice);
     if(command=="quit()"){
