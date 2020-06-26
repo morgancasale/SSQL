@@ -261,7 +261,7 @@ bool control_select(string in){
                     if (in.find("order by") != in.npos) {
                         tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
                         if((num_of_words(tmp))==4){
-                            tmp=take_the_next_word(tmp, take_the_next_word(tmp, "by"));
+                            tmp=take_the_N_nextWord(tmp,"by", 2);
                             if(tmp!="asc" and tmp!="desc") noErr=false;
                         }
                         else noErr=false;
@@ -272,7 +272,7 @@ bool control_select(string in){
                 if(in.find("order by") != in.npos){
                     tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
                     if(num_of_words(tmp)==4){
-                        tmp=take_the_next_word(tmp, take_the_next_word(tmp, "order by"));
+                        tmp=take_the_N_nextWord(tmp, "by", 2);
                         if(tmp!="asc" and tmp!="desc") noErr=false;
                     }
                 }

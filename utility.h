@@ -361,16 +361,20 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
     }
 }
 
-string take_the_next_word(const string & in, string before){
+string take_the_N_nextWord(const string & in, string before, int N){
     string tmp, after;
     stringstream iss(in);
     if(in.find(before)==in.npos){
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
+    if(N<=0 or N>in.size()){
+        cerr<<endl<<"Non ci sono "<<N<<" parole";
+        return "/err";
+    }
     while(iss>>tmp){
         if(tmp==before){
-            iss>>after;
+            for(int i=0; i<N; i++) iss>>after;
         }
         after-=";";
     }

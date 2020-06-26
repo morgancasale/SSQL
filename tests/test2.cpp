@@ -25,11 +25,11 @@ int main(){
     choice="insert into phone (number, name, price, car) values (2098, \"morgan\", 0.5, 'p');";
     command=take_command(choice);
     d4.process_command(choice, command);
-    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'p');";
+    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'h');";
     command=take_command(choice);
     d4.process_command(choice, command);
 
-    choice="SELECT number, name, price, car FROM phone WHERE car = 'p' order by number desc;";
+    choice="SELECT number, name, price, car FROM phone WHERE car <= 'p' ;";
     command=take_command(choice);
     d4.process_command(choice, command);
 

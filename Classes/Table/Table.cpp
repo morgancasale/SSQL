@@ -444,7 +444,14 @@ int Table::get_col_index(const string & in){ //returns -1 if no element with tha
     return index;
 }
 
-bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int> &foundRows) {
+//==
+//>
+//<
+//>=
+//<=
+//<>
+
+bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int> &foundRows, const string & op) {
     bool noErr=true;
     const string & type=elementsTypes[col_i];
     noErr=check_data_consistence(data, type);
@@ -453,46 +460,110 @@ bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int
         if (elementsTypes[col_i] == "int") {
             vector<int> tmp = (*static_cast<Column<int> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (to_string(tmp[i]) == data) {
+                if (op == "=" and to_string(tmp[i]) == data)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and to_string(tmp[i]) > data)
+                    foundRows.push_back(i);
+                else if (op == "<" and to_string(tmp[i]) < data)
+                    foundRows.push_back(i);
+                else if (op == ">=" and to_string(tmp[i]) >= data)
+                    foundRows.push_back(i);
+                else if (op == "<=" and to_string(tmp[i]) <= data)
+                    foundRows.push_back(i);
+                else if (op == "<>" and to_string(tmp[i]) != data)
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
+
             }
         } else if (elementsTypes[col_i] == "float") {
             vector<float> tmp = (*static_cast<Column<float> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == stof(data)) {
+                if (op == "=" and tmp[i] == stof(data))
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > stof(data))
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < stof(data))
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= stof(data))
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= stof(data))
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != stof(data))
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
+
             }
         } else if (elementsTypes[col_i] == "char") {
             vector<char> tmp = (*static_cast<Column<char> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == data[1]) {
+                if (op == "=" and tmp[i] == data[1])
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > data[1])
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < data[1])
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= data[1])
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= data[1])
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != data[1])
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
             }
         } else if (elementsTypes[col_i] == "string" or elementsTypes[col_i] == "text") {
             vector<string> tmp = (*static_cast<Column<string> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == data) {
+                if (op == "=" and tmp[i] == data)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > data)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < data)
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= data)
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= data)
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != data)
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
             }
         } else if (elementsTypes[col_i] == "date") {
             vector<Date> tmp = (*static_cast<Column<Date> *>(cols[col_i])).values;
+            Date tmp_date;
+            tmp_date.set_Date(data);
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i].Date_to_string() == data) {
+                if (op == "=" and tmp[i] == tmp_date)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > tmp_date)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < tmp_date)
+                    foundRows.push_back(i);
+                else if (op == ">=" and (tmp[i] > tmp_date or tmp[i] == tmp_date))
+                    foundRows.push_back(i);
+                else if (op == "<=" and (tmp[i] < tmp_date or tmp[i] == tmp_date))
+                    foundRows.push_back(i);
+                else if (op == "<>" and !(tmp[i] == tmp_date))
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
             }
         } else if (elementsTypes[col_i] == "time") {
             vector<Time> tmp = (*static_cast<Column<Time> *>(cols[col_i])).values;
             Time tmp_time;
             tmp_time.set_time(data);
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == tmp_time) {
+                if (op == "=" and tmp[i] == tmp_time)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > tmp_time)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < tmp_time)
+                    foundRows.push_back(i);
+                else if (op == ">=" and (tmp[i] > tmp_time or tmp[i] == tmp_time))
+                    foundRows.push_back(i);
+                else if (op == "<=" and (tmp[i] < tmp_time or tmp[i] == tmp_time))
+                    foundRows.push_back(i);
+                else if (op == "<>" and !(tmp[i] == tmp_time))
+                    foundRows.push_back(i);
+                else cerr<<endl<<"operazione non disponibile";
             }
         }
     } else{
@@ -705,19 +776,20 @@ void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
     rowsIndexes = tmp - ( tmp - rowsIndexes);
 }
 
-void Table::printCols(vector <string> colSelection, const string & whereToSearch, const string & whatToSearch, const string &colToOrder, const int &order ){
+void Table::printCols(vector <string> colSelection, const vector <string> & search, const string &colToOrder, const int &order ){
     bool noErr;
     int index;
     vector <int> rowsOrder;
     for(int k=0; k<rows; k++) rowsOrder.push_back(k);
 
+
     if(colSelection[0]=="*"){
         colSelection=elementsNames;
     }
 
-    if(whereToSearch!="/err" and whatToSearch!="/err"){
+    if(search[0]!="/err" and search[1] != "0" and search[2]!="/err"){
         rowsOrder.erase(rowsOrder.begin(), rowsOrder.end());
-        find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),rowsOrder);
+        find_Rows_by_value(search[2],find_col_by_name(search[0]),rowsOrder, search[1]);
     }
 
     if(order and colToOrder!="/err"){
