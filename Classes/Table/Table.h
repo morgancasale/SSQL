@@ -61,7 +61,7 @@ public:
 
     int get_col_index(const string &in);
 
-    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
+    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows, const string & op);
 
     void deleteRows(const vector<int> &rows);
 
@@ -71,7 +71,9 @@ public:
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-    void printCols(vector <string> colSelection, string whereToSearch="/err", string whatToSearch="/err");
+    void col_orderer(int colIndex, vector <int> & rowsIndexes, int order);
+
+    void printCols(vector <string> colSelection, const vector <string> & search = {"/err", "0", "/err"}, const string &colToOrder="/err", const int &order=0 );
 
     bool printTable_to_file(ofstream & out);
 

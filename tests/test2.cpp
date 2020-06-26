@@ -21,18 +21,19 @@ int main(){
 
     choice="insert into phone (number, name, price) values (2020, \"carlo\", 12.89);";
     command=take_command(choice);
-    d4.process_command(choice, <#initializer#>);
-    choice="insert into phone (number, name, price, car) values (2098, \"morgan\", 0.5, 's');";
+  
+    d4.process_command(choice, command);
+    choice="insert into phone (number, name, price, car) values (2098, \"morgan\", 0.5, 'p');";
     command=take_command(choice);
-    d4.process_command(choice, <#initializer#>);
-    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'p');";
+    d4.process_command(choice, command);
+    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'h');";
+
     command=take_command(choice);
     d4.process_command(choice, <#initializer#>);
 
-    choice="SELECT number, name, price, car FROM phone WHERE car = 'p';";
+    choice="SELECT number, name, price, car FROM phone WHERE car <= 'p' ;";
     command=take_command(choice);
     d4.process_command(choice, <#initializer#>);
-
 
     return 0;
 }
