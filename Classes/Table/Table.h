@@ -30,17 +30,18 @@ public:
     vector<string> elementsNames;
     vector<string> elementsTypes;
     vector<void *> cols;
+    vector<int> ForeignTables, ConnectedCols, ForeignCols;
 
     bool find_check_primaryKey(const string & in);
     bool create_col(string in, const bool &key_existence);
     void clear_col(const int &i);
 
-    bool set_Table(const string &in);
+    bool set_Table(string in);
     Table()=default;
     ~Table()=default;
 
     void set_name(string name_in){ name=name_in; }
-    string get_name(){ return name; }
+    string get_name() const{ return name; }
 
     void empty_table();
 
@@ -56,7 +57,7 @@ public:
 
     bool set_INSERT_INTO_data(const vector<string> &elements_Names, const vector<string> &elementsValues);
 
-    bool checkINSERT_INTOData_and_Nullify(const vector<string> &filled_elements);
+    bool checkINSERT_INTOData_and_Nullify(vector<string> filled_elements);
 
     int get_col_index(const string &in);
 
