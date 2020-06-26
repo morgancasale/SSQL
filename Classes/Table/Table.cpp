@@ -524,38 +524,44 @@ bool Table::find_Rows_by_value(const string &data1, const int & col_i, vector<in
             }
         } else if (elementsTypes[col_i] == "date") {
             vector<Date> tmp = (*static_cast<Column<Date> *>(cols[col_i])).values;
-            Date tmp_date;
-            tmp_date.set_Date(data1);
+            Date tmp_date1, tmp_date2;
+            tmp_date1.set_Date(data1);
+            tmp_date2.set_Date(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == tmp_date)
+                if (op == "=" and tmp[i] == tmp_date1)
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > tmp_date)
+                else if (op == ">" and tmp[i] > tmp_date1)
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < tmp_date)
+                else if (op == "<" and tmp[i] < tmp_date1)
                     foundRows.push_back(i);
-                else if (op == ">=" and (tmp[i] > tmp_date or tmp[i] == tmp_date))
+                else if (op == ">=" and tmp[i] >= tmp_date1)
                     foundRows.push_back(i);
-                else if (op == "<=" and (tmp[i] < tmp_date or tmp[i] == tmp_date))
+                else if (op == "<=" and tmp[i] <= tmp_date1)
                     foundRows.push_back(i);
-                else if (op == "<>" and !(tmp[i] == tmp_date))
+                else if (op == "<>" and !(tmp[i] == tmp_date1))
+                    foundRows.push_back(i);
+                else if (op == "between" and between<Date>(tmp[i], tmp_date1, tmp_date2))
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "time") {
             vector<Time> tmp = (*static_cast<Column<Time> *>(cols[col_i])).values;
-            Time tmp_time;
-            tmp_time.set_time(data1);
+            Time tmp_time1, tmp_time2;
+            tmp_time1.set_time(data1);
+            tmp_time2.set_time(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == tmp_time)
+                if (op == "=" and tmp[i] == tmp_time1)
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > tmp_time)
+                else if (op == ">" and tmp[i] > tmp_time1)
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < tmp_time)
+                else if (op == "<" and tmp[i] < tmp_time1)
                     foundRows.push_back(i);
-                else if (op == ">=" and (tmp[i] > tmp_time or tmp[i] == tmp_time))
+                else if (op == ">=" and tmp[i] >= tmp_time1)
                     foundRows.push_back(i);
-                else if (op == "<=" and (tmp[i] < tmp_time or tmp[i] == tmp_time))
+                else if (op == "<=" and tmp[i] <= tmp_time1)
                     foundRows.push_back(i);
-                else if (op == "<>" and !(tmp[i] == tmp_time))
+                else if (op == "<>" and !(tmp[i] == tmp_time1))
+                    foundRows.push_back(i);
+                else if (op == "between" and between<Time>(tmp[i], tmp_time1, tmp_time2))
                     foundRows.push_back(i);
             }
         }
@@ -772,6 +778,7 @@ void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
 void Table::printCols(vector <string> colSelection, const vector <string> & search, const string &colToOrder, const int &order ){
     bool noErr;
     int index;
+    string tmp;
     vector <int> rowsOrder;
     for(int k=0; k<rows; k++) rowsOrder.push_back(k);
 
@@ -782,7 +789,9 @@ void Table::printCols(vector <string> colSelection, const vector <string> & sear
 
     if(search[0]!="/err" and search[1] != "0" and search[2]!="/err"){
         rowsOrder.erase(rowsOrder.begin(), rowsOrder.end());
-        find_Rows_by_value(search[2],find_col_by_name(search[0]),rowsOrder, search[1]);
+        if(search[1]=="between") tmp=search[3];
+        else tmp="/err";
+        find_Rows_by_value(search[2],find_col_by_name(search[0]),rowsOrder, search[1], tmp);
     }
 
     if(order and colToOrder!="/err"){

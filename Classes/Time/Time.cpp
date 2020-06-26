@@ -86,6 +86,8 @@ bool Time::equal_min(Time t2) const & { return this->tot_mins()==t2.tot_mins(); 
 
 bool Time::operator>(Time t2) const & { return this->tot_seconds()>t2.tot_seconds(); }
 bool Time::operator<(Time t2) const & { return this->tot_seconds()<t2.tot_seconds(); }
+bool Time::operator>=(Time t2) const & { return (this->tot_seconds()>t2.tot_seconds() or equal_sec(t2)); }
+bool Time::operator<=(Time t2) const & { return (this->tot_seconds()<t2.tot_seconds() or equal_sec(t2)); }
 
 string Time::to_string() const{
     string tmp;

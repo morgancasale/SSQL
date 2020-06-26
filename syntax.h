@@ -259,9 +259,21 @@ bool control_insert(string in){
 }
 
 bool control_delete(string in){
+    string tmp, s;
     bool noErr=true;
-    if(in[in.size()-1]!=';' or in.find("=")==-1){ noErr=false; }
+    if(in[in.size()-1]!=';'){ noErr=false; }
     if(substrcc(in, 1, 2) != "where"){ noErr =false; }
+    if (noErr){
+        noErr=false;
+        for(string oper: possibleOperators){
+            if((tmp = take_the_N_nextWord(in, "where", 2))==oper){
+                noErr=true;
+                if(tmp=="between" and take_the_N_nextWord(in, "where", 4) != "and"){
+                    noErr=false;
+                }
+            }
+        }
+    }
     if(!noErr){
         cerr<<endl<<"DELETE command syntax error!";
     }
