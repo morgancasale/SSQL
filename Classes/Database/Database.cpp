@@ -80,7 +80,9 @@ bool Database::process_command(string choice, bool &quit) {
         }
     } else
     if(command=="select"){
-        PRINT(choice);
+        if((noErr=control_select(choice))){
+            PRINT(choice);
+        }
     }
     return noErr;
 }
@@ -290,17 +292,18 @@ bool Database::DELETE(string in) {
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = substr_from_s_to_s(in,"where ","=");
-        replace_chars(element, {' '}, -1);
+        string element = take_the_N_nextWord(in, "where", 1);
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";
             noErr = false;
         }
         if(noErr){
-            string data = substrcc(in, 1, 1, '=', ';');
+            string oper = take_the_N_nextWord(in, "where", 2);
+            string data = take_the_N_nextWord(in, "where", 3);
+          
             vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows);
+            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows, oper);
             if(noErr){
                 Tables[table_i].deleteRows(foundRows);
             }
@@ -351,19 +354,19 @@ bool Database::UPDATE(string in){
 
     if(noErr){
         in-=(tableName+" set ");
-
-        string colToSearch= substr_from_s_to_s(in, "where ", "=", true);
-        replace_chars(colToSearch, {' '}, -1);
+        string oper = take_the_N_nextWord(in, "where", 2);
+        string colToSearch= take_the_N_nextWord(in, "where", 1);
         int col_index;
         noErr=((col_index=table.get_col_index(colToSearch))!=-1);
 
         if(noErr){
-            string searchData= substr_from_s_to_s(in, colToSearch, ";");
-            searchData= substrcc(searchData, 1, -1, '=', ' ');
-            replace_chars(searchData, {' '}, -1);
+            string searchData = take_the_N_nextWord(in, "where", 3);
+            /*string searchData= substr_from_s_to_s(in, colToSearch, ";");
+            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
+            replace_chars(searchData, {' '}, -1);*/
 
             vector<int> foundRows;
-            noErr=table.find_Rows_by_value(searchData, col_index, foundRows);
+            noErr=table.find_Rows_by_value(searchData, col_index, foundRows, oper);
             in-=(substr_from_s_to_s(in, " where", ";")+";");
             if(noErr){
                 replace_chars(in, {' '}, -1);
@@ -402,11 +405,13 @@ bool Database::UPDATE(string in){
 
 bool Database::PRINT(string in) {
     bool noErr;
-    string tableName = take_the_next_word(in, "from");
+    string tableName = take_the_N_nextWord(in, "from", 1);
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
+    string colToOrder="/err";
+    vector <string> vec={"/err", "0", "/err"};
+    int orden=0;
     if(noErr){
-        //SELECT ID,	AGE,	SALARY		FROM CUSTOMERS	WHERE	AGE	=	20;
         vector <string> colNames;
         string tmp;
         bool exit=true;
@@ -427,12 +432,19 @@ bool Database::PRINT(string in) {
             }
         }while(exit);
 
+        if(in.find("order by")!=in.npos){
+            if(in.find("desc")!=in.npos) orden = 1;
+            else if(in.find("asc")!=in.npos) orden = -1;
+            colToOrder = take_the_N_nextWord(in, "by", 1);
+        }
+
         if(in.find("*")!=in.npos){
-            table.printCols({"*"});
+            table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=in.npos){
-            table.printCols(colNames, take_the_next_word(in,"where"), take_the_next_word(in,"="));
+            vec = {take_the_N_nextWord(in,"where", 1), take_the_N_nextWord(in,"where", 2), take_the_N_nextWord(in,"where", 3)};
+            table.printCols(colNames, vec, colToOrder, orden);
         }else{
-            table.printCols(colNames);
+            table.printCols(colNames, vec, colToOrder, orden);
         }
     }
     return noErr;

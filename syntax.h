@@ -293,4 +293,44 @@ bool control_update(string in){
     }
     return noErr;
 }
+//SELECT ID, NAME FROM CUSTOMERS WHERE ID = 20 ORDER BY ID ASC;
+bool control_select(string in){
+    bool noErr=(in[in.size()-1]==';');
+    string tmp;
+    if(noErr){
+        in-=";";
+        if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1) {
+            in-=tmp;
+            if(in.find("where") != in.npos and num_of_words(substr_from_s_to_s(in, "from", "where")) == 1){
+                in-= "from" + substr_from_s_to_s(in, "from", "where") + "where";
+                if(num_of_words(in) > 2) {
+                    if (in.find("order by") != in.npos) {
+                        tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
+                        if((num_of_words(tmp))==4){
+                            tmp=take_the_N_nextWord(tmp,"by", 2);
+                            if(tmp!="asc" and tmp!="desc") noErr=false;
+                        }
+                        else noErr=false;
+                    } else noErr = false;
+                }else if(num_of_words(in) < 2) noErr = false;
+            }
+            else if(num_of_words(in) > 2){
+                if(in.find("order by") != in.npos){
+                    tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
+                    if(num_of_words(tmp)==4){
+                        tmp=take_the_N_nextWord(tmp, "by", 2);
+                        if(tmp!="asc" and tmp!="desc") noErr=false;
+                    }
+                }
+                else noErr=false;
+            }
+            else if(num_of_words(in) < 2) noErr=false;
+        }
+        else noErr=false;
+    }
+    if(!noErr){
+        cerr<<endl<<"SELECT command syntax error!";
+    }
+    return noErr;
+}
 #endif //CS_PROJECT_SYNTAX_H

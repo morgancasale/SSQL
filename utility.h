@@ -385,16 +385,22 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
     }
 }/** O(x*n) */
 
-string take_the_next_word(const string & in, string before){
+string take_the_N_nextWord(const string & in, string before, int N){
     string tmp, after;
     stringstream iss(in);
     if(in.find(before)==in.npos){ /** O(n) */
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
+  
+    if(N<=0 or N>in.size()){
+        cerr<<endl<<"Non ci sono "<<N<<" parole";
+        return "/err";
+    }
     while(iss>>tmp){ /** O(n) */
+
         if(tmp==before){
-            iss>>after;
+            for(int i=0; i<N; i++) iss>>after;
         }
         after-=";";
     }
@@ -445,4 +451,22 @@ string removeSpaces_fromStart_andEnd(string & in){
     return in;
 } /** O(2x) */
 
+template <typename T>
+vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
+    /* +1=ascending; -1=descending */
+    int n=input.size(), aux=0;
+    vector <int> output(n);
+
+    for (int i=0; i<n; i++){
+        aux=0;
+        for (int j=0; j<n; j++){
+            if(input[i]>input[j] and orden==+1) aux++;
+            else if(input[i]<input[j] and orden==-1)  aux++;
+            else if(input[i]==input[j]) aux = j==i ? aux : aux+1;
+            else if(!orden) cerr<<endl<<"errore";
+        }
+        output[aux]=i;
+    }
+    return output;
+}
 #endif
