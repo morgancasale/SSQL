@@ -5,9 +5,11 @@
 
 class Database {
 public:
+    bool process_command(string choice, bool &quit);
+private:
     vector<Table> Tables;
     vector<string> TablesNames;
-    bool process_command(string choice, bool &quit);
+
     static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
     bool check_Table_existence(const string &in_Table_name, const bool & check_existence);
