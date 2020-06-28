@@ -21,7 +21,7 @@ string tolower(string &in, int stop= -1){ //converts all upper letters of a stri
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substrcc(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2= ' ') {
+string substr_CC(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2= ' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -149,7 +149,7 @@ void operator -=(string & minuend, const string & subtrahend){
     erase_substr(minuend, subtrahend);
 } /** O(n^2) */
 
-string substr_from_s_to_s(string in, string s1, string s2, const bool & reverse=false, bool fromZero=false){
+string substr_SS(string in, string s1, string s2, const bool & reverse= false, bool fromZero= false){
     int start, end;
     //int shift = 1;
     int shift = s1.size();
@@ -311,10 +311,10 @@ bool is_a_Date(const string & var){
 bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
 
-    if(substrcc(var, 1, 2, '"', '"') != "/err"){ /** O(n) */
+    if(substr_CC(var, 1, 2, '"', '"') != "/err"){ /** O(n) */
         noErr = (type == "string" or type == "text");
     } else
-    if(substrcc(var, 1, 2, 39, 39) != "/err"){ /** O(n) */ //char a=39 --> a='
+    if(substr_CC(var, 1, 2, 39, 39) != "/err"){ /** O(n) */ //char a=39 --> a='
         noErr = (type == "char");
     } else
     if(var.find('.')!=-1){ /** O(n) */
@@ -421,7 +421,7 @@ string replace_content(string in, const char & start, const char & end, const ch
     int start_i=0, end_i=0;
     while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){ /** O(x) */
         string repl=" ";
-        string tmp= substrcc(in, start_i + 1, end_i + 1, start, end); /** O(n) */
+        string tmp= substr_CC(in, start_i + 1, end_i + 1, start, end); /** O(n) */
         int s=tmp.size();
         for(int j=0; j<s-1; j++){ repl.push_back(' '); } /** O(y) */
         in.replace(in.find(tmp), tmp.size(), repl); /** O(n) */

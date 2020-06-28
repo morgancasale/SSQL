@@ -134,7 +134,7 @@ int main(){
 
 /*string b="CREATE TABLE CUSTOMERS ( ID INT NOT NULL, NAME TEXT NOT NULL, AGE INT NOT NULL, ADDRESS TEXT , SALARY FLOAT, PRIMARY KEY (ID) );";
     clean_input(b);
-    cout<<substrcc(b, 2, 3, ' ', ' ',false);
+    cout<<substr_CC(b, 2, 3, ' ', ' ',false);
 
     bool c;
     if(c=check_CREATE_syntax(b)){

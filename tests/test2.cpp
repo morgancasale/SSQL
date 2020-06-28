@@ -6,7 +6,11 @@
 #include "../Classes/Table/Table.cpp"
 #include "../Classes/Database/Database.cpp"
 using namespace std;
-
+//NOTE PER CARLO DEL FUTURO:
+//fchgvhbknjlmò
+// sistemare between nelle varie funzioni e finire controllo sintassi di update
+//xcfjgvbnmò
+//cgvhnklmò
 
 int main(){
     Database d4;

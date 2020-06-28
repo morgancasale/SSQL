@@ -42,7 +42,7 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
 
     string key;
     if(noErr){
-        key= substrcc(in, 1, 1, '(', ')');
+        key= substr_CC(in, 1, 1, '(', ')');
 
         if (key == "/err") { noErr = false; }
     }
@@ -98,9 +98,9 @@ bool Table::check_type(const string & type){
 int Table::count_data(const vector<string> & data, const string & type){ //conta quanti dati di tipo "type" ci sono in data
     int counter=0;
     for(int i=1; i<data.size()-1; i++){
-        string tmp= substrcc(data[i], 1, 2);
+        string tmp= substr_CC(data[i], 1, 2);
         if(tmp=="/err"){
-            tmp= substrcc(data[i], 1, -1);
+            tmp= substr_CC(data[i], 1, -1);
         }
         if(tmp==type){
             counter++;
@@ -127,14 +127,14 @@ bool Table::create_col(string in, const bool &key_existence) {
         in-=" not null";
     }
 
-    string key= substrcc(in, 0, 1);
+    string key= substr_CC(in, 0, 1);
     replace_chars(key, {' '}, -1);
     err=!check_key(key, key_existence);
     in-=key;
 
     string type;
     if(!err){
-        type= substrcc(in, 0, -1);
+        type= substr_CC(in, 0, -1);
         replace_chars(type, {' '}, -1);
         err=!check_type(type);
     }
@@ -200,14 +200,14 @@ bool Table::create_col(string in, const bool &key_existence) {
 vector<string> Table::get_CREATE_data(string in){
     vector<string> data;
     data.resize(1);
-    data[0]= substrcc(in, 0, 1);
+    data[0]= substr_CC(in, 0, 1);
 
     string line;
-    for(int i=1; substrcc(in, 1, 1, '(', ';') != ")"; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substr_CC(in, 1, 1, '(', ';') != ")"; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]= substrcc(in, 1, 1, '(', ',');
+        data[i]= substr_CC(in, 1, 1, '(', ',');
         if(data[i]=="/err"){
-            data[i]= substrcc(in, 1, 1, '(', ';');
+            data[i]= substr_CC(in, 1, 1, '(', ';');
             data[i].resize(data[i].size()-1);
             erase_substr(in, data[i]);
             removeSpaces_fromStart_andEnd(data[i]);
@@ -688,7 +688,7 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     int noErr=true;
     for(int i=0; i<data.size() and noErr; i++){
         string tmp=data[i];
-        string col= substrcc(tmp, 0, 1, ' ', '=');
+        string col= substr_CC(tmp, 0, 1, ' ', '=');
 
         int col_i;
         noErr=((col_i=find_col_by_name(col))!=-1);
@@ -1074,7 +1074,7 @@ void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
         string data=line, element;
-        while((element= substrcc(data, 1, 2, '\"', '\"')) != "/err"){
+        while((element= substr_CC(data, 1, 2, '\"', '\"')) != "/err"){
             tmp.values.push_back(element);
             data-="\""+element+"\" ";
         }
