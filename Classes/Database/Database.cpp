@@ -300,10 +300,11 @@ bool Database::DELETE(string in) {
         }
         if(noErr){
             string oper = take_the_N_nextWord(in, "where", 2);
-            string data = take_the_N_nextWord(in, "where", 3);
+            string data = take_the_N_nextWord(in, "where", 3), data2="/err";
+            if(oper=="between") data2 = substr_SS(in,"between", ";");
           
             vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows, oper, "/err");
+            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows, oper, data2);
             if(noErr){
                 Tables[table_i].deleteRows(foundRows);
             }
@@ -434,16 +435,18 @@ bool Database::PRINT(string in) {
             }
         }while(exit);
 
-        if(in.find("order by")!=in.npos){
-            if(in.find("desc")!=in.npos) orden = 1;
-            else if(in.find("asc")!=in.npos) orden = -1;
+        if(in.find("order by")!=-1){
+            if(in.find("desc")!=-1) orden = 1;
+            else if(in.find("asc")!=-1) orden = -1;
             colToOrder = take_the_N_nextWord(in, "by", 1);
         }
 
-        if(in.find("*")!=in.npos){
+        if(in.find("*")!=-1){
             table.printCols({"*"}, vec, colToOrder, orden);
-        }else if(in.find("where")!=in.npos){
-            vec = {take_the_N_nextWord(in,"where", 1), take_the_N_nextWord(in,"where", 2), take_the_N_nextWord(in,"where", 3)};
+        }else if(in.find("where")!=-1){
+            string oper = take_the_N_nextWord(in,"where", 2), data2="/err";
+            if(oper=="between") data2 = take_the_N_nextWord(in,"where", 4);
+            vec = {take_the_N_nextWord(in,"where", 1), oper, take_the_N_nextWord(in,"where", 3), data2};
             table.printCols(colNames, vec, colToOrder, orden);
         }else{
             table.printCols(colNames, vec, colToOrder, orden);
