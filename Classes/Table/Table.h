@@ -61,7 +61,7 @@ public:
 
     int get_col_index(const string &in);
 
-    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows, const string & op);
+    bool find_Rows_by_value(const string &data1, const int &col_i, vector<int> &foundRows, const string & op, const string &data2);
 
     void deleteRows(const vector<int> &Rows);
 

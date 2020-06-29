@@ -25,6 +25,8 @@ public:
     bool equal_min(Time t2) const &;
     bool operator > (Time t2) const &;
     bool operator < (Time t2) const &;
+    bool operator >= (Time t2) const &;
+    bool operator <= (Time t2) const &;
     string to_string() const;
     Time(){
         hours=0, minutes=0, seconds=0;
