@@ -1,3 +1,55 @@
+car 2 0
+
+
+
+text text int float float 
+model company yor price speed 
+
+model 1 0
+"Pa,nda" "Grand Cherokee" 
+0 0 
+-
+company 0 0
+"Fiat" "Jeep" 
+0 0 
+-
+yor 0 0
+2012 2012 
+0 0 
+-
+price 0 0
+3000.000000 68000.000000 
+0 0 
+-
+speed 0 0
+120.500000 140.000000 
+0 0 
+-
+
+phone 3 0
+
+
+
+text int float int 
+Name yOr price sef 
+
+Name 1 0
+"oneplus 8 pro" "iphone 5" "samsung s7 edge" 
+0 0 0 
+-
+yOr 1 0
+2020 2013 2016 
+0 0 0 
+-
+price 0 0
+1019.010010 729.989990 729.989990 
+0 0 0 
+-
+sef 1 1
+6 5 10 
+0 0 0 
+-
+
 EUROPE 3 0
 
 
@@ -10,7 +62,7 @@ EUROPIAN_COUNTRIES 0 0
 0 0 0 
 -
 
-AMERICA 3 0
+AMERICA 0 0
 
 
 
@@ -18,12 +70,12 @@ text
 AMERICAN_COUNTRIES 
 
 AMERICAN_COUNTRIES 0 0
-"USA" "Canada" "Mexico" 
-0 0 0 
+
+
 -
 
 COUNTRIES 1 0
-0 1 
+2 3 
 0 0 
 1 2 
 int text text 
@@ -42,56 +94,28 @@ NAME_AMERICAN 0 0
 0 
 -
 
-pHone 3 0
+moto 2 0
 
 
 
-text int float int 
-Name yOr price sef 
+text text text int 
+Name company1 color wheels 
 
 Name 1 0
-"oneplus 8 pro" "samsung s7" "iphone 5" 
-0 0 0 
+"gina" "figa " 
+0 0 
 -
-yOr 1 0
-2020 2016 2013 
-0 0 0 
+company1 0 0
+"piaggio" "yamaha" 
+0 0 
 -
-price 0 0
-1019.010010 729.989990 729.989990 
-0 0 0 
+color 0 0
+"rosso" "nera" 
+0 0 
 -
-sef 1 1
-6 6 5 
-0 0 0 
--
-
-car 3 0
-
-
-
-text text int float float 
-model company yor price speed 
-
-model 1 0
- "Panda"  "C3 Picasso"  "Grand Cherokee" 
-0 0 0 
--
-company 0 0
-"Fiat" "/empty" "Jeep" 
-0 1 0 
--
-yor 0 0
-2012 2006 2012 
-0 0 0 
--
-price 0 0
-3000.000000 5000.500000 68000.000000 
-0 0 0 
--
-speed 0 0
-120.500000 0.000000 140.000000 
-0 1 0 
+wheels 0 0
+2 4 
+0 0 
 -
 
 |

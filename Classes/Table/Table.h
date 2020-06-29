@@ -16,7 +16,7 @@ public:
     void printCol_to_file(ofstream & out);
 };
 
-class Table{
+class Table {
 private:
     string name;
 
@@ -36,11 +36,11 @@ public:
     bool create_col(string in, const bool &key_existence);
     void clear_col(const int &i);
 
-    bool set_Table(string in);
+    bool set_Table(const string &in);
     Table()=default;
     ~Table()=default;
 
-    void set_name(string name_in){ name=name_in; }
+    void set_name(const string &name_in){ name=name_in; }
     string get_name() const{ return name; }
 
     void empty_table();
@@ -61,9 +61,9 @@ public:
 
     int get_col_index(const string &in);
 
-    bool find_Rows_by_value(const string &data, const int &col_i, vector<int> &foundRows);
+    bool find_Rows_by_value(string data1, const int &col_i, vector<int> &foundRows, const string & op, string data2);
 
-    void deleteRows(const vector<int> &rows);
+    void deleteRows(const vector<int> &Rows);
 
     void empty_content();
 
@@ -71,7 +71,9 @@ public:
 
     bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-    void printCols(vector <string> colSelection, string whereToSearch="/err", string whatToSearch="/err");
+    void col_orderer(int colIndex, vector <int> & rowsIndexes, int order);
+
+    void printCols(vector <string> colSelection, const vector <string> & search = {"/err", "0", "/err"}, const string &colToOrder="/err", const int &order=0 );
 
     bool printTable_to_file(ofstream & out);
 

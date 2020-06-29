@@ -21,7 +21,8 @@ public:
     bool compare_date(const Date &d2) const &;
     bool operator >(const Date &d2) const &;
     bool operator <(const Date &d2) const &;
-
+    bool operator <=(const Date &d2) const &;
+    bool operator >=(const Date &d2) const &;
     string Date_to_string() const &;
     Date(){
         day=01, month=01, year=1970;

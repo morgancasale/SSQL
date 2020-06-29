@@ -7,8 +7,16 @@ using namespace std;
 
 
 int main(){
-    bool a=true, b=false;
-    a&=b;
+    string a="asasas -dsdasfsdfgò-  - dfgj  -dsfsdfsdf- jgd";
+    bool b;
+    a=remove_content(a, '-', '-', b);
+    b=true;
+    for(int i=0; b; i++){
+        cout<<i;
+        b= false;
+    }
+    cout<<" ciao";
+
 
     return 0;
 }

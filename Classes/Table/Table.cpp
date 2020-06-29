@@ -1,7 +1,7 @@
 #include <memory>
 #include "Table.h"
 
-template<typename type>
+/*template<typename type>
 void Column<type>::printCol_to_file(ofstream & out) {
     out<<key<<" ";
     out<<not_null<<" ";
@@ -16,9 +16,9 @@ void Column<type>::printCol_to_file(ofstream & out) {
         out<<nullity<<" ";
     }
     out<<endl;
-}
+}*/
 
-bool Table::set_Table(string in){
+bool Table::set_Table(const string &in){
     bool noErr=true;
     vector<string> data = get_CREATE_data(in);
     noErr = control_CREATE_data(data);
@@ -42,17 +42,16 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
 
     string key;
     if(noErr){
-        key= substrcc(in, 1, 1, '(', ')');
+        key= substr_CC(in, 1, 1, '(', ')');
 
         if (key == "/err") { noErr = false; }
     }
 
     if(noErr) {
         noErr = false;
-        int i=0;
         for (int i=0; i<elementsNames.size() and !noErr; i++) {
             string tmp=elementsNames[i];
-            if (tolower(key) == tolower(tmp)) { noErr = true; primaryKey_index=i; }
+            if (key == tmp) { noErr = true; primaryKey_index=i; }
         }
     }
 
@@ -66,12 +65,12 @@ bool Table::check_key(const string &key, const bool &existence) { //controlla se
     bool noErr = true;
     bool existenceErr = false;
     if(key=="/err"){ noErr=false; }
-    for(int i=0; i<allowed_coms.size(); i++){ if(key==allowed_coms[i]){ noErr=false; } }
+    for(const auto & allowed_com : allowed_coms){ if(key==allowed_com){ noErr=false; } }
     if(noErr){
-        for(int i=0; i<allowed_types.size(); i++){ if(key==allowed_types[i]){ noErr=false; } }
+        for(const auto & allowed_type : allowed_types){ if(key==allowed_type){ noErr=false; } }
     }
     if(noErr and !existence){
-        for(int i=0; i<elementsNames.size(); i++){ if(key==elementsNames[i]){ noErr=false; existenceErr=true; } }
+        for(auto & elementsName : elementsNames){ if(key==elementsName){ noErr=false; existenceErr=true; } }
     }
 
 
@@ -98,9 +97,9 @@ bool Table::check_type(const string & type){
 int Table::count_data(const vector<string> & data, const string & type){ //conta quanti dati di tipo "type" ci sono in data
     int counter=0;
     for(int i=1; i<data.size()-1; i++){
-        string tmp= substrcc(data[i], 1, 2);
+        string tmp= substr_CC(data[i], 1, 2);
         if(tmp=="/err"){
-            tmp= substrcc(data[i], 1, -1);
+            tmp= substr_CC(data[i], 1, -1);
         }
         if(tmp==type){
             counter++;
@@ -127,14 +126,14 @@ bool Table::create_col(string in, const bool &key_existence) {
         in-=" not null";
     }
 
-    string key= substrcc(in, 0, 1);
+    string key= substr_CC(in, 0, 1);
     replace_chars(key, {' '}, -1);
     err=!check_key(key, key_existence);
     in-=key;
 
     string type;
     if(!err){
-        type= substrcc(in, 0, -1);
+        type= substr_CC(in, 0, -1);
         replace_chars(type, {' '}, -1);
         err=!check_type(type);
     }
@@ -200,19 +199,21 @@ bool Table::create_col(string in, const bool &key_existence) {
 vector<string> Table::get_CREATE_data(string in){
     vector<string> data;
     data.resize(1);
-    data[0]= substrcc(in, 0, 1);
+    data[0]= substr_CC(in, 0, 1);
 
     string line;
-    for(int i=1; substrcc(in, 1, 1, '(', ')') != " "; i++){//this checks if there is the final substring ");" somewhere
+    for(int i=1; substr_CC(in, 1, 1, '(', ';') != ")"; i++){//this checks if there is the final substring ");" somewhere
         data.resize(i+1);
-        data[i]= substrcc(in, 2, 1, ' ', ',');
+        data[i]= substr_CC(in, 1, 1, '(', ',');
         if(data[i]=="/err"){
-            data[i]= substrcc(in, 2, 1, ' ', ')');
-            data[i]+=")";
+            data[i]= substr_CC(in, 1, 1, '(', ';');
+            data[i].resize(data[i].size()-1);
             erase_substr(in, data[i]);
+            removeSpaces_fromStart_andEnd(data[i]);
         }else{
             erase_substr(in, data[i]+", ");
         }
+        removeSpaces_fromStart_andEnd(data[i]);
         remove_duplicate_chars(in, {' '});
 
     }
@@ -225,7 +226,7 @@ int Table::find_col_by_name(string in) {
     bool found=false;
     for(; i<elementsNames.size() and !found; i++){
         string tmp=elementsNames[i];
-        if(tolower(tmp)==tolower(in)){
+        if(tmp==in){
             found=true;
         }
     }
@@ -330,8 +331,8 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     //Column<string> & col=(*static_cast<Column<string> *>(cols[0]));
     bool fillErr=false, autoIncrAndNotNullErr=false;
     vector<string> elements=elementsNames;
-    for(int i=0; i<elements.size(); i++){ tolower(elements[i]);}
-    for(int i=0; i<filled_elements.size(); i++){ tolower(filled_elements[i]); }
+    for(auto & element : elements){ tolower(element);}
+    for(auto & filled_element : filled_elements){ tolower(filled_element); }
     vector<string> notFilled= elements - filled_elements;
 
     for(const string & emptyElement: notFilled){
@@ -442,55 +443,135 @@ int Table::get_col_index(const string & in){ //returns -1 if no element with tha
     return index;
 }
 
-bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int> &foundRows) {
+bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &foundRows, const string & op, string data2= "/err") {
     bool noErr=true;
     const string & type=elementsTypes[col_i];
-    noErr=check_data_consistence(data, type);
+    noErr=check_data_consistence(data1, type);
 
     if(noErr) {
         if (elementsTypes[col_i] == "int") {
             vector<int> tmp = (*static_cast<Column<int> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (to_string(tmp[i]) == data) {
+                if (op == "=" and to_string(tmp[i]) == data1)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and to_string(tmp[i]) > data1)
+                    foundRows.push_back(i);
+                else if (op == "<" and to_string(tmp[i]) < data1)
+                    foundRows.push_back(i);
+                else if (op == ">=" and to_string(tmp[i]) >= data1)
+                    foundRows.push_back(i);
+                else if (op == "<=" and to_string(tmp[i]) <= data1)
+                    foundRows.push_back(i);
+                else if (op == "<>" and to_string(tmp[i]) != data1)
+                    foundRows.push_back(i);
+                else if (op == "between" and between<string>(to_string(tmp[i]), data1, data2))
+                    foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "float") {
             vector<float> tmp = (*static_cast<Column<float> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == stof(data)) {
+                if (op == "=" and tmp[i] == stof(data1))
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > stof(data1))
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < stof(data1))
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= stof(data1))
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= stof(data1))
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != stof(data1))
+                    foundRows.push_back(i);
+                else if (op == "between" and between<float>(tmp[i], stof(data1), stof(data2)))
+                    foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "char") {
             vector<char> tmp = (*static_cast<Column<char> *>(cols[col_i])).values;
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == data[0]) {
+                if (op == "=" and tmp[i] == data1[1])
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > data1[1])
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < data1[1])
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= data1[1])
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= data1[1])
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != data1[1])
+                    foundRows.push_back(i);
+                else if (op == "between" and between<char>(tmp[i], data1[1], data2[1]))
+                    foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "string" or elementsTypes[col_i] == "text") {
             vector<string> tmp = (*static_cast<Column<string> *>(cols[col_i])).values;
+            /**data1.resize(data1.size()-1);
+            reverse(data1.begin(),data1.end());
+            data1.resize(data1.size()-1);
+            reverse(data1.begin(),data1.end());
+
+            data2.resize(data2.size()-1);
+            reverse(data2.begin(),data2.end());
+            data2.resize(data2.size()-1);
+            reverse(data2.begin(),data2.end());*/
+
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == data) {
+                if (op == "=" and tmp[i] == data1)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > data1)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < data1)
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= data1)
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= data1)
+                    foundRows.push_back(i);
+                else if (op == "<>" and tmp[i] != data1)
+                    foundRows.push_back(i);
+                else if (op == "between" and between<string>(tmp[i], data1, data2))
+                    foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "date") {
             vector<Date> tmp = (*static_cast<Column<Date> *>(cols[col_i])).values;
+            Date tmp_date1, tmp_date2;
+            tmp_date1.set_Date(data1);
+            tmp_date2.set_Date(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i].Date_to_string() == data) {
+                if (op == "=" and tmp[i] == tmp_date1)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > tmp_date1)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < tmp_date1)
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= tmp_date1)
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= tmp_date1)
+                    foundRows.push_back(i);
+                else if (op == "<>" and !(tmp[i] == tmp_date1))
+                    foundRows.push_back(i);
+                else if (op == "between" and between<Date>(tmp[i], tmp_date1, tmp_date2))
+                    foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "time") {
             vector<Time> tmp = (*static_cast<Column<Time> *>(cols[col_i])).values;
-            Time tmp_time;
-            tmp_time.set_time(data);
+            Time tmp_time1, tmp_time2;
+            tmp_time1.set_time(data1);
+            tmp_time2.set_time(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (tmp[i] == tmp_time) {
+                if (op == "=" and tmp[i] == tmp_time1)
                     foundRows.push_back(i);
-                }
+                else if (op == ">" and tmp[i] > tmp_time1)
+                    foundRows.push_back(i);
+                else if (op == "<" and tmp[i] < tmp_time1)
+                    foundRows.push_back(i);
+                else if (op == ">=" and tmp[i] >= tmp_time1)
+                    foundRows.push_back(i);
+                else if (op == "<=" and tmp[i] <= tmp_time1)
+                    foundRows.push_back(i);
+                else if (op == "<>" and !(tmp[i] == tmp_time1))
+                    foundRows.push_back(i);
+                else if (op == "between" and between<Time>(tmp[i], tmp_time1, tmp_time2))
+                    foundRows.push_back(i);
             }
         }
     } else{
@@ -499,43 +580,47 @@ bool Table::find_Rows_by_value(const string &data, const int & col_i, vector<int
 
     if(foundRows.empty()){
         noErr=false;
-        cerr<<"No row containing \""<<data<<"\" was found!";
+        cerr<<endl<<"No row containing \""<<data1<<"\"";
+        if(data2!="/err") cerr<<" or \""<<data2<<"\" were";
+        else cerr<<" was";
+        cerr<<" found";
     }
 
     return noErr;
 }
 
-void Table::deleteRows(const vector<int> & rows){
+void Table::deleteRows(const vector<int> & Rows){
+    rows-=Rows.size();
     for (int j=0; j<elementsTypes.size(); j++) {
         if(elementsTypes[j]=="int"){
             Column<int> & vec=(*static_cast<Column<int>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="float"){
             Column<float> & vec=(*static_cast<Column<float>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="char"){
             Column<char> & vec=(*static_cast<Column<char>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="string" or elementsTypes[j]=="text"){
             Column<string> & vec=(*static_cast<Column<string>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="date"){
             Column<Date> & vec=(*static_cast<Column<Date>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="time"){
             Column<Time> & vec=(*static_cast<Column<Time>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
     }
 }
@@ -594,6 +679,7 @@ void Table::empty_content(){
             tmp.valuesNullity.clear();
         }
     }
+    rows=0;
 }
 
 bool Table::get_rows_by_data(const int & col_i, const string & searchData, vector<int> & foundRows){
@@ -616,7 +702,7 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     int noErr=true;
     for(int i=0; i<data.size() and noErr; i++){
         string tmp=data[i];
-        string col= substrcc(tmp, 0, 1, ' ', '=');
+        string col= substr_CC(tmp, 0, 1, ' ', '=');
 
         int col_i;
         noErr=((col_i=find_col_by_name(col))!=-1);
@@ -673,23 +759,62 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
     return noErr;
 }
 
-void Table::printCols(vector <string> colSelection, string whereToSearch, string whatToSearch){
+void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
+    string &type = elementsTypes[colIndex];
+    vector <int> tmp;
+    if (type == "int") {
+        vector<int> &values = (*static_cast<Column<int> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<int>(values, order);
+    }
+    if (type == "float") {
+        vector<float> &values = (*static_cast<Column<float> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<float>(values, order);
+    }
+    if (type == "char") {
+        vector<char> &values = (*static_cast<Column<char> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<char>(values, order);
+    }
+    if (type=="string" or type=="text") {
+        vector<string> &values = (*static_cast<Column<string> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<string>(values, order);
+    }
+    if (type=="date") {
+        vector<Date> & values = (*static_cast<Column<Date> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<Date>(values, order);
+    }
+    if (type=="time") {
+        vector<Time> & values = (*static_cast<Column<Time> *>(cols[colIndex])).values;
+        tmp = order_vector_indexes<Time>(values, order);
+    }
+    rowsIndexes = tmp - ( tmp - rowsIndexes);
+}
+
+void Table::printCols(vector <string> colSelection, const vector <string> & search, const string &colToOrder, const int &order ){
     bool noErr;
-    int index, k=0;
-    vector <int> colsDiscovered;
-    bool whereFind = false;
-    if(colSelection[0]=="*"){   colSelection=elementsNames;}
+    int index;
+    string tmp;
+    vector <int> rowsOrder;
+    for(int k=0; k<rows; k++) rowsOrder.push_back(k);
 
-    for(int j=-1;j<rows;j++) {
 
-        if(whereToSearch!="/err" and whatToSearch!="/err"){
-            whereFind = find_Rows_by_value(whatToSearch,find_col_by_name(whereToSearch),colsDiscovered);
-            whereToSearch="/err"; whatToSearch="/err";
-        } else if(whereFind) {
-            j=colsDiscovered[k];
-            k++;
-        }
+    if(colSelection[0]=="*"){
+        colSelection=elementsNames;
+    }
 
+    if(search[0]!="/err" and search[1] != "0" and search[2]!="/err"){
+        rowsOrder.erase(rowsOrder.begin(), rowsOrder.end());
+        if(search[1]=="between") tmp=search[3];
+        else tmp="/err";
+        find_Rows_by_value(search[2],find_col_by_name(search[0]),rowsOrder, search[1], tmp);
+    }
+
+    if(order and colToOrder!="/err"){
+        col_orderer(find_col_by_name(colToOrder), rowsOrder, order);
+    }
+
+    rowsOrder.insert(rowsOrder.begin(), -1);
+
+    for(int j: rowsOrder) {
         for (auto & colSelectedName : colSelection) {
             noErr = ((index = find_col_by_name(colSelectedName)) != -1);
             if (noErr) {
@@ -730,7 +855,6 @@ void Table::printCols(vector <string> colSelection, string whereToSearch, string
             }
         }
         cout<<endl;
-    if(k==colsDiscovered.size()) j=rows-1;
     }
 }
 
@@ -964,7 +1088,7 @@ void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
         string data=line, element;
-        while((element= substrcc(data, 1, 2, '\"', '\"')) != "/err"){
+        while((element= substr_CC(data, 1, 2, '\"', '\"')) != "/err"){
             tmp.values.push_back(element);
             data-="\""+element+"\" ";
         }
