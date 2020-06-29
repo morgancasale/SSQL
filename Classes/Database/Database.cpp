@@ -17,7 +17,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
         do {
             string tmp=Tables[i].get_name();
             string in_Table_nameCopy=in_Table_name;
-            if ( tolower(tmp) == tolower(in_Table_nameCopy)) {
+            if ( tmp == in_Table_nameCopy) {
                 not_exists = false;
             }
             i++;
@@ -42,6 +42,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
 bool Database::process_command(string choice, bool & quit) {
     bool noErr=true;  int j=0;
     string command=take_command(choice);
+
     if(command=="quit()"){
         quit=true;
         QUIT();
@@ -69,7 +70,7 @@ bool Database::process_command(string choice, bool & quit) {
             noErr=!INSERT_INTO(choice);
         }
     } else
-    if(command=="delete"){
+    if(command=="delete from"){
        if((noErr=control_delete(choice))){
            noErr=DELETE(choice);
        }
@@ -86,7 +87,8 @@ bool Database::process_command(string choice, bool & quit) {
     }
     return noErr;
 }
-bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
+
+/*bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;
     for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
         if(((command= substr_CC(input, 0, 1, ' ')) == tmp) or ((command= substr_CC(input, 0, 2, ' ')) == tmp)){
@@ -97,7 +99,7 @@ bool Database::check_command(const string &input, const bool &show_error, string
         cerr<<"This command doesn't exist!";
     }
     return err;
-}
+}*/
 
 bool Database::INSERT_INTO(string in){
     bool err;
@@ -153,6 +155,10 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     in-="() values (";
     for(int i=0; !substr_CC(in, 0, 1, ' ', ')').empty() and noErr; i++){
         string elementValue= substr_CC(in, 0, 1, ' ', ',');
+        for(int j=2; character_counter(elementValue,'"')%2 != 0; j++){
+            elementValue= substr_CC(in, 0, j, ' ', ',');
+        }
+
         if(elementValue=="/err"){
             elementValue= substr_CC(in, 0, 1, ' ', ')');
             erase_substr(in, elementValue);
@@ -161,6 +167,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
         }
         for(const string & tmp: reserved_words){ if(elementValue==tmp){ noErr=false; } }
         if(noErr){
+            removeSpaces_fromStart_andEnd(elementValue);
             elementsValues.push_back(elementValue);
         } else{
            cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
@@ -275,7 +282,7 @@ int Database::find_Table(string in) {
     bool found=false;
     for(; i<Tables.size() and !found; i++){
         string tmp=Tables[i].get_name();
-        if(tolower(tmp)==tolower(in)){
+        if(tmp==in){
             found=true;
         }
     }
@@ -300,11 +307,16 @@ bool Database::DELETE(string in) {
         }
         if(noErr){
             string oper = take_the_N_nextWord(in, "where", 2);
-            string data = take_the_N_nextWord(in, "where", 3), data2="/err";
-            if(oper=="between") data2 = substr_SS(in,"between", ";");
+            string data1 = substr_SS(in, oper, ";"), data2="/err";
+            if(oper=="between"){
+                data1 = substr_SS(in,"between", "and");
+                data2 = substr_SS(in,"and", ";");
+            }
+            removeSpaces_fromStart_andEnd(data1);
+            removeSpaces_fromStart_andEnd(data2);
           
             vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows, oper, data2);
+            noErr=Tables[table_i].find_Rows_by_value(data1, col_i, foundRows, oper, data2);
             if(noErr){
                 Tables[table_i].deleteRows(foundRows);
             }
@@ -357,22 +369,26 @@ bool Database::UPDATE(string in){
         in-=(tableName+" set ");
         string oper = take_the_N_nextWord(in, "where", 2), data2between="/err";
         if(oper=="between") data2between=substr_SS(in,"between",";");
-        else data2between="/err";
         string colToSearch= take_the_N_nextWord(in, "where", 1);
         int col_index;
         noErr=((col_index=table.get_col_index(colToSearch))!=-1);
 
         if(noErr){
-            string searchData = take_the_N_nextWord(in, "where", 3);
+            string searchData=in-substr_SS(in, "", "where");
+            if(oper=="between"){
+                searchData=substr_SS(searchData, "between", "and");
+            } else{
+                searchData=substr_SS(searchData, oper,";");
+            }
+            removeSpaces_fromStart_andEnd(searchData);
             /*string searchData= substr_SS(in, colToSearch, ";");
             searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
             replace_chars(searchData, {' '}, -1);*/
 
             vector<int> foundRows;
             noErr=table.find_Rows_by_value(searchData, col_index, foundRows, oper, data2between);
-            in-=(substr_SS(in, " where", ";") + ";");
+            in-=(substr_SS(in, " where", ";", false, true) + ";");
             if(noErr){
-                replace_chars(in, {' '}, -1);
                 vector<string> updateData;
                 while( !in.empty() ){
                     string tmp= substr_CC(in, 0, 1, ' ', ',');
@@ -382,15 +398,16 @@ bool Database::UPDATE(string in){
                     }
                     in-=tmp;
                     if(tmp.find(',')){ tmp-=","; }
+                    replace_chars(tmp, {' '}, -1);
                     updateData.push_back(tmp);
 
                 }
                 noErr= table.set_UPDATE_data(updateData, foundRows);
 
                 if(noErr and !table.ForeignTables.empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
-            } else{
-                cerr<<"No row containing"<<searchData<<"was found!";
-            }
+            } /*else{
+                cerr<<endl<<"No row containing"<<searchData<<"was found!";
+            }*/
 
         } else{
             cerr<<endl<<"No column "<<colToSearch<<"was found!";
@@ -418,40 +435,52 @@ bool Database::PRINT(string in) {
         vector <string> colNames;
         string tmp;
         bool exit=true;
-        do{
-            tmp= substr_CC(in, 0, 1, ' ', ',');
-            if(tmp=="/err") {
-                tmp=in.substr(0,in.find("from")-1);
-                if(num_of_words(tmp)==1) {
-                    in-=(tmp+" ");
+        if(in.substr(0,in.find("from")).find("*")!=-1) colNames={"*"};
+        else {
+            do {
+                tmp = substr_CC(in, 0, 1, ' ', ',');
+                if (tmp == "/err") {
+                    tmp = in.substr(0, in.find("from") - 1);
+                    if (num_of_words(tmp) == 1) {
+                        in -= (tmp + " ");
+                        colNames.push_back(tmp);
+                    } else {
+                        exit = false;
+                    }
+                } else {
+                    in -= (tmp + "," + " ");
                     colNames.push_back(tmp);
-                }else  {
-                    exit=false;
                 }
-            }
-            else {
-                in-=(tmp+","+" ");
-                colNames.push_back(tmp);
-            }
-        }while(exit);
-
+            } while (exit);
+        }
         if(in.find("order by")!=-1){
-            if(in.find("desc")!=-1) orden = 1;
-            else if(in.find("asc")!=-1) orden = -1;
+            if(in.find("asc")!=-1) orden = 1;
+            else if(in.find("desc")!=-1) orden = -1;
             colToOrder = take_the_N_nextWord(in, "by", 1);
         }
 
-        if(in.find("*")!=-1){
+        if(in.find("*")!=-1 and in.find("where")==-1){
             table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
-            string oper = take_the_N_nextWord(in,"where", 2), data2="/err";
-            if(oper=="between") data2 = take_the_N_nextWord(in,"where", 4);
-            vec = {take_the_N_nextWord(in,"where", 1), oper, take_the_N_nextWord(in,"where", 3), data2};
+            string oper = take_the_N_nextWord(in,"where", 2), data2="/err", data1="/err";
+            if(oper=="between"){
+                data1 = substr_SS(in, "between", "and");
+                data2 = substr_SS(in, "and", "order");
+                if(data2=="/err"){ data2 = substr_SS(in, "and", ";"); }
+                removeSpaces_fromStart_andEnd(data2);
+            } else{
+                data1 = substr_SS(in, oper, "order");
+                if(data1=="/err"){ data1 = substr_SS(in, oper, ";"); }
+            }
+            removeSpaces_fromStart_andEnd(data1);
+
+            vec = {take_the_N_nextWord(in,"where", 1), oper, data1, data2};
             table.printCols(colNames, vec, colToOrder, orden);
         }else{
             table.printCols(colNames, vec, colToOrder, orden);
         }
     }
+    cout<<endl;
     return noErr;
 }
 
@@ -608,10 +637,10 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 noErr = process_command(command, quit);
                 if (!noErr) {
                     if (endLine_i == startLine_i) {
-                        cerr << endl << "Error at line " << startLine_i;
+                        cerr << endl << "Error at line " << startLine_i+1;
                     } else {
-                        cerr << endl << "Error from line " << startLine_i
-                             << " to line " << endLine_i << "!";
+                        cerr << endl << "Error from line " << startLine_i+1
+                             << " to line " << endLine_i+1 << "!";
                     }
                 }
                 if(quit){

@@ -7,10 +7,16 @@ using namespace std;
 
 
 int main(){
-    string a = "ciao";
-    a.erase(2,2);
-    string b = "from ciao where";
-    b=substr_from_s_to_s(b, "from", "where", false, true);
+    string a="asasas -dsdasfsdfgò-  - dfgj  -dsfsdfsdf- jgd";
+    bool b;
+    a=remove_content(a, '-', '-', b);
+    b=true;
+    for(int i=0; b; i++){
+        cout<<i;
+        b= false;
+    }
+    cout<<" ciao";
+
 
     return 0;
 }

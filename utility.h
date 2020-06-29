@@ -152,6 +152,7 @@ void operator -=(string & minuend, const string & subtrahend){
 string substr_SS(string in, string s1, string s2, const bool & reverse= false, bool fromZero= false){
     int start, end;
     //int shift = 1;
+    if(s1.empty()){ start=0; }
     int shift = s1.size();
     if(fromZero){ shift=0; }
 
@@ -176,32 +177,34 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
     }
 } /** O(9n) */
 
+bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
+
 int num_of_words(string in){
     int num=0, i=0, k=0, end=in.size()-1;
 
-    for(; !isalpha(in[end]); end--){} /** O(in.size()) --> O(x) */
+    for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
     end++;
     in=in.substr(0, end); /** O(n) */
     in.push_back(' ');
 
-    if(!isalpha(in[0]) and !isalpha(in[in.size()-1])){ /** O(2x) */
+    if(!isalphanum(in[0]) and !isalphanum(in[in.size()-1])){ /** O(2x) */
         i++;
         k++;
     }
 
     for(; i<in.size()-k; i++){ /** O(x) */
-        for(; isalpha(in[i]); i++){} /** O(x) */
-        if(i!=0 and isalpha(in[i-1])){ /** O(x) */
+        for(; isalphanum(in[i]); i++){} /** O(x) */
+        if(i!=0 and isalphanum(in[i-1])){ /** O(x) */
             num++;
         }
     }/** O(2x^2) */
-    if(num==0 and isalpha(in[in.size()-1])){ num++; } /** O(x) */
+    if(num==0 and isalphanum(in[in.size()-1])){ num++; } /** O(x) */
 
     char characters[2]={'_', '-'};
     while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
         for(const char & ch: characters){ /** O(x) */
             int pos=in.find(ch); /** O(n) */
-            if(pos!=-1 and isalpha(in[pos-1]) and isalpha(in[pos+1])){ /** O(2x) */
+            if(pos!=-1 and isalphanum(in[pos-1]) and isalphanum(in[pos+1])){ /** O(2x) */
                 num--;
                 in[pos]=' ';
             }
@@ -389,7 +392,10 @@ template<typename type> void deleteElements_from_vec(vector<type> & minuend, con
 string take_the_N_nextWord(const string & in, string before, int N){
     string tmp, after;
     stringstream iss(in);
-    if(in.find(before)==in.npos){ /** O(n) */
+    if(before.empty()){
+        before=substr_CC(in, 0, 1, 0, ' ');
+        replace_chars(before, {' '}, -1);
+    } if(in.find(before)==in.npos){ /** O(n) */
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
@@ -430,6 +436,33 @@ string replace_content(string in, const char & start, const char & end, const ch
     }
     return in;
 } /** O(xn^2) */
+
+string remove_content(string & in, const char & start, const char & end, bool & noErr){
+    noErr=true;
+    int i=in.find(start)+1;
+    bool kill=true;
+
+    bool tmp;
+    if(start!=end){
+        tmp=(character_counter(in, start)+character_counter(in,end))%2==0;
+    }else{
+        tmp=character_counter(in, start)%2==0;
+    }
+
+    if(tmp) {
+        for (; i < in.size() and i != 0; i++) {
+            if (kill and in[i] != end) {
+                in[i] = ' ';
+            } else if (in[i] == end and kill) {
+                kill = false;
+            } else if (!kill and in[i] == start) {
+                kill = true;
+            }
+        }
+    } else noErr=false;
+
+    return in;
+}
 
 void operator>>(const string & str, vector<string> & vec){
     vec.resize(0);

@@ -51,7 +51,7 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
         noErr = false;
         for (int i=0; i<elementsNames.size() and !noErr; i++) {
             string tmp=elementsNames[i];
-            if (tolower(key) == tolower(tmp)) { noErr = true; primaryKey_index=i; }
+            if (key == tmp) { noErr = true; primaryKey_index=i; }
         }
     }
 
@@ -226,7 +226,7 @@ int Table::find_col_by_name(string in) {
     bool found=false;
     for(; i<elementsNames.size() and !found; i++){
         string tmp=elementsNames[i];
-        if(tolower(tmp)==tolower(in)){
+        if(tmp==in){
             found=true;
         }
     }
@@ -443,7 +443,7 @@ int Table::get_col_index(const string & in){ //returns -1 if no element with tha
     return index;
 }
 
-bool Table::find_Rows_by_value(const string &data1, const int & col_i, vector<int> &foundRows, const string & op, const string &data2="/err") {
+bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &foundRows, const string & op, string data2= "/err") {
     bool noErr=true;
     const string & type=elementsTypes[col_i];
     noErr=check_data_consistence(data1, type);
@@ -505,6 +505,16 @@ bool Table::find_Rows_by_value(const string &data1, const int & col_i, vector<in
             }
         } else if (elementsTypes[col_i] == "string" or elementsTypes[col_i] == "text") {
             vector<string> tmp = (*static_cast<Column<string> *>(cols[col_i])).values;
+            /**data1.resize(data1.size()-1);
+            reverse(data1.begin(),data1.end());
+            data1.resize(data1.size()-1);
+            reverse(data1.begin(),data1.end());
+
+            data2.resize(data2.size()-1);
+            reverse(data2.begin(),data2.end());
+            data2.resize(data2.size()-1);
+            reverse(data2.begin(),data2.end());*/
+
             for (int i = 0; i < tmp.size(); i++) {
                 if (op == "=" and tmp[i] == data1)
                     foundRows.push_back(i);
@@ -570,13 +580,17 @@ bool Table::find_Rows_by_value(const string &data1, const int & col_i, vector<in
 
     if(foundRows.empty()){
         noErr=false;
-        cerr<<"No row containing \""<<data1<<"\" was found!";
+        cerr<<endl<<"No row containing \""<<data1<<"\"";
+        if(data2!="/err") cerr<<" or \""<<data2<<"\" were";
+        else cerr<<" was";
+        cerr<<" found";
     }
 
     return noErr;
 }
 
 void Table::deleteRows(const vector<int> & Rows){
+    rows-=Rows.size();
     for (int j=0; j<elementsTypes.size(); j++) {
         if(elementsTypes[j]=="int"){
             Column<int> & vec=(*static_cast<Column<int>*>(cols[j]));
@@ -665,6 +679,7 @@ void Table::empty_content(){
             tmp.valuesNullity.clear();
         }
     }
+    rows=0;
 }
 
 bool Table::get_rows_by_data(const int & col_i, const string & searchData, vector<int> & foundRows){

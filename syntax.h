@@ -12,7 +12,7 @@ const vector <string> allowed_coms={
         "drop table",
         "truncate table",
         "insert into",
-        "delete",
+        "delete from",
         "update",
         "select",
         "quit()"
@@ -46,7 +46,8 @@ const vector <string> keyWords={
         "asc",
         "foreign key",
         "references",
-        "between"
+        "between",
+        "and"
 };
 
 vector <string> possibleOperators={
@@ -63,7 +64,7 @@ string take_command(string & in){
     bool err=true; string tmp;
 
     int start_i=0;
-    while(!isalpha(in[start_i])){ start_i++; }
+    while(!isalphanum(in[start_i])){ start_i++; }
     in=in.substr(start_i,in.size());
 
     vector <string> dictionary;
@@ -207,6 +208,9 @@ bool control_insert(string in){
     noErr&=(num_of_words(substr_CC(in, 0, 1, ' ', '(')));
     noErr= noErr and (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2);
     noErr= noErr and (in[in.size()-2]==')');
+    noErr= noErr and (character_counter(in,'\"')%2==0);
+    if(noErr) remove_content(in, '\"', '\"', noErr);
+
 
     if(noErr){
         string no_content= replace_content(in, '(', ')');
@@ -262,15 +266,15 @@ bool control_delete(string in){
     string tmp, s;
     bool noErr=true;
     if(in[in.size()-1]!=';'){ noErr=false; }
-    if(substr_CC(in, 1, 2) != "where"){ noErr =false; }
+    if(take_the_N_nextWord(in, "", 1) != "where"){ noErr =false; }
     if (noErr){
         noErr=false;
         for(string oper: possibleOperators){
             if((tmp = take_the_N_nextWord(in, "where", 2))==oper){
                 noErr=true;
-                if(tmp=="between" and take_the_N_nextWord(in, "where", 4) != "and"){
-                    noErr=false;
-                }
+                if(tmp=="between" and in.find("and") != -1){
+                    if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
+                } else noErr = false;
             }
         }
     }
@@ -282,28 +286,32 @@ bool control_delete(string in){
 
 bool control_update(string in){
     bool noErr=(in[in.size()-1]==';'), exit=false;
+    if(noErr) remove_content(in, '\"', '\"', noErr);
     if(noErr){
         int tmp, tmp2;
         string setRow;
         if(in.find("set")!=-1)  noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
         else noErr=false;
         if(noErr){
-            in=in.substr(tmp+4, ((tmp+4)-(in.size()-1)));
+            in-=in.substr(0,in.find(take_the_N_nextWord(in,"", 2)));
             if(in.find("where")!=-1)   {
-                setRow = substr_SS(in, 0, "where",false,true);
+                setRow = substr_SS(in, "", "where",false,true);
                 in-=setRow;
             }
             else noErr=false;
             if(noErr){
-                if((tmp=character_counter(setRow, '=') == 2*(tmp2=character_counter(setRow, ','))) or (tmp==1 and tmp2==0) and tmp){
+                tmp=character_counter(setRow, '=');
+                tmp2=character_counter(setRow, ',');
+                if(tmp-1 == tmp2){
                     setRow += ',';
                     char c='=';
-                    do{
-                        string data1= substr_CC(setRow, 0, 1, ' ', c);
+                    while(!exit and setRow!=","){
+                        string data1 = substr_CC(setRow, 0, 1, ' ', c);
                         exit=!(noErr=(num_of_words(data1)==1));
-                        setRow-=data1+' ';
+                        if(character_counter(data1, '"')==2){ exit=!(noErr=true); }
+                        setRow-=data1;
                         c = (c=='=') ? ',' : '=';
-                    }while(!exit);
+                    }
                 }
                 else noErr=false;
 
@@ -337,8 +345,7 @@ bool control_select(string in){
     string s;
     string tmp=" ";
     if(noErr){
-        in-=";";
-        if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1) {
+        if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1 or tmp.find("*")!=-1) {
             in-=tmp;
             if(in.find("where") != in.npos and num_of_words(substr_SS(in, "from", "where")) == 1){
                 bool exit=false;
@@ -348,7 +355,7 @@ bool control_select(string in){
                         if(num_of_words(substr_SS(in,"where",oper))!=1) noErr=false;
                         else if(oper=="between"){
                             if(in.find("and")!=-1){
-                                if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
+                                if(num_of_words(s=substr_SS(in,"and",";"))==0 or num_of_words(substr_SS(in,"between","and"))==0) noErr=false;
                             } else noErr=false;
                         }
                     }
@@ -364,7 +371,7 @@ bool control_select(string in){
                                 tmp = take_the_N_nextWord(tmp, "by", 2);
                                 if (tmp != "asc" and tmp != "desc") noErr = false;
                             } else noErr = false;
-                        } else noErr = false;
+                        }
                     } else if (num_of_words(in) < 2) noErr = false;
                 }
             }

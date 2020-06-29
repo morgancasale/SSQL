@@ -30,7 +30,7 @@ int main(){
     choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'h');";
     d4.process_command(choice, quit);
 
-    choice="SELECT number, name, price, car FROM phone WHERE car between 'p' and 'c' order by number asc;";
+    choice="SELECT number, name, price, car FROM phone WHERE car between 'c' and 'r' order by number asc;";
     d4.process_command(choice, quit);
 
     return 0;
