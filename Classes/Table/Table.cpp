@@ -1,7 +1,7 @@
 #include <memory>
 #include "Table.h"
 
-template<typename type>
+/*template<typename type>
 void Column<type>::printCol_to_file(ofstream & out) {
     out<<key<<" ";
     out<<not_null<<" ";
@@ -16,9 +16,9 @@ void Column<type>::printCol_to_file(ofstream & out) {
         out<<nullity<<" ";
     }
     out<<endl;
-}
+}*/
 
-bool Table::set_Table(string in){
+bool Table::set_Table(const string &in){
     bool noErr=true;
     vector<string> data = get_CREATE_data(in);
     noErr = control_CREATE_data(data);
@@ -49,7 +49,6 @@ bool Table::find_check_primaryKey(const string & in){ //controlla se la chiave p
 
     if(noErr) {
         noErr = false;
-        int i=0;
         for (int i=0; i<elementsNames.size() and !noErr; i++) {
             string tmp=elementsNames[i];
             if (tolower(key) == tolower(tmp)) { noErr = true; primaryKey_index=i; }
@@ -66,12 +65,12 @@ bool Table::check_key(const string &key, const bool &existence) { //controlla se
     bool noErr = true;
     bool existenceErr = false;
     if(key=="/err"){ noErr=false; }
-    for(int i=0; i<allowed_coms.size(); i++){ if(key==allowed_coms[i]){ noErr=false; } }
+    for(const auto & allowed_com : allowed_coms){ if(key==allowed_com){ noErr=false; } }
     if(noErr){
-        for(int i=0; i<allowed_types.size(); i++){ if(key==allowed_types[i]){ noErr=false; } }
+        for(const auto & allowed_type : allowed_types){ if(key==allowed_type){ noErr=false; } }
     }
     if(noErr and !existence){
-        for(int i=0; i<elementsNames.size(); i++){ if(key==elementsNames[i]){ noErr=false; existenceErr=true; } }
+        for(auto & elementsName : elementsNames){ if(key==elementsName){ noErr=false; existenceErr=true; } }
     }
 
 
@@ -332,8 +331,8 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     //Column<string> & col=(*static_cast<Column<string> *>(cols[0]));
     bool fillErr=false, autoIncrAndNotNullErr=false;
     vector<string> elements=elementsNames;
-    for(int i=0; i<elements.size(); i++){ tolower(elements[i]);}
-    for(int i=0; i<filled_elements.size(); i++){ tolower(filled_elements[i]); }
+    for(auto & element : elements){ tolower(element);}
+    for(auto & filled_element : filled_elements){ tolower(filled_element); }
     vector<string> notFilled= elements - filled_elements;
 
     for(const string & emptyElement: notFilled){
@@ -577,37 +576,37 @@ bool Table::find_Rows_by_value(const string &data1, const int & col_i, vector<in
     return noErr;
 }
 
-void Table::deleteRows(const vector<int> & rows){
+void Table::deleteRows(const vector<int> & Rows){
     for (int j=0; j<elementsTypes.size(); j++) {
         if(elementsTypes[j]=="int"){
             Column<int> & vec=(*static_cast<Column<int>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="float"){
             Column<float> & vec=(*static_cast<Column<float>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="char"){
             Column<char> & vec=(*static_cast<Column<char>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="string" or elementsTypes[j]=="text"){
             Column<string> & vec=(*static_cast<Column<string>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="date"){
             Column<Date> & vec=(*static_cast<Column<Date>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
         if(elementsTypes[j]=="time"){
             Column<Time> & vec=(*static_cast<Column<Time>*>(cols[j]));
-            deleteElements_from_vec(vec.values, rows);
-            deleteElements_from_vec(vec.valuesNullity, rows);
+            deleteElements_from_vec(vec.values, Rows);
+            deleteElements_from_vec(vec.valuesNullity, Rows);
         }
     }
 }
