@@ -7,10 +7,16 @@ using namespace std;
 
 
 int main(){
-    string a = "ciao";
-    a.erase(2,2);
-    string b = "primary key(name) )";
-    b.erase(18,1);
+    string a="asasas -dsdasfsdfgò-  - dfgj  -dsfsdfsdf- jgd";
+    bool b;
+    a=remove_content(a, '-', '-', b);
+    b=true;
+    for(int i=0; b; i++){
+        cout<<i;
+        b= false;
+    }
+    cout<<" ciao";
+
 
     return 0;
 }

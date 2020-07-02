@@ -5,10 +5,20 @@
 
 class Database {
 public:
+    bool process_command(string choice, bool &quit);
+
+    bool START();
+
+    bool readCommands_from_file(const string &filepath, bool &quit);
+
     vector<Table> Tables;
-    vector<string> TablesNames;
-    bool process_command(string choice);
-    static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
+
+    Database() = default;
+    ~Database()=default;
+private:
+
+
+    //static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
 
     bool check_Table_existence(const string &in_Table_name, const bool & check_existence);
 
@@ -18,10 +28,6 @@ public:
     bool PRINT(string in);
 
     int find_Table(string in);
-
-    Database() = default;
-
-    ~Database()=default;
 
     static bool get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
 
@@ -33,7 +39,7 @@ public:
 
     bool UPDATE(string in);
 
-    bool START();
+
 
     void QUIT();
 
@@ -43,7 +49,7 @@ public:
 
     bool checkForeignKeys(const Table &table, int row=-1);
 
-    bool readCommands_from_file(const string &filepath);
+
 };
 
 

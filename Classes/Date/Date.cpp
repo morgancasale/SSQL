@@ -24,6 +24,8 @@ bool Date::compare_date(const Date &d2) const &{
 }
 bool Date::operator >(const Date &d2) const &{ return compare_date(d2); }
 bool Date::operator <(const Date &d2) const &{ return !compare_date(d2); }
+bool Date::operator >=(const Date &d2) const &{ return (compare_date(d2) or equal_date(d2)); }
+bool Date::operator <=(const Date &d2) const &{ return (!compare_date(d2) or equal_date(d2)); }
 
 void Date::set_day(const int &d) {
     bool day_err=false;

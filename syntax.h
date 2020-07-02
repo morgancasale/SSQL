@@ -12,7 +12,7 @@ const vector <string> allowed_coms={
         "drop table",
         "truncate table",
         "insert into",
-        "delete",
+        "delete from",
         "update",
         "select",
         "quit()"
@@ -45,14 +45,26 @@ const vector <string> keyWords={
         "desc",
         "asc",
         "foreign key",
-        "references"
+        "references",
+        "between",
+        "and"
+};
+
+vector <string> possibleOperators={
+        "=",
+        "<",
+        ">",
+        "<=",
+        ">=",
+        "<>",
+        "between"
 };
 
 string take_command(string & in){
     bool err=true; string tmp;
 
     int start_i=0;
-    while(!isalpha(in[start_i])){ start_i++; }
+    while(!isalphanum(in[start_i])){ start_i++; }
     in=in.substr(start_i,in.size());
 
     vector <string> dictionary;
@@ -85,25 +97,25 @@ bool control_create(string in){
         string line, foreignKeys;
         int end2 = in.find(");");
         if (in.find("foreign key") != -1) {
-            foreignKeys = substr_from_s_to_s(in, "foreign key", ");", false, true);
+            foreignKeys = substr_SS(in, "foreign key", ");", false, true);
             in -= ", " + foreignKeys;
         }
         bool flag = true;
         if (end2 != in.npos and !err) {//this checks if there is the final substring ");" somewhere
             for (int i = 0; i < end2 and !err and
                             flag; i++) { //this checks if every input starts with a space end ends with a ',', it considers input of two and three letters
-                line = substrcc(in, 2, 1, ' ', ',');
+                line = substr_CC(in, 2, 1, ' ', ',');
                 if (num_of_words(line) > 5) {
                     err = true;
                 }
                 if (line == "/err" and !err) {
-                    line = substrcc(in, 2, 2, ' ', ')');
-                    string tmp_str=substrcc(line, 0, 1, ' ', '(');
+                    line = substr_CC(in, 2, 2, ' ', ')');
+                    string tmp_str= substr_CC(line, 0, 1, ' ', '(');
                     if (num_of_words(tmp_str) > 2) {
                         err = true;
                     }
                     in -= line;
-                    string tmp = substrcc(in, 1, 1, '(', ';');
+                    string tmp = substr_CC(in, 1, 1, '(', ';');
                     replace_chars(tmp, {' '}, -1);
 
                     flag = (tmp != ")");
@@ -113,27 +125,27 @@ bool control_create(string in){
             }
             while (!err and !foreignKeys.empty()) {
                 bool noErr = true;
-                line = substrcc(foreignKeys, 0, 1, ' ', ',');
+                line = substr_CC(foreignKeys, 0, 1, ' ', ',');
                 while (!foreignKeys.empty()) {
                     line += ",";
                     if (line == "/err,") {
-                        line = substrcc(foreignKeys, 0, -1);
+                        line = substr_CC(foreignKeys, 0, -1);
                     }
                     noErr = (line.find("foreign key") != -1 and line.find("references") != -1);
                     if (noErr) {
                         noErr = (num_of_chars(line, '(') == 2 and num_of_chars(line, ')') == 2);
                         if (noErr) {
-                            string tmp_str = substrcc(line, 1, 1, '(', ')');
+                            string tmp_str = substr_CC(line, 1, 1, '(', ')');
                             noErr = (num_of_words(tmp_str) == 1);
                             if (noErr) {
-                                tmp_str = substrcc(line, 2, 2, '(', ')');
+                                tmp_str = substr_CC(line, 2, 2, '(', ')');
                                 noErr = (num_of_words(tmp_str) == 1);
                                 if (noErr) {
-                                    string ref = substrcc(line, 1, -1, ')', ' ');
-                                    tmp_str = substrcc(ref, 0, 1, ' ', '(');
+                                    string ref = substr_CC(line, 1, -1, ')', ' ');
+                                    tmp_str = substr_CC(ref, 0, 1, ' ', '(');
                                     noErr = (num_of_words(tmp_str) == 2);
                                     if (noErr) {
-                                        tmp_str = substrcc(ref, 1, 1, '(', ')');
+                                        tmp_str = substr_CC(ref, 1, 1, '(', ')');
                                         noErr = (num_of_words(tmp_str) == 1);
                                     }
                                 }
@@ -141,7 +153,7 @@ bool control_create(string in){
                         }
                     }
                     foreignKeys -= line;
-                    line = substrcc(foreignKeys, 0, 1, ' ', ',');
+                    line = substr_CC(foreignKeys, 0, 1, ' ', ',');
                 }
                 err = !noErr;
             }
@@ -193,9 +205,12 @@ bool control_insert(string in){
     //controlla se ci sia il termine "values", un ';' alla fine, che ci sia solo una parola
     //tra insert e la parentesi, che ci siano solo 2 '(' e 2 ')' e che l'ultimo carattere sia ')'
     noErr= (in.find("values")!=in.npos and in[in.size()-1]==';');
-    noErr&=(num_of_words(substrcc(in, 0, 1, ' ', '(')));
+    noErr&=(num_of_words(substr_CC(in, 0, 1, ' ', '(')));
     noErr= noErr and (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2);
     noErr= noErr and (in[in.size()-2]==')');
+    noErr= noErr and (character_counter(in,'\"')%2==0);
+    if(noErr) remove_content(in, '\"', '\"', noErr);
+
 
     if(noErr){
         string no_content= replace_content(in, '(', ')');
@@ -220,13 +235,13 @@ bool control_insert(string in){
                 else {
                     //elimino le stringhe per non causare problemi al contatore dopo
                     for (int i = 0; i < character_counter(secondLine, '"'); i++) {
-                        string toErase = "\"" + substrcc(secondLine, 1, 2, '"', '"') + "\"";
+                        string toErase = "\"" + substr_CC(secondLine, 1, 2, '"', '"') + "\"";
                         erase_substr(secondLine, toErase);
                     }
 
                     //elimino i caratteri per non causare problemi al contatore dopo
                     for (int i = 0; i < character_counter(secondLine, 39); i++) {
-                        string toErase = substrcc(secondLine, 1, 2, 39, 39);
+                        string toErase = substr_CC(secondLine, 1, 2, 39, 39);
                         if (toErase.size() != 1) { noErr = false; }
                         else { //controlla se la stringa presa tra le virgolette è di un solo carattere
                             toErase = "'" + toErase + "'";
@@ -248,9 +263,21 @@ bool control_insert(string in){
 }
 
 bool control_delete(string in){
+    string tmp, s;
     bool noErr=true;
-    if(in[in.size()-1]!=';' or in.find("=")==-1){ noErr=false; }
-    if(substrcc(in, 1, 2) != "where"){ noErr =false; }
+    if(in[in.size()-1]!=';'){ noErr=false; }
+    if(take_the_N_nextWord(in, "", 1) != "where"){ noErr =false; }
+    if (noErr){
+        noErr=false;
+        for(string oper: possibleOperators){
+            if((tmp = take_the_N_nextWord(in, "where", 2))==oper){
+                noErr=true;
+                if(tmp=="between" and in.find("and") != -1){
+                    if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
+                } else noErr = false;
+            }
+        }
+    }
     if(!noErr){
         cerr<<endl<<"DELETE command syntax error!";
     }
@@ -258,38 +285,112 @@ bool control_delete(string in){
 }
 
 bool control_update(string in){
-    bool noErr=(in[in.size()-1]==';');
+    bool noErr=(in[in.size()-1]==';'), exit=false;
+    if(noErr) remove_content(in, '\"', '\"', noErr);
     if(noErr){
-        int tmp;
-        noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
+        int tmp, tmp2;
+        string setRow;
+        if(in.find("set")!=-1)  noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
+        else noErr=false;
         if(noErr){
-            in=in.substr(tmp+4, ((tmp+4)-(in.size()-1)));
-            noErr=(in.find("where")!=-1);
+            in-=in.substr(0,in.find(take_the_N_nextWord(in,"", 2)));
+            if(in.find("where")!=-1)   {
+                setRow = substr_SS(in, "", "where",false,true);
+                in-=setRow;
+            }
+            else noErr=false;
             if(noErr){
-                for(; in.find("where")!=0 and noErr;){
-                    string data1= substrcc(in, 0, 1, ' ', '=');
-                    noErr=(num_of_words(data1)==1);
-
-                    string data2= substrcc(in, 1, 1, '=', ',');
-                    data2+=",";
-                    if(data2=="/err,"){
-                        data2= substr_from_s_to_s(in, "=", " where");
-                    }
-
-                    if(noErr){
-                        in-=(data1+"="+data2+" ");
+                tmp=character_counter(setRow, '=');
+                tmp2=character_counter(setRow, ',');
+                if(tmp-1 == tmp2){
+                    setRow += ',';
+                    char c='=';
+                    while(!exit and setRow!=","){
+                        string data1 = substr_CC(setRow, 0, 1, ' ', c);
+                        exit=!(noErr=(num_of_words(data1)==1));
+                        if(character_counter(data1, '"')==2){ exit=!(noErr=true); }
+                        setRow-=data1;
+                        c = (c=='=') ? ',' : '=';
                     }
                 }
+                else noErr=false;
+
                 if(noErr){
-                    in-="where ";
-                    string data= substrcc(in, 0, 1, ' ', '=');
-                    noErr=(num_of_words(data) == 1);
+                    exit=false;
+                    for(string oper: possibleOperators){
+                        if(take_the_N_nextWord(in, "where", 2)==oper){
+                            exit=true;
+                            if(num_of_words(substr_SS(in,"where",oper))!=1) noErr=false;
+                            else if(oper=="between"){
+                                if(in.find("and")!=-1){
+                                    if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
+                                } else noErr=false;
+                            }
+                        }
+                    }
+                    if(!exit) noErr=false;
                 }
             }
         }
     }
     if(!noErr){
         cerr<<endl<<"UPDATE command syntax error!";
+    }
+    return noErr;
+}
+
+bool control_select(string in){
+    bool noErr=(in[in.size()-1]==';');
+    int c=0;
+    string s;
+    string tmp=" ";
+    if(noErr){
+        if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1 or tmp.find("*")!=-1) {
+            in-=tmp;
+            if(in.find("where") != in.npos and num_of_words(substr_SS(in, "from", "where")) == 1){
+                bool exit=false;
+                for(string oper: possibleOperators){
+                    if(take_the_N_nextWord(in, "where", 2)==oper){
+                        exit=true;
+                        if(num_of_words(substr_SS(in,"where",oper))!=1) noErr=false;
+                        else if(oper=="between"){
+                            if(in.find("and")!=-1){
+                                if(num_of_words(s=substr_SS(in,"and",";"))==0 or num_of_words(substr_SS(in,"between","and"))==0) noErr=false;
+                            } else noErr=false;
+                        }
+                    }
+                }
+                if(!exit) noErr=false;
+
+                if(noErr) {
+                    in -= "from" + substr_SS(in, "from", "where") + "where";
+                    if (num_of_words(in) > 2) {
+                        if (in.find("order by") != in.npos) {
+                            tmp = in.substr(in.find("order by"), in.size() - in.find("order by"));
+                            if ((num_of_words(tmp)) == 4) {
+                                tmp = take_the_N_nextWord(tmp, "by", 2);
+                                if (tmp != "asc" and tmp != "desc") noErr = false;
+                            } else noErr = false;
+                        }
+                    } else if (num_of_words(in) < 2) noErr = false;
+                }
+            }
+            else if(num_of_words(in) > 2){
+                if(in.find("order by") != in.npos){
+                    tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
+                    if(num_of_words(tmp)==4){
+                        tmp=take_the_N_nextWord(tmp, "by", 2);
+                        if(tmp!="asc" and tmp!="desc") noErr=false;
+                    }
+                }
+                else noErr=false;
+            }
+            else if(num_of_words(in) < 2) noErr=false;
+        }
+        else noErr=false;
+    }
+    if(!noErr){
+        cerr<<endl<<"SELECT command syntax error!";
     }
     return noErr;
 }
