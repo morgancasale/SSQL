@@ -15,9 +15,8 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
     int i=0;
     if(!Tables.empty()) {
         do {
-            string tmp=Tables[i].get_name();
-            string in_Table_nameCopy=in_Table_name;
-            if ( tmp == in_Table_nameCopy) {
+            string tmp=Tables[i].name;
+            if ( tmp == in_Table_name) {
                 not_exists = false;
             }
             i++;
@@ -111,22 +110,22 @@ bool Database::INSERT_INTO(string in){
 
     if(Table_i!=-1) {
         Table & table = Tables[Table_i];
-        //Column<string> & col=(*static_cast<Column<string> *>(table.cols[0]));
         Table tableBackup=table;
+        int tmp_rows=table.get_rows();
 
         vector<string> elementsNames;
         vector<string> elementsValues;
         err=!get_INSERT_INTO_data(in, elementsNames, elementsValues);
 
-        if(!err){ err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues); }
+        if(!err){ err=table.set_INSERT_INTO_data(elementsNames, elementsValues); }
         if(!err){
-            err= Tables[Table_i].checkINSERT_INTOData_and_Nullify(elementsNames);
+            err= table.checkINSERT_INTOData_and_Nullify(elementsNames);
         }
-        if(!err and !table.ForeignCols.empty()){ err=!checkForeignKeys(table); }
+        if(!err and !table.get_ForeignCols().empty()){ err=!checkForeignKeys(table); }
         if(!err){
-            Tables[Table_i].auto_increment_col();
+            table.auto_increment_col();
         }
-        Tables[Table_i].rows++;
+        table.set_rows(tmp_rows+1);
 
         if(err){
             table=tableBackup;
@@ -178,15 +177,15 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
 
 bool Database::checkForeignKeys(const Table &table, int row) {
     bool noErr=true;
-    for(int i=0; i<table.ForeignTables.size() and noErr; i++){
-        Table & ForeignTable=Tables[table.ForeignTables[i]];
-        int FCol_i=table.ForeignCols[i], ConCol_i=table.ConnectedCols[i];
+    for(int i=0; i<table.get_ForeignTables().size() and noErr; i++){
+        Table & ForeignTable=Tables[table.get_ForeignTables()[i]];
+        int FCol_i=table.get_ForeignCols()[i], ConCol_i=table.get_ConnectedCols()[i];
         string type;
-        if((type=ForeignTable.elementsTypes[FCol_i])==table.elementsTypes[ConCol_i]){
+        if((type=ForeignTable.get_elementsTypes()[FCol_i])==table.get_elementsTypes()[ConCol_i]){
             noErr=false;
             if(type=="int"){
-                const Column<int> & FCol=(*static_cast<Column<int>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<int> & ConCol=(*static_cast<Column<int>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<int> & FCol=(*static_cast<Column<int>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<int> & ConCol=(*static_cast<Column<int>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const int & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -194,13 +193,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="float"){
-                const Column<float> & FCol=(*static_cast<Column<float>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<float> & ConCol=(*static_cast<Column<float>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<float> & FCol=(*static_cast<Column<float>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<float> & ConCol=(*static_cast<Column<float>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const float & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -208,13 +207,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="char"){
-                const Column<char> & FCol=(*static_cast<Column<char>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<char> & ConCol=(*static_cast<Column<char>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<char> & FCol=(*static_cast<Column<char>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<char> & ConCol=(*static_cast<Column<char>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const char & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -222,13 +221,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="string" or type=="text"){
-                const Column<string> & FCol=(*static_cast<Column<string>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<string> & ConCol=(*static_cast<Column<string>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<string> & FCol=(*static_cast<Column<string>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<string> & ConCol=(*static_cast<Column<string>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const string & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -236,13 +235,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="date"){
-                const Column<Date> & FCol=(*static_cast<Column<Date>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<Date> & ConCol=(*static_cast<Column<Date>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<Date> & FCol=(*static_cast<Column<Date>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<Date> & ConCol=(*static_cast<Column<Date>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const Date & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -250,13 +249,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el.Date_to_string()<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="Time"){
-                const Column<Time> & FCol=(*static_cast<Column<Time>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<Time> & ConCol=(*static_cast<Column<Time>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<Time> & FCol=(*static_cast<Column<Time>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<Time> & ConCol=(*static_cast<Column<Time>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const Time & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -264,8 +263,8 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el.to_string()<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
 
@@ -281,7 +280,7 @@ int Database::find_Table(string in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
-        string tmp=Tables[i].get_name();
+        string tmp=Tables[i].name;
         if(tmp==in){
             found=true;
         }
@@ -335,9 +334,9 @@ bool Database::DROP_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        for(int i=table.elementsTypes.size(); i>0; i--){
-            table.clear_col(i);
-            table.elementsTypes.resize(table.elementsTypes.size()-1);
+        for(int i=table.get_elementsTypes().size(); i>0; i--){
+            table.delete_col(i);
+            table.get_elementsTypes().resize(table.get_elementsTypes().size()-1);
         }
         deleteElements_from_vec(Tables,{Table_i});
     }
@@ -353,7 +352,7 @@ bool Database::TRUNCATE_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        table.empty_content();
+        table.empty_Tablecontent();
     }
     return noErr;
 }
@@ -401,10 +400,11 @@ bool Database::UPDATE(string in){
                     replace_chars(tmp, {' '}, -1);
                     updateData.push_back(tmp);
 
+
                 }
                 noErr= table.set_UPDATE_data(updateData, foundRows);
 
-                if(noErr and !table.ForeignTables.empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
+                if(noErr and !table.get_ForeignTables().empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
             } /*else{
                 cerr<<endl<<"No row containing"<<searchData<<"was found!";
             }*/
@@ -564,7 +564,7 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
         data-=line;
 
         string thisTableElement= substr_CC(line, 1, 1, '(', ')');
-        int thisCol_i=thisTable.find_col_by_name(thisTableElement);
+        int thisCol_i= thisTable.get_col_index(thisTableElement);
         if(thisCol_i != -1){
             string foreignTableName = substr_CC(line, 4, 5);
             int foreignTable_i = find_Table(foreignTableName);
@@ -573,12 +573,21 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
                 Table & foreignTable=Tables[foreignTable_i];
 
                 string foreignTableElement= substr_CC(line, 2, 2, '(', ')');
-                int foreignCol_i=foreignTable.find_col_by_name(foreignTableElement);
+                int foreignCol_i= foreignTable.get_col_index(foreignTableElement);
 
                 if(foreignCol_i != -1){
-                    thisTable.ForeignTables.push_back(foreignTable_i);
-                    thisTable.ConnectedCols.push_back(thisCol_i);
-                    thisTable.ForeignCols.push_back(foreignCol_i);
+                    vector<int> tmp_ForeignTables=thisTable.get_ForeignTables();
+                    vector<int> tmp_ConnectedCols=thisTable.get_ConnectedCols();
+                    vector<int> tmp_ForeignCols=thisTable.get_ForeignCols();
+
+                    tmp_ForeignTables.push_back(foreignTable_i);
+                    tmp_ConnectedCols.push_back(thisCol_i);
+                    tmp_ForeignCols.push_back(foreignCol_i);
+
+                    thisTable.set_ForeignTables(tmp_ForeignTables);
+                    thisTable.set_ConnectedCols(tmp_ConnectedCols);
+                    thisTable.set_ForeignCols(tmp_ForeignCols);
+
                     line = substr_CC(data, 0, 1, ' ', ',');
                 } else{
                     cerr<<endl<<"Uncaught reference to a non existence Column in";
@@ -621,6 +630,7 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                     if(line=="\r"){
                         getline(in, line);
                         line_i++;
+                        startLine_i++;
                     }
                     if(line!="~"){
                         replace_chars(line, {'\r'}, -1);

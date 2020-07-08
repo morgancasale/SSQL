@@ -10,7 +10,7 @@ using namespace std;
 
 
 string tolower(string &in, int stop= -1){ //converts all upper letters of a string to lower ones
-    stop = ((stop<0)? in.size()-1 : stop); //if stop<0 takes all the string
+    stop = ((stop<0)? (int)in.size()-1 : stop); //if stop<0 takes all the string
     for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
     }
@@ -73,7 +73,7 @@ int character_counter(const string & in, char char_to_count){
     return counter;
 } /** O(in.size) --> O(x) */
 
-bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=true){
+bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & show_err=true){
     bool err=false;
 
     for(const char & tmp: c){
@@ -100,7 +100,7 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     return err;
 } /** O(xn) */
 
-string replace_chars(string &in, const vector<char> sub, const char &car) {
+string replace_chars(string &in, const vector<char> & sub, const char &car) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
@@ -121,7 +121,7 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
-        if (tmp.find(a)!=tmp.npos){
+        if (tmp.find(a)!=-1){
             string big=in.substr(tmp.find(a), a.size());
             while(big!=a and in.find(big)!=-1){
                 in.replace(in.find(big), a.size(), a); /** O(n^2) */
@@ -132,7 +132,7 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
     return remove_duplicate_chars(in, {' '}, false); /** O(3n) */
 } /** O(xn^2) */
 
-string erase_substr(string &in, string to_erase){
+string erase_substr(string &in, const string & to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size()); /** O(n) */
@@ -160,10 +160,10 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
         std::reverse(in.begin(), in.end()); /** O(n) */
         std::reverse(s1.begin(), s1.end()); /** O(n) */
         std::reverse(s2.begin(), s2.end()); /** O(n) */
-        start = in.find(s2) + shift; /** O(n) */
+        start = (int)in.find(s2) + shift; /** O(n) */
         end = in.find(s1); /** O(n) */
     } else{
-        start = in.find(s1) + shift; /** O(n) */
+        start = (int)in.find(s1) + shift; /** O(n) */
         end = in.find(s2); /** O(n) */
     }
 
@@ -180,7 +180,7 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
 bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
 
 int num_of_words(string in){
-    int num=0, i=0, k=0, end=in.size()-1;
+    int num=0, i=0, k=0, end=(int)in.size()-1;
 
     for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
     end++;
@@ -213,14 +213,6 @@ int num_of_words(string in){
 
     return num;
 } /** O(2n^2) */
-
-template<typename type> bool check_existence(const vector<type> &vec, const type &el){
-    bool found=false;
-    for(const type &x : vec){
-        if(x==el){ found=true; }
-    }
-    return found;
-}
 
 bool is_a_Time(const string & var){
     bool response=true;
@@ -381,8 +373,8 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
 } /** O(xy^2) */
 
 template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
-    for(int i=0; i<rows.size(); i++){ /** O(n) */
-        for(int k=rows[i]; k<minuend.size()-1; k++){ /** O(x) */
+    for(int k : rows){ /** O(n) */
+        for(; k<minuend.size()-1; k++){ /** O(x) */
             minuend[k]=minuend[k+1];
         }
         minuend.resize(minuend.size()-1);
@@ -395,7 +387,7 @@ string take_the_N_nextWord(const string & in, string before, int N){
     if(before.empty()){
         before=substr_CC(in, 0, 1, 0, ' ');
         replace_chars(before, {' '}, -1);
-    } if(in.find(before)==in.npos){ /** O(n) */
+    } if(in.find(before)==-1){ /** O(n) */
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
@@ -439,7 +431,7 @@ string replace_content(string in, const char & start, const char & end, const ch
 
 string remove_content(string & in, const char & start, const char & end, bool & noErr){
     noErr=true;
-    int i=in.find(start)+1;
+    int i=(int)in.find(start)+1;
     bool kill=true;
 
     bool tmp;
@@ -477,7 +469,7 @@ void operator>>(const string & str, vector<string> & vec){
 } /** O(n) */
 
 string removeSpaces_fromStart_andEnd(string & in){
-    int start=0, end=in.size()-1;
+    int start=0, end=(int)in.size()-1;
     for(; in[start]==' '; start++){} /** O(x) */
     for(; in[end]==' '; end--){} /** O(x) */
     in=in.substr(start, end-start+1);
@@ -503,6 +495,7 @@ vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
     }
     return output;
 }
+
 template <typename T>
 bool between(const T & in, const T & val1, const T & val2){
     if(val1 < val2){
@@ -515,5 +508,13 @@ bool between(const T & in, const T & val1, const T & val2){
         return (in == val2);
     } else return false;
 }
+
+/*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
+    bool found=false;
+    for(const type &x : vec){
+        if(x==el){ found=true; }
+    }
+    return found;
+}*/
 
 #endif
