@@ -787,41 +787,61 @@ void Table::printCols(vector <string> colSelection, const vector <string> & sear
     }
 
     rowsOrder.insert(rowsOrder.begin(), -1);
-
+    string tabs;
     for(int j: rowsOrder) {
         for (auto & colSelectedName : colSelection) {
             noErr = ((index = get_col_index(colSelectedName)) != -1);
             if (noErr) {
-                if(j==-1) {cout<<colSelectedName<<((elementsTypes[index]=="string" or elementsTypes[index]=="text")?"\t\t":"\t");}
+                if(j==-1) {
+                    tabs = elementsTypes[index]=="string" or elementsTypes[index]=="text"?"\t\t\t":"\t\t";
+                    tabs = colSelectedName.size()>=8 ? tabs-"\t" : tabs;
+                    cout<<colSelectedName<<tabs;
+                }
                 else {
                     string &type = elementsTypes[index];
                     if (type == "int") {
-                        vector<int> &values = (*static_cast<Column<int> *>(cols[index])).values;
-                        cout << values[j] << "\t";
+                        int &value = (*static_cast<Column<int> *>(cols[index])).values[j];
+                        tabs = (value > 9999999 or value < -999999)? "\t" : "\t\t";
+                        cout << value << tabs;
                     }
                     if (type=="float") {
-                        vector<float> & values = (*static_cast<Column<float> *>(cols[index])).values;
-                        cout << values[j] << "\t";
+                        float & value = (*static_cast<Column<float> *>(cols[index])).values[j];
+                        tabs = "\t\t";
+                        cout.precision(5);
+                        if(value > 99999 or (value < 0.0001 and value > 0))   cout.precision(2);
+                        if(value < -99999 or (value > -0.0001 and value < 0))  cout.precision(1);
+                        cout << value << tabs;
                     }
                     if (type=="char") {
-                        vector<char> &values = (*static_cast<Column<char> *>(cols[index])).values;
-                        cout << values[j] << "\t";
+                        char & value = (*static_cast<Column<char> *>(cols[index])).values[j];
+                        tabs = "\t\t";
+                        cout << value << tabs;
                     }
                     if (type=="string" or type=="text") {
-                        vector<string> &values = (*static_cast<Column<string> *>(cols[index])).values;
-                        cout << values[j] << (values[j].size()>=8?"\t":"\t\t");
+                        string & value = (*static_cast<Column<string> *>(cols[index])).values[j];
+
+                        if(value.size() >= 8){
+                            if(value.size() >= 16){
+                                if(value.size() >= 24) value = value.substr(0, 19) + "...\"";
+                                tabs="\t";
+                            }else   tabs="\t\t";
+                        } else tabs="\t\t\t";
+
+                        cout << value << tabs;
                     }
                     if (type=="date") {
-                        vector<Date> & values = (*static_cast<Column<Date> *>(cols[index])).values;
-                        cout << values[j].get_day()<<"/";
-                        cout << values[j].get_month()<<"/";
-                        cout << values[j].get_year()<<"\t";
+                        Date & value = (*static_cast<Column<Date> *>(cols[index])).values[j];
+                        tabs = "\t";
+                        cout << value.get_day()<<"/";
+                        cout << value.get_month()<<"/";
+                        cout << value.get_year()<<tabs;
                     }
                     if (type == "time") {
-                        vector<Time> &values = (*static_cast<Column<Time> *>(cols[index])).values;
-                        cout << values[j].get_hours()<<":";
-                        cout << values[j].get_minutes()<<":";
-                        cout << values[j].get_seconds()<<"\t";
+                        Time &value = (*static_cast<Column<Time> *>(cols[index])).values[j];
+                        tabs = "\t";
+                        cout << value.get_hours()<<":";
+                        cout << value.get_minutes()<<":";
+                        cout << value.get_seconds()<<tabs;
                     }
                 }
             } else {
