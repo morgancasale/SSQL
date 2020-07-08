@@ -15,9 +15,8 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
     int i=0;
     if(!Tables.empty()) {
         do {
-            string tmp=Tables[i].get_name();
-            string in_Table_nameCopy=in_Table_name;
-            if ( tolower(tmp) == tolower(in_Table_nameCopy)) {
+            string tmp=Tables[i].name;
+            if ( tmp == in_Table_name) {
                 not_exists = false;
             }
             i++;
@@ -42,6 +41,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
 bool Database::process_command(string choice, bool & quit) {
     bool noErr=true;  int j=0;
     string command=take_command(choice);
+
     if(command=="quit()"){
         quit=true;
         QUIT();
@@ -69,7 +69,7 @@ bool Database::process_command(string choice, bool & quit) {
             noErr=!INSERT_INTO(choice);
         }
     } else
-    if(command=="delete"){
+    if(command=="delete from"){
        if((noErr=control_delete(choice))){
            noErr=DELETE(choice);
        }
@@ -86,7 +86,8 @@ bool Database::process_command(string choice, bool & quit) {
     }
     return noErr;
 }
-bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
+
+/*bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
     bool err=true;
     for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
         if(((command= substr_CC(input, 0, 1, ' ')) == tmp) or ((command= substr_CC(input, 0, 2, ' ')) == tmp)){
@@ -97,7 +98,7 @@ bool Database::check_command(const string &input, const bool &show_error, string
         cerr<<"This command doesn't exist!";
     }
     return err;
-}
+}*/
 
 bool Database::INSERT_INTO(string in){
     bool err;
@@ -109,22 +110,22 @@ bool Database::INSERT_INTO(string in){
 
     if(Table_i!=-1) {
         Table & table = Tables[Table_i];
-        //Column<string> & col=(*static_cast<Column<string> *>(table.cols[0]));
         Table tableBackup=table;
+        int tmp_rows=table.get_rows();
 
         vector<string> elementsNames;
         vector<string> elementsValues;
         err=!get_INSERT_INTO_data(in, elementsNames, elementsValues);
 
-        if(!err){ err=Tables[Table_i].set_INSERT_INTO_data(elementsNames, elementsValues); }
+        if(!err){ err=table.set_INSERT_INTO_data(elementsNames, elementsValues); }
         if(!err){
-            err= Tables[Table_i].checkINSERT_INTOData_and_Nullify(elementsNames);
+            err= table.checkINSERT_INTOData_and_Nullify(elementsNames);
         }
-        if(!err and !table.ForeignCols.empty()){ err=!checkForeignKeys(table); }
+        if(!err and !table.get_ForeignCols().empty()){ err=!checkForeignKeys(table); }
         if(!err){
-            Tables[Table_i].auto_increment_col();
+            table.auto_increment_col();
         }
-        Tables[Table_i].rows++;
+        table.set_rows(tmp_rows+1);
 
         if(err){
             table=tableBackup;
@@ -153,6 +154,10 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     in-="() values (";
     for(int i=0; !substr_CC(in, 0, 1, ' ', ')').empty() and noErr; i++){
         string elementValue= substr_CC(in, 0, 1, ' ', ',');
+        for(int j=2; character_counter(elementValue,'"')%2 != 0; j++){
+            elementValue= substr_CC(in, 0, j, ' ', ',');
+        }
+
         if(elementValue=="/err"){
             elementValue= substr_CC(in, 0, 1, ' ', ')');
             erase_substr(in, elementValue);
@@ -161,6 +166,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
         }
         for(const string & tmp: reserved_words){ if(elementValue==tmp){ noErr=false; } }
         if(noErr){
+            removeSpaces_fromStart_andEnd(elementValue);
             elementsValues.push_back(elementValue);
         } else{
            cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
@@ -171,15 +177,15 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
 
 bool Database::checkForeignKeys(const Table &table, int row) {
     bool noErr=true;
-    for(int i=0; i<table.ForeignTables.size() and noErr; i++){
-        Table & ForeignTable=Tables[table.ForeignTables[i]];
-        int FCol_i=table.ForeignCols[i], ConCol_i=table.ConnectedCols[i];
+    for(int i=0; i<table.get_ForeignTables().size() and noErr; i++){
+        Table & ForeignTable=Tables[table.get_ForeignTables()[i]];
+        int FCol_i=table.get_ForeignCols()[i], ConCol_i=table.get_ConnectedCols()[i];
         string type;
-        if((type=ForeignTable.elementsTypes[FCol_i])==table.elementsTypes[ConCol_i]){
+        if((type=ForeignTable.get_elementsTypes()[FCol_i])==table.get_elementsTypes()[ConCol_i]){
             noErr=false;
             if(type=="int"){
-                const Column<int> & FCol=(*static_cast<Column<int>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<int> & ConCol=(*static_cast<Column<int>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<int> & FCol=(*static_cast<Column<int>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<int> & ConCol=(*static_cast<Column<int>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const int & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -187,13 +193,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="float"){
-                const Column<float> & FCol=(*static_cast<Column<float>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<float> & ConCol=(*static_cast<Column<float>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<float> & FCol=(*static_cast<Column<float>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<float> & ConCol=(*static_cast<Column<float>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const float & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -201,13 +207,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="char"){
-                const Column<char> & FCol=(*static_cast<Column<char>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<char> & ConCol=(*static_cast<Column<char>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<char> & FCol=(*static_cast<Column<char>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<char> & ConCol=(*static_cast<Column<char>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const char & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -215,13 +221,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="string" or type=="text"){
-                const Column<string> & FCol=(*static_cast<Column<string>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<string> & ConCol=(*static_cast<Column<string>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<string> & FCol=(*static_cast<Column<string>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<string> & ConCol=(*static_cast<Column<string>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const string & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -229,13 +235,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="date"){
-                const Column<Date> & FCol=(*static_cast<Column<Date>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<Date> & ConCol=(*static_cast<Column<Date>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<Date> & FCol=(*static_cast<Column<Date>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<Date> & ConCol=(*static_cast<Column<Date>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const Date & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -243,13 +249,13 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el.Date_to_string()<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
             if(type=="Time"){
-                const Column<Time> & FCol=(*static_cast<Column<Time>*>(ForeignTable.cols[table.ForeignCols[i]]));
-                const Column<Time> & ConCol=(*static_cast<Column<Time>*>(table.cols[table.ConnectedCols[i]]));
+                const Column<Time> & FCol=(*static_cast<Column<Time>*>(ForeignTable.get_cols()[table.get_ForeignCols()[i]]));
+                const Column<Time> & ConCol=(*static_cast<Column<Time>*>(table.get_cols()[table.get_ConnectedCols()[i]]));
                 if(row==-1){ row=(int)ConCol.values.size()-1; }
                 const Time & ConCol_el=ConCol.values[row];
                 for(int j=0; j<FCol.values.size() and !noErr; j++){
@@ -257,8 +263,8 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                 }
                 if(!noErr){
                     cerr<<endl<<"The element "<<ConCol_el.to_string()<<" from the Column "<<ConCol.key
-                        <<" ,of the Table "<<table.get_name()<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.get_name()<<"!";
+                        <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
             }
 
@@ -274,8 +280,8 @@ int Database::find_Table(string in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
-        string tmp=Tables[i].get_name();
-        if(tolower(tmp)==tolower(in)){
+        string tmp=Tables[i].name;
+        if(tmp==in){
             found=true;
         }
     }
@@ -300,11 +306,16 @@ bool Database::DELETE(string in) {
         }
         if(noErr){
             string oper = take_the_N_nextWord(in, "where", 2);
-            string data = take_the_N_nextWord(in, "where", 3), data2="/err";
-            if(oper=="between") data2 = substr_SS(in,"between", ";");
+            string data1 = substr_SS(in, oper, ";"), data2="/err";
+            if(oper=="between"){
+                data1 = substr_SS(in,"between", "and");
+                data2 = substr_SS(in,"and", ";");
+            }
+            removeSpaces_fromStart_andEnd(data1);
+            removeSpaces_fromStart_andEnd(data2);
           
             vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data, col_i, foundRows, oper, data2);
+            noErr=Tables[table_i].find_Rows_by_value(data1, col_i, foundRows, oper, data2);
             if(noErr){
                 Tables[table_i].deleteRows(foundRows);
             }
@@ -323,9 +334,9 @@ bool Database::DROP_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        for(int i=table.elementsTypes.size(); i>0; i--){
-            table.clear_col(i);
-            table.elementsTypes.resize(table.elementsTypes.size()-1);
+        for(int i=table.get_elementsTypes().size(); i>0; i--){
+            table.delete_col(i);
+            table.get_elementsTypes().resize(table.get_elementsTypes().size()-1);
         }
         deleteElements_from_vec(Tables,{Table_i});
     }
@@ -341,7 +352,7 @@ bool Database::TRUNCATE_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        table.empty_content();
+        table.empty_Tablecontent();
     }
     return noErr;
 }
@@ -357,22 +368,26 @@ bool Database::UPDATE(string in){
         in-=(tableName+" set ");
         string oper = take_the_N_nextWord(in, "where", 2), data2between="/err";
         if(oper=="between") data2between=substr_SS(in,"between",";");
-        else data2between="/err";
         string colToSearch= take_the_N_nextWord(in, "where", 1);
         int col_index;
         noErr=((col_index=table.get_col_index(colToSearch))!=-1);
 
         if(noErr){
-            string searchData = take_the_N_nextWord(in, "where", 3);
+            string searchData=in-substr_SS(in, "", "where");
+            if(oper=="between"){
+                searchData=substr_SS(searchData, "between", "and");
+            } else{
+                searchData=substr_SS(searchData, oper,";");
+            }
+            removeSpaces_fromStart_andEnd(searchData);
             /*string searchData= substr_SS(in, colToSearch, ";");
             searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
             replace_chars(searchData, {' '}, -1);*/
 
             vector<int> foundRows;
             noErr=table.find_Rows_by_value(searchData, col_index, foundRows, oper, data2between);
-            in-=(substr_SS(in, " where", ";") + ";");
+            in-=(substr_SS(in, " where", ";", false, true) + ";");
             if(noErr){
-                replace_chars(in, {' '}, -1);
                 vector<string> updateData;
                 while( !in.empty() ){
                     string tmp= substr_CC(in, 0, 1, ' ', ',');
@@ -382,15 +397,17 @@ bool Database::UPDATE(string in){
                     }
                     in-=tmp;
                     if(tmp.find(',')){ tmp-=","; }
+                    replace_chars(tmp, {' '}, -1);
                     updateData.push_back(tmp);
+
 
                 }
                 noErr= table.set_UPDATE_data(updateData, foundRows);
 
-                if(noErr and !table.ForeignTables.empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
-            } else{
-                cerr<<"No row containing"<<searchData<<"was found!";
-            }
+                if(noErr and !table.get_ForeignTables().empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
+            } /*else{
+                cerr<<endl<<"No row containing"<<searchData<<"was found!";
+            }*/
 
         } else{
             cerr<<endl<<"No column "<<colToSearch<<"was found!";
@@ -418,40 +435,52 @@ bool Database::PRINT(string in) {
         vector <string> colNames;
         string tmp;
         bool exit=true;
-        do{
-            tmp= substr_CC(in, 0, 1, ' ', ',');
-            if(tmp=="/err") {
-                tmp=in.substr(0,in.find("from")-1);
-                if(num_of_words(tmp)==1) {
-                    in-=(tmp+" ");
+        if(in.substr(0,in.find("from")).find("*")!=-1) colNames={"*"};
+        else {
+            do {
+                tmp = substr_CC(in, 0, 1, ' ', ',');
+                if (tmp == "/err") {
+                    tmp = in.substr(0, in.find("from") - 1);
+                    if (num_of_words(tmp) == 1) {
+                        in -= (tmp + " ");
+                        colNames.push_back(tmp);
+                    } else {
+                        exit = false;
+                    }
+                } else {
+                    in -= (tmp + "," + " ");
                     colNames.push_back(tmp);
-                }else  {
-                    exit=false;
                 }
-            }
-            else {
-                in-=(tmp+","+" ");
-                colNames.push_back(tmp);
-            }
-        }while(exit);
-
+            } while (exit);
+        }
         if(in.find("order by")!=-1){
-            if(in.find("desc")!=-1) orden = 1;
-            else if(in.find("asc")!=-1) orden = -1;
+            if(in.find("asc")!=-1) orden = 1;
+            else if(in.find("desc")!=-1) orden = -1;
             colToOrder = take_the_N_nextWord(in, "by", 1);
         }
 
-        if(in.find("*")!=-1){
+        if(in.find("*")!=-1 and in.find("where")==-1){
             table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
-            string oper = take_the_N_nextWord(in,"where", 2), data2="/err";
-            if(oper=="between") data2 = take_the_N_nextWord(in,"where", 4);
-            vec = {take_the_N_nextWord(in,"where", 1), oper, take_the_N_nextWord(in,"where", 3), data2};
+            string oper = take_the_N_nextWord(in,"where", 2), data2="/err", data1="/err";
+            if(oper=="between"){
+                data1 = substr_SS(in, "between", "and");
+                data2 = substr_SS(in, "and", "order");
+                if(data2=="/err"){ data2 = substr_SS(in, "and", ";"); }
+                removeSpaces_fromStart_andEnd(data2);
+            } else{
+                data1 = substr_SS(in, oper, "order");
+                if(data1=="/err"){ data1 = substr_SS(in, oper, ";"); }
+            }
+            removeSpaces_fromStart_andEnd(data1);
+
+            vec = {take_the_N_nextWord(in,"where", 1), oper, data1, data2};
             table.printCols(colNames, vec, colToOrder, orden);
         }else{
             table.printCols(colNames, vec, colToOrder, orden);
         }
     }
+    cout<<endl;
     return noErr;
 }
 
@@ -535,7 +564,7 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
         data-=line;
 
         string thisTableElement= substr_CC(line, 1, 1, '(', ')');
-        int thisCol_i=thisTable.find_col_by_name(thisTableElement);
+        int thisCol_i= thisTable.get_col_index(thisTableElement);
         if(thisCol_i != -1){
             string foreignTableName = substr_CC(line, 4, 5);
             int foreignTable_i = find_Table(foreignTableName);
@@ -544,12 +573,21 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
                 Table & foreignTable=Tables[foreignTable_i];
 
                 string foreignTableElement= substr_CC(line, 2, 2, '(', ')');
-                int foreignCol_i=foreignTable.find_col_by_name(foreignTableElement);
+                int foreignCol_i= foreignTable.get_col_index(foreignTableElement);
 
                 if(foreignCol_i != -1){
-                    thisTable.ForeignTables.push_back(foreignTable_i);
-                    thisTable.ConnectedCols.push_back(thisCol_i);
-                    thisTable.ForeignCols.push_back(foreignCol_i);
+                    vector<int> tmp_ForeignTables=thisTable.get_ForeignTables();
+                    vector<int> tmp_ConnectedCols=thisTable.get_ConnectedCols();
+                    vector<int> tmp_ForeignCols=thisTable.get_ForeignCols();
+
+                    tmp_ForeignTables.push_back(foreignTable_i);
+                    tmp_ConnectedCols.push_back(thisCol_i);
+                    tmp_ForeignCols.push_back(foreignCol_i);
+
+                    thisTable.set_ForeignTables(tmp_ForeignTables);
+                    thisTable.set_ConnectedCols(tmp_ConnectedCols);
+                    thisTable.set_ForeignCols(tmp_ForeignCols);
+
                     line = substr_CC(data, 0, 1, ' ', ',');
                 } else{
                     cerr<<endl<<"Uncaught reference to a non existence Column in";
@@ -592,6 +630,7 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                     if(line=="\r"){
                         getline(in, line);
                         line_i++;
+                        startLine_i++;
                     }
                     if(line!="~"){
                         replace_chars(line, {'\r'}, -1);
@@ -608,10 +647,10 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 noErr = process_command(command, quit);
                 if (!noErr) {
                     if (endLine_i == startLine_i) {
-                        cerr << endl << "Error at line " << startLine_i;
+                        cerr << endl << "Error at line " << startLine_i+1;
                     } else {
-                        cerr << endl << "Error from line " << startLine_i
-                             << " to line " << endLine_i << "!";
+                        cerr << endl << "Error from line " << startLine_i+1
+                             << " to line " << endLine_i+1 << "!";
                     }
                 }
                 if(quit){

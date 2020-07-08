@@ -31,6 +31,7 @@ int main(){
     d4.process_command(choice, quit);
 
     choice="SELECT cariocano, numberionero, price, name FROM phone WHERE cariocano = 'p';";
+    choice="SELECT number, name, price, car FROM phone WHERE car between 'c' and 'r' order by number asc;";
     d4.process_command(choice, quit);
 
     return 0;
