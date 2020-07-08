@@ -16,7 +16,7 @@ public:
     void printCol_to_file(ofstream & out);
 };
 
-class Table{
+class Table {
 private:
     string name;
 
@@ -36,11 +36,11 @@ public:
     bool create_col(string in, const bool &key_existence);
     void clear_col(const int &i);
 
-    bool set_Table(string in);
+    bool set_Table(const string &in);
     Table()=default;
     ~Table()=default;
 
-    void set_name(string name_in){ name=name_in; }
+    void set_name(const string &name_in){ name=name_in; }
     string get_name() const{ return name; }
 
     void empty_table();
@@ -63,7 +63,7 @@ public:
 
     bool find_Rows_by_value(const string &data1, const int &col_i, vector<int> &foundRows, const string & op, const string &data2);
 
-    void deleteRows(const vector<int> &rows);
+    void deleteRows(const vector<int> &Rows);
 
     void empty_content();
 
