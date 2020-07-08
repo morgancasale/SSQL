@@ -16,21 +16,21 @@ int main(){
     Database d4;
     bool quit=false;
     string choice="CREATE table phone ( "
-                  "number int not null, "
+                  "numberionero int not null, "
                   "name text not null, "
                   "price float not null, "
-                  "car char, "
-                  "primary key(number) );";
+                  "cariocano char, "
+                  "primary key(numberionero) );";
     d4.process_command(choice, quit);
 
-    choice="insert into phone (number, name, price) values (2020, \"carlo\", 12.89);";
+    choice="insert into phone (numberionero, name, price, cariocano) values (-1000000, \"carlo pietro tabasso\", -4252526.01, 'p');";
     d4.process_command(choice, quit);
-    choice="insert into phone (number, name, price, car) values (2098, \"morgan\", 0.5, 'p');";
+    choice="insert into phone (numberionero, name, price, cariocano) values (2098, \"morgan stefano maria casale\", -0.0000005684, 'p');";
     d4.process_command(choice, quit);
-    choice="insert into phone (number, name, price, car) values (2079, \"nicolo'\", 9.72, 'h');";
+    choice="insert into phone (numberionero, name, price, cariocano) values (2079, \"nicolo' ribaudo\", -9.72485, 'p');";
     d4.process_command(choice, quit);
 
-    choice="SELECT number, name, price, car FROM phone WHERE car between 'p' and 'c' order by number asc;";
+    choice="SELECT cariocano, numberionero, price, name FROM phone WHERE cariocano = 'p';";
     d4.process_command(choice, quit);
 
     return 0;
