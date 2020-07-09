@@ -40,6 +40,7 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
 
 bool Database::process_command(string choice, bool & quit) {
     bool noErr=true;  int j=0;
+    removeSpaces_fromStart_andEnd(choice);
     string command=take_command(choice);
 
     if(command=="quit()"){
@@ -627,13 +628,14 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 if(start){ startLine_i=line_i; start=false;}
                 getline(in, line);
                 if(line!="~"){
-                    if(line=="\r"){
+                    while(line=="\r" or line[0]=='#'){
                         getline(in, line);
                         line_i++;
                         startLine_i++;
                     }
                     if(line!="~"){
                         replace_chars(line, {'\r'}, -1);
+                        line-="#"+substr_CC(line, 1, -1, '#');
                         command += " " + line;
                         line_i++;
                     }

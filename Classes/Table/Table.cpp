@@ -686,37 +686,42 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
             noErr=check_data_consistence(tmp, type);
             if(noErr){
                 if (type=="int") {
-                    vector<int> & values = (*static_cast<Column<int> *>(cols[col_i])).values;
-                    for (const auto & row: foundRows) {
-                        values[row] = stoi(tmp);
+                    Column<int> & column = *static_cast<Column<int> *>(cols[col_i]);
+                    if(!column.auto_increment) {
+                        for (const auto &row: foundRows) {
+                            column.values[row] = stoi(tmp);
+                        }
+                    }else{
+                        noErr=false;
+                        cout<<endl<<"You can't update auto_increment variables values!";
                     }
                 }
-                if (type=="float") {
+                if (noErr and type=="float") {
                     vector<float> & values = (*static_cast<Column<float> *>(cols[col_i])).values;
                     for (const auto & row: foundRows) {
                         values[row] = stof(tmp);
                     }
                 }
-                if (type=="char") {
+                if (noErr and type=="char") {
                     vector<char> &values = (*static_cast<Column<char> *>(cols[col_i])).values;
                     for (const auto & row: foundRows) {
                         values[row] = stoi(tmp);
                     }
                 }
-                if (type=="string" or type=="text") {
+                if (noErr and (type=="string" or type=="text")) {
                     vector<string> & values = (*static_cast<Column<string> *>(cols[col_i])).values;
                     for (const auto & row: foundRows) {
                         values[row] = tmp;
                     }
                 }
-                if (type=="date") {
+                if (noErr and type=="date") {
                     vector<Date> & values = (*static_cast<Column<Date> *>(cols[col_i])).values;
                     for (const auto & row: foundRows) {
                         Date tmpDate(tmp);
                         values[row] = tmpDate;
                     }
                 }
-                if (type == "time") {
+                if (noErr and type == "time") {
                     vector<Time> &values = (*static_cast<Column<Time> *>(cols[col_i])).values;
                     for (const auto & row: foundRows) {
                         Time tmpTime(tmp);

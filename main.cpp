@@ -7,21 +7,22 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    bool noErr=true, QUIT=false;
+    bool noErr, QUIT=false;
     Database d4;
     //d4.START();
 
-    if(argc>1){
-        noErr= d4.readCommands_from_file(argv[1], QUIT);
-    }
+    if(argc>1) {
+        noErr = d4.readCommands_from_file(argv[1], QUIT);
 
-    if(noErr){
-        cout<<"Input file "<<argv[1]<<" correctly read.";
+        if (noErr) {
+            cout << "Input file " << argv[1] << " correctly read.";
+        }
+        cout<<endl<<endl;
     }
 
     string choice;
     do{
-        cout<<endl<<endl<<"Waiting for next command: "<<endl;
+        cout<<"Waiting for next command: "<<endl;
         cin>>choice;
 
         d4.process_command(choice, QUIT);

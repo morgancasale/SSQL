@@ -1,7 +1,7 @@
 #ifndef CS_PROJECT_TIME_H
 #define CS_PROJECT_TIME_H
 #include <iostream>
-#include "../../core.h"
+#include "../core.h"
 using namespace std;
 
 class Time{
