@@ -134,8 +134,7 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
     for(const string & a: programKeyWords) {
         unsigned long int pos=0;
         if(tmp.find(a)!=-1) {
-            string big = in.substr(tmp.find(a), a.size());
-            for (int i = 1; big != a and (pos = find_nIteration(in, big, i)) != -1; i++) {
+            for (int i = 1; (pos = find_nIteration(tmp, a, i)) != -1; i++) {
                 unsigned long int val = pos + a.size();
                 bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
                 flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
@@ -236,12 +235,13 @@ bool is_a_Time(const string & var){
     bool response=true;
 
     int hours=-1, min=-1, sec=-1;
+    int tmp=0;
 
     char sub;
-    if(var.find(':')!=-1){ /** O(n) */
+    if(var.find(':')!=-1 and character_counter(var, ':')<3){ /** O(n) */
         sub=':';
     }
-    else if(var.find('.')!=-1){ /** O(n) */
+    else if(var.find('.')!=-1 and (tmp=character_counter(var, '.')==1 or tmp==2)){ /** O(n) */
         sub='.';
     }else{
         response=false;

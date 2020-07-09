@@ -80,9 +80,9 @@ class Table {
 
         bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-        void printCols(vector <string> colSelection,
-                const vector <string> & search = {"/err", "0", "/err"},
-                const string &colToOrder="/err", const int &order=0 );
+        bool printCols(vector <string> colSelection,
+                       const vector <string> & search = {"/err", "0", "/err"},
+                       const string &colToOrder="/err", const int &order=0 );
 
         bool printTable_to_file(ofstream & out);
 

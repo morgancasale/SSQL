@@ -772,8 +772,8 @@ void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
     rowsIndexes = tmp - ( tmp - rowsIndexes);
 }
 
-void Table::printCols(vector <string> colSelection, const vector <string> & search, const string &colToOrder, const int &order ){
-    bool noErr;
+bool Table::printCols(vector <string> colSelection, const vector <string> & search, const string &colToOrder, const int &order ){
+    bool noErr=true;
     int index;
     string tmp;
     vector <int> rowsOrder;
@@ -870,11 +870,12 @@ void Table::printCols(vector <string> colSelection, const vector <string> & sear
                     }
                 }
             } else {
-                cerr << endl << "No column " << colSelectedName << " was found!";
+                cerr << endl << "No column " << colSelectedName << " to print was found!";
             }
         }
         cout<<endl;
     }
+    return noErr;
 }
 
 bool Table::printTable_to_file(ofstream & out) {
