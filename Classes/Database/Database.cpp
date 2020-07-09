@@ -142,7 +142,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
     bool noErr=true;
     for(; !substr_CC(in, 1, 1, '(', ')').empty();){
         string elementName= substr_CC(in, 1, 1, '(', ',');
-        if(elementName=="/err" or num_of_words(elementName)>1){
+        if(elementName=="/err" or elementName.find('(')!=-1){
             elementName= substr_CC(in, 1, 1, '(', ')');
             erase_substr(in, elementName);
         }else{
@@ -152,7 +152,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
         elementsNames.push_back(elementName);
     }
 
-    in-="() values (";
+    in-=substr_CC(in, 0, 2, ' ', '(')+"(";
     for(int i=0; !substr_CC(in, 0, 1, ' ', ')').empty() and noErr; i++){
         string elementValue= substr_CC(in, 0, 1, ' ', ',');
         for(int j=2; character_counter(elementValue,'"')%2 != 0; j++){

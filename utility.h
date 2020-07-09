@@ -116,15 +116,33 @@ string replace_chars(string &in, const vector<char> & sub, const char &car) {
     return in;
 } /** O(sub.size()*n*(n+n)) --> O(xn^2) */
 
+unsigned long int find_nIteration(string in, const string & search, const int & it){
+    int pos=in.find(search);
+    for(int i=0; i<it-1 and pos!=-1; i++){
+        vector<char>tmp;
+        tmp.resize(search.size());
+        string repl(tmp.begin(), tmp.end());
+        in.replace(pos,search.size(), repl);
+        pos=in.find(search);
+    }
+    return pos;
+}
 
 bool clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
-        if (tmp.find(a)!=-1){
-            string big=in.substr(tmp.find(a), a.size());
-            while(big!=a and in.find(big)!=-1){
-                in.replace(in.find(big), a.size(), a); /** O(n^2) */
+        unsigned long int pos=0;
+        if(tmp.find(a)!=-1) {
+            string big = in.substr(tmp.find(a), a.size());
+            for (int i = 1; big != a and (pos = find_nIteration(in, big, i)) != -1; i++) {
+                unsigned long int val = pos + a.size();
+                bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
+                flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
+
+                if (flag) {
+                    in.replace(pos, a.size(), a); /** O(n^2) */
+                }
             }
         }
     } /** O(programKeyWords.size()*n^2) --> O(p*n^2) */
@@ -206,8 +224,8 @@ int num_of_words(string in){
             int pos=in.find(ch); /** O(n) */
             if(pos!=-1 and isalphanum(in[pos-1]) and isalphanum(in[pos+1])){ /** O(2x) */
                 num--;
-                in[pos]=' ';
             }
+            in[pos]=' ';
         }
     } /** O(2n^2) */
 
@@ -252,11 +270,11 @@ bool is_a_Date(const string & var){
 
     char sub;
     bool err=false;
-    if(var.find(':')!=-1){ /** O(n) */
-        sub=':';
-    } else if(var.find('.')!=-1){ /** O(n) */
+    if(var.find('-')!=-1 and character_counter(var, '-')==2){ /** O(n) */
+        sub='-';
+    } else if(var.find('.')!=-1 and character_counter(var, '.')==2){ /** O(n) */
         sub='.';
-    } else if(var.find('/')!=-1){ /** O(n) */
+    } else if(var.find('/')!=-1 and character_counter(var, '/')==2){ /** O(n) */
         sub='/';
     } else{
         response=false;
