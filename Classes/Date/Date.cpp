@@ -85,8 +85,8 @@ void Date::set_Date(const string & in){
     bool err=false;
     char sub;
 
-    if(in.find(':')!=-1){
-        sub=':';
+    if(in.find('-')!=-1){
+        sub='-';
     } else if(in.find('.')!=-1){
         sub='.';
     } else if(in.find('/')!=-1){

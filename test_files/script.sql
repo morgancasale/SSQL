@@ -1,3 +1,4 @@
+
 create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );
 insert iNTo car ( model, company, yor, price, speed) values ( "Pa,nda", "Fiat", 2012, 3000.0, 120.5);
 insert iNTo car ( model, yor, price) values ( "C3 Picasso", 2006, 5000.5);
@@ -5,6 +6,7 @@ insert iNTo car ( model, company, yor, price, speed) values ( "Grand Cherokee", 
 
 select * from car where model between "C3 Picasso" and "Grand Cherokee" ;
 delete from car where model between  "C3 Picasso" and "Grand Cherokee";
+
 insert iNTo car ( model, company, yor, price, speed) values ( "Grand Cherokee", "Jeep", 2012, 68000.0, 140.0);
 
 CREATE table phone ( Name tExt not null, yOr int not null, price float, sef int auto_increment not null, primary key(Name) );
@@ -38,7 +40,7 @@ Update COUNTRIES
 
 create TABLE moto ( Name text not null, company1 text, color text, wheels int, primary key(Name));
 insert into moto (Name, company1, color, wheels) values ("gina", "piaggio", "rosso", 2);
-insert into moto (Name, company1, color, wheels) values ("figa ", "yamaha", "nera", 4);
+insert into moto (Name, company1, color, wheels) values ("Vespa ", "yamaha", "nera", 4);
 
 truncate table AMERICA;
 

@@ -3,3 +3,5 @@
     replace
 <sstream>:
     sstream
+
+static_cast
