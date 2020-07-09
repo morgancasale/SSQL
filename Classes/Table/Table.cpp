@@ -420,131 +420,129 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
 bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &foundRows, const string & op, string data2= "/err") {
     bool noErr=true;
     const string & type=elementsTypes[col_i];
+    if(data2!="/err") noErr=check_data_consistence(data2, type);
     noErr=check_data_consistence(data1, type);
 
     if(noErr) {
         if (elementsTypes[col_i] == "int") {
             vector<int> tmp = (*static_cast<Column<int> *>(cols[col_i])).values;
+            vector<bool> nullity = (*static_cast<Column<int> *>(cols[col_i])).valuesNullity;
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and to_string(tmp[i]) == data1)
+                if (op == "=" and to_string(tmp[i]) == data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and to_string(tmp[i]) > data1)
+                else if (op == ">" and to_string(tmp[i]) > data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and to_string(tmp[i]) < data1)
+                else if (op == "<" and to_string(tmp[i]) < data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and to_string(tmp[i]) >= data1)
+                else if (op == ">=" and to_string(tmp[i]) >= data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and to_string(tmp[i]) <= data1)
+                else if (op == "<=" and to_string(tmp[i]) <= data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and to_string(tmp[i]) != data1)
+                else if (op == "<>" and to_string(tmp[i]) != data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<string>(to_string(tmp[i]), data1, data2))
+                else if (op == "between" and between<string>(to_string(tmp[i]), data1, data2) and !nullity[i])
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "float") {
             vector<float> tmp = (*static_cast<Column<float> *>(cols[col_i])).values;
+            vector<bool> nullity = (*static_cast<Column<float> *>(cols[col_i])).valuesNullity;
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == stof(data1))
+                if (op == "=" and tmp[i] == stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > stof(data1))
+                else if (op == ">" and tmp[i] > stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < stof(data1))
+                else if (op == "<" and tmp[i] < stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and tmp[i] >= stof(data1))
+                else if (op == ">=" and tmp[i] >= stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and tmp[i] <= stof(data1))
+                else if (op == "<=" and tmp[i] <= stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and tmp[i] != stof(data1))
+                else if (op == "<>" and tmp[i] != stof(data1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<float>(tmp[i], stof(data1), stof(data2)))
+                else if (op == "between" and between<float>(tmp[i], stof(data1), stof(data2)) and !nullity[i])
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "char") {
             vector<char> tmp = (*static_cast<Column<char> *>(cols[col_i])).values;
+            vector<bool> nullity = (*static_cast<Column<char> *>(cols[col_i])).valuesNullity;
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == data1[1])
+                if (op == "=" and tmp[i] == data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > data1[1])
+                else if (op == ">" and tmp[i] > data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < data1[1])
+                else if (op == "<" and tmp[i] < data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and tmp[i] >= data1[1])
+                else if (op == ">=" and tmp[i] >= data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and tmp[i] <= data1[1])
+                else if (op == "<=" and tmp[i] <= data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and tmp[i] != data1[1])
+                else if (op == "<>" and tmp[i] != data1[1] and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<char>(tmp[i], data1[1], data2[1]))
+                else if (op == "between" and between<char>(tmp[i], data1[1], data2[1]) and !nullity[i])
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "string" or elementsTypes[col_i] == "text") {
             vector<string> tmp = (*static_cast<Column<string> *>(cols[col_i])).values;
-            /**data1.resize(data1.size()-1);
-            reverse(data1.begin(),data1.end());
-            data1.resize(data1.size()-1);
-            reverse(data1.begin(),data1.end());
-
-            data2.resize(data2.size()-1);
-            reverse(data2.begin(),data2.end());
-            data2.resize(data2.size()-1);
-            reverse(data2.begin(),data2.end());*/
+            vector<bool> nullity = (*static_cast<Column<string> *>(cols[col_i])).valuesNullity;
 
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == data1)
+                if (op == "=" and tmp[i] == data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > data1)
+                else if (op == ">" and tmp[i] > data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < data1)
+                else if (op == "<" and tmp[i] < data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and tmp[i] >= data1)
+                else if (op == ">=" and tmp[i] >= data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and tmp[i] <= data1)
+                else if (op == "<=" and tmp[i] <= data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and tmp[i] != data1)
+                else if (op == "<>" and tmp[i] != data1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<string>(tmp[i], data1, data2))
+                else if (op == "between" and between<string>(tmp[i], data1, data2) and !nullity[i])
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "date") {
             vector<Date> tmp = (*static_cast<Column<Date> *>(cols[col_i])).values;
+            vector<bool> nullity = (*static_cast<Column<Date> *>(cols[col_i])).valuesNullity;
             Date tmp_date1, tmp_date2;
             tmp_date1.set_Date(data1);
             tmp_date2.set_Date(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == tmp_date1)
+                if (op == "=" and tmp[i] == tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > tmp_date1)
+                else if (op == ">" and tmp[i] > tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < tmp_date1)
+                else if (op == "<" and tmp[i] < tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and tmp[i] >= tmp_date1)
+                else if (op == ">=" and tmp[i] >= tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and tmp[i] <= tmp_date1)
+                else if (op == "<=" and tmp[i] <= tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and !(tmp[i] == tmp_date1))
+                else if (op == "<>" and !(tmp[i] == tmp_date1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<Date>(tmp[i], tmp_date1, tmp_date2))
+                else if (op == "between" and between<Date>(tmp[i], tmp_date1, tmp_date2) and !nullity[i])
                     foundRows.push_back(i);
             }
         } else if (elementsTypes[col_i] == "time") {
             vector<Time> tmp = (*static_cast<Column<Time> *>(cols[col_i])).values;
+            vector<bool> nullity = (*static_cast<Column<Time> *>(cols[col_i])).valuesNullity;
             Time tmp_time1, tmp_time2;
             tmp_time1.set_time(data1);
             tmp_time2.set_time(data2);
             for (int i = 0; i < tmp.size(); i++) {
-                if (op == "=" and tmp[i] == tmp_time1)
+                if (op == "=" and tmp[i] == tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">" and tmp[i] > tmp_time1)
+                else if (op == ">" and tmp[i] > tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<" and tmp[i] < tmp_time1)
+                else if (op == "<" and tmp[i] < tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == ">=" and tmp[i] >= tmp_time1)
+                else if (op == ">=" and tmp[i] >= tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<=" and tmp[i] <= tmp_time1)
+                else if (op == "<=" and tmp[i] <= tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "<>" and !(tmp[i] == tmp_time1))
+                else if (op == "<>" and !(tmp[i] == tmp_time1) and !nullity[i])
                     foundRows.push_back(i);
-                else if (op == "between" and between<Time>(tmp[i], tmp_time1, tmp_time2))
+                else if (op == "between" and between<Time>(tmp[i], tmp_time1, tmp_time2) and !nullity[i])
                     foundRows.push_back(i);
             }
         }
@@ -806,24 +804,32 @@ void Table::printCols(vector <string> colSelection, const vector <string> & sear
                     string &type = elementsTypes[index];
                     if (type == "int") {
                         int &value = (*static_cast<Column<int> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<int> *>(cols[index])).valuesNullity[j];
                         tabs = (value > 9999999 or value < -999999)? "\t" : "\t\t";
-                        cout << value << tabs;
+                        if(!nullity){
+                            cout << value << tabs;
+                        } else  cout << tabs;
                     }
                     if (type=="float") {
                         float & value = (*static_cast<Column<float> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<float> *>(cols[index])).valuesNullity[j];
                         tabs = "\t\t";
                         cout.precision(5);
                         if(value > 99999 or (value < 0.0001 and value > 0))   cout.precision(2);
                         if(value < -99999 or (value > -0.0001 and value < 0))  cout.precision(1);
-                        cout << value << tabs;
+                        if(!nullity){
+                            cout << value << tabs;
+                        } else  cout << tabs;
                     }
                     if (type=="char") {
                         char & value = (*static_cast<Column<char> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<char> *>(cols[index])).valuesNullity[j];
                         tabs = "\t\t";
                         cout << value << tabs;
                     }
                     if (type=="string" or type=="text") {
                         string & value = (*static_cast<Column<string> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<string> *>(cols[index])).valuesNullity[j];
 
                         if(value.size() >= 8){
                             if(value.size() >= 16){
@@ -832,21 +838,29 @@ void Table::printCols(vector <string> colSelection, const vector <string> & sear
                             }else   tabs="\t\t";
                         } else tabs="\t\t\t";
 
-                        cout << value << tabs;
+                        if(!nullity){
+                            cout << value << tabs;
+                        } else  cout << tabs;
                     }
                     if (type=="date") {
                         Date & value = (*static_cast<Column<Date> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<Date> *>(cols[index])).valuesNullity[j];
                         tabs = "\t";
-                        cout << value.get_day()<<"/";
-                        cout << value.get_month()<<"/";
-                        cout << value.get_year()<<tabs;
+                        if(!nullity){
+                            cout << value.get_day()<<"/";
+                            cout << value.get_month()<<"/";
+                            cout << value.get_year()<<tabs;
+                        } else  cout << tabs;
                     }
                     if (type == "time") {
                         Time &value = (*static_cast<Column<Time> *>(cols[index])).values[j];
+                        bool nullity = (*static_cast<Column<Time> *>(cols[index])).valuesNullity[j];
                         tabs = "\t";
-                        cout << value.get_hours()<<":";
-                        cout << value.get_minutes()<<":";
-                        cout << value.get_seconds()<<tabs;
+                        if(!nullity) {
+                            cout << value.get_hours() << ":";
+                            cout << value.get_minutes() << ":";
+                            cout << value.get_seconds() << tabs;
+                        } else  cout << tabs;
                     }
                 }
             } else {
