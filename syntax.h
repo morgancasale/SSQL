@@ -93,6 +93,9 @@ bool control_create(string in){
     if(in.find("primary key(")==-1 and in.find("primary key (")==-1){
         primaryKeyErr=true;
     }
+    if(!err and in.find("not_null")!=-1 ){
+        err=true;
+    }
     if(!err and !primaryKeyErr) {
         string line, foreignKeys;
         int end2 = in.find(");");

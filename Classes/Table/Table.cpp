@@ -134,7 +134,7 @@ bool Table::create_col(string in) {
     string type;
     if(!err){
         type= substr_CC(in, 0, -1);
-        replace_chars(type, {' '}, -1);
+        removeSpaces_fromStart_andEnd(type);
         err=!check_type(type);
     }
 
@@ -312,8 +312,6 @@ void Table::auto_increment_col(){
 bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     bool fillErr=false, autoIncrAndNotNullErr=false;
     vector<string> elements=elementsNames;
-    for(auto & element : elements){ tolower(element);}
-    for(auto & filled_element : filled_elements){ tolower(filled_element); }
     vector<string> notFilled= elements - filled_elements;
 
     for(const string & emptyElement: notFilled){
@@ -334,8 +332,16 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
                     fillErr = true;
                 }
 
+
                 if(!(fillErr and autoIncrAndNotNullErr)){
-                    tmp.valuesNullity.push_back(true);
+                    if(tmp.auto_increment){
+                        int val=0;
+                        if(rows>0){ val=tmp.values[tmp.values.size()-1]+1; }
+                        tmp.values.push_back(val);
+                        tmp.valuesNullity.push_back(false);
+                    }else{
+                        tmp.valuesNullity.push_back(true);
+                    }
                 }
             }
             if(tmp.values.size()!=tmp.valuesNullity.size()){
