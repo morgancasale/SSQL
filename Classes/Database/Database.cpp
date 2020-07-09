@@ -436,7 +436,7 @@ bool Database::PRINT(string in) {
         vector <string> colNames;
         string tmp;
         bool exit=true;
-        if(in.substr(0,in.find("from")).find("*")!=-1) colNames={"*"};
+        if(in.substr(0,in.find("from")).find('*')!=-1) colNames={"*"};
         else {
             do {
                 tmp = substr_CC(in, 0, 1, ' ', ',');

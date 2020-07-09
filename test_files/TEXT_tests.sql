@@ -14,11 +14,11 @@
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
     select * from TEXT_test;
 
-    select vaR1 from TEXT_test where Var2 = "zyyz";
+    select VAR1 from TEXT_test where Var2 = "zyyz";
     select * from TEXT_test where Var2 > "abba";
-    select vaR1 from TEXT_test where Var2 < "ZZZzz";
+    select VAR1 from TEXT_test where Var2 < "zzzzz";
     select * from TEXT_test where Var2 >= "abba";
-    select * from TEXT_test where Var2 <= "ZZZz";
+    select * from TEXT_test where Var2 <= "zzzzz";
     select * from TEXT_test where Var2 <> "xiaorb";
     select * from TEXT_test where VAR1 between "aa" and "ringogol";
 
