@@ -82,7 +82,7 @@ bool Database::process_command(string choice, bool & quit) {
     } else
     if(command=="select"){
         if((noErr=control_select(choice))){
-            PRINT(choice);
+            noErr=PRINT(choice);
         }
     }
     return noErr;
@@ -425,7 +425,7 @@ bool Database::UPDATE(string in){
 }
 
 bool Database::PRINT(string in) {
-    bool noErr;
+    bool noErr=true;
     string tableName = take_the_N_nextWord(in, "from", 1);
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
@@ -436,7 +436,7 @@ bool Database::PRINT(string in) {
         vector <string> colNames;
         string tmp;
         bool exit=true;
-        if(in.substr(0,in.find("from")).find("*")!=-1) colNames={"*"};
+        if(in.substr(0,in.find("from")).find('*')!=-1) colNames={"*"};
         else {
             do {
                 tmp = substr_CC(in, 0, 1, ' ', ',');
@@ -461,7 +461,7 @@ bool Database::PRINT(string in) {
         }
 
         if(in.find("*")!=-1 and in.find("where")==-1){
-            table.printCols({"*"}, vec, colToOrder, orden);
+            noErr=table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
             string oper = take_the_N_nextWord(in,"where", 2), data2="/err", data1="/err";
             if(oper=="between"){
@@ -476,9 +476,9 @@ bool Database::PRINT(string in) {
             removeSpaces_fromStart_andEnd(data1);
 
             vec = {take_the_N_nextWord(in,"where", 1), oper, data1, data2};
-            table.printCols(colNames, vec, colToOrder, orden);
+            noErr=table.printCols(colNames, vec, colToOrder, orden);
         }else{
-            table.printCols(colNames, vec, colToOrder, orden);
+            noErr=table.printCols(colNames, vec, colToOrder, orden);
         }
     }
     cout<<endl;

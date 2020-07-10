@@ -87,10 +87,11 @@ string take_command(string & in){
 bool control_create(string in){
     bool err = false, primaryKeyErr=false;
     //controllo sintassi prima riga
-    if(in.find('(')!=in.npos and num_of_words(in.substr(0,in.find('(')))!=1) {
+    if(in[in.size()-1]==-1){ err=true; }
+    if(!err and in.find('(')!=-1 and num_of_words(in.substr(0,in.find('(')))!=1) {
         err = true;
     }
-    if(in.find("primary key(")==-1 and in.find("primary key (")==-1){
+    if(!err and in.find("primary key(")==-1 and in.find("primary key (")==-1){
         primaryKeyErr=true;
     }
     if(!err and in.find("not_null")!=-1 ){
@@ -104,24 +105,24 @@ bool control_create(string in){
             in -= ", " + foreignKeys;
         }
         bool flag = true;
-        if (end2 != in.npos and !err) {//this checks if there is the final substring ");" somewhere
+        if (end2 != -1 and !err) {//this checks if there is the final substring ");" somewhere
             for (int i = 0; i < end2 and !err and
                             flag; i++) { //this checks if every input starts with a space end ends with a ',', it considers input of two and three letters
-                line = substr_CC(in, 2, 1, ' ', ',');
+                line = substr_CC(in, 1, 1, '(', ',');
                 if (num_of_words(line) > 5) {
                     err = true;
                 }
                 if (line == "/err" and !err) {
-                    line = substr_CC(in, 2, 2, ' ', ')');
+                    line = substr_CC(in, 1, 1, '(', ';');
                     string tmp_str= substr_CC(line, 0, 1, ' ', '(');
-                    if (num_of_words(tmp_str) > 2) {
+                    if (num_of_words(tmp_str) > 3) {
                         err = true;
                     }
                     in -= line;
                     string tmp = substr_CC(in, 1, 1, '(', ';');
                     replace_chars(tmp, {' '}, -1);
 
-                    flag = (tmp != ")");
+                    flag = (!tmp.empty());
                 } else {
                     erase_substr(in, line + ", ");
                 }
@@ -161,10 +162,6 @@ bool control_create(string in){
                 err = !noErr;
             }
         } else {
-            err = true;
-        }
-
-        if (in.find(");") == -1 and !err) {
             err = true;
         }
     }
