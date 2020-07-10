@@ -561,7 +561,7 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
         cerr<<endl<<"No row/s that satisfies/y the condition "<<data1;
         if(data2!="/err") cerr<<" or \""<<data2<<"\" were";
         else cerr<<" was";
-        cerr<<" found";
+        cerr<<" found"<<endl;
     }
 
     return noErr;
@@ -659,22 +659,6 @@ void Table::empty_Tablecontent(){
     }
     rows=0;
 }
-
-/*bool Table::get_rows_by_data(const int & col_i, const string & searchData, vector<int> & foundRows){
-    bool noErr=true;
-    const string & type=elementsTypes[col_i];
-    noErr=check_data_consistence(searchData, type);
-
-    if(noErr){
-        if(type=="int"){
-            vector<int> & colVal=(*static_cast<Column<int>*>(cols[col_i])).values;
-
-        }
-    } else{
-        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")";
-    }
-    return noErr;
-}*/
 
 bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &foundRows) {
     int noErr=true;
