@@ -100,13 +100,13 @@ bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & sh
     return err;
 } /** O(xn) */
 
-string replace_chars(string &in, const vector<char> & sub, const char &car) {
+string replace_chars(string & in, const vector<char> & sub, const char & c) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
             string tmp="";
-            if(car!=-1){
-                tmp[0]=car;
+            if(c != -1){
+                tmp[0]=c;
             }
             in.replace(pos,1, tmp);
             pos=in.find(c);
@@ -116,7 +116,7 @@ string replace_chars(string &in, const vector<char> & sub, const char &car) {
     return in;
 } /** O(sub.size()*n*(n+n)) --> O(xn^2) */
 
-unsigned long int find_nIteration(string in, const string & search, const int & it){
+unsigned long int find_nIterations(string in, const string & search, const int & it){
     int pos=in.find(search);
     for(int i=0; i<it-1 and pos!=-1; i++){
         vector<char>tmp;
@@ -128,13 +128,13 @@ unsigned long int find_nIteration(string in, const string & search, const int & 
     return pos;
 }
 
-bool clean_input(string & in, const vector<string> & programKeyWords){
+void clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
         unsigned long int pos=0;
         if(tmp.find(a)!=-1) {
-            for (int i = 1; (pos = find_nIteration(tmp, a, i)) != -1; i++) {
+            for (int i = 1; (pos = find_nIterations(tmp, a, i)) != -1; i++) {
                 unsigned long int val = pos + a.size();
                 bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
                 flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
@@ -146,14 +146,14 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
         }
     } /** O(programKeyWords.size()*n^2) --> O(p*n^2) */
     replace_chars(in, {'\n', '\t', '\r'}, ' '); /** O(3n^2) */
-    return remove_duplicate_chars(in, {' '}, false); /** O(3n) */
+    remove_duplicate_chars(in, {' '}, false); /** O(3n) */
 } /** O(xn^2) */
 
 string erase_substr(string &in, const string & to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size()); /** O(n) */
-        replace_chars(in, {'\n'}, ' '); /** O(n^2) */ //we should delete this line
+        //replace_chars(in, {'\n'}, ' '); /** O(n^2) */ //we should delete this line
     }
     return in;
 } /** O(n^2) */
