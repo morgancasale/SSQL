@@ -18,6 +18,9 @@ CREATE table EUROPE ( EUROPIAN_COUNTRIES text, PRIMARY KEY (EUROPIAN_COUNTRIES))
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Italy");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("France");
 insert into EUROPE (EUROPIAN_COUNTRIES) values ("Greece");
+insert into EUROPE (EUROPIAN_COUNTRIES) values ("Germany");
+insert into EUROPE (EUROPIAN_COUNTRIES) values ("Ucraina");
+insert into EUROPE (EUROPIAN_COUNTRIES) values ("Belgium");
 
 Create table AMERICA ( AMERICAN_COUNTRIES text, PRIMARY KEY (AMERICAN_COUNTRIES));
 insert into AMERICA (AMERICAN_COUNTRIES) values ("USA");

@@ -1,6 +1,14 @@
 #include "Time.h"
 using namespace std;
 
+int c_counter(const string & in, char char_to_count){
+    int counter=0;
+    for(char c:in){
+        if(c==char_to_count) counter++;
+    }
+    return counter;
+}
+
 void Time::set_hours(const int &h) {
     try{
         if(h<0 or h>24){
@@ -52,16 +60,15 @@ void Time::set_time(const int &h, const int &m, const int &s) {
 void Time::set_time(const string &time) {
     char sub=' ';
     bool err=false;
-    if(time.find(':')!=-1){
+    int a;
+    if((a=c_counter(time,':'))==1 or a==2){
         sub=':';
     }
-    else if(time.find('.')!=-1){
+    else if((a=c_counter(time,'.'))==1 or a==2){
         sub='.';
     }
-    else if(time.find(' ')!=-1){
-    }
     else{
-        cerr<<"time data format error";
+        cerr<<"Time data format error";
         hours=0;
         minutes=0;
         seconds=42;

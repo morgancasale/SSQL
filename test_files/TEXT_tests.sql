@@ -9,7 +9,7 @@
 
 #This lines should give errors if uncommented
     #insert InTo Err_TEXT_test(VAR1) values ("tef"); #No value was given to Var2
-    #insErt iNto TEXT_test (VAR1, Var2) valUes( "/err", "swrt"); # The use of the string "/err" (and others) is not permitted
+    #insErt iNto Err_TEXT_test (VAR1, Var2) valUes( "/err", "swrt"); # The use of the string "/err" (and others) is not permitted
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
     select * from TEXT_test;
