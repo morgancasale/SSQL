@@ -81,10 +81,10 @@ void Time::set_time(const string &time) {
 }
 
 int Time::tot_seconds() const {
-    return 360*hours+60*minutes+seconds;
+    return 3600*hours+60*minutes+seconds;
 }
 int Time::tot_mins() const {
-    return 360*hours+60*minutes;
+    return 3600*hours+60*minutes;
 }
 
 bool Time::equal_sec(Time t2) const & { return this->tot_seconds()==t2.tot_seconds(); }

@@ -512,7 +512,7 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
             vector<bool> & nullity = (*static_cast<Column<Date> *>(cols[col_i])).valuesNullity;
             Date tmp_date1, tmp_date2;
             tmp_date1.set_Date(data1);
-            tmp_date2.set_Date(data2);
+            if(data2 != "/err") tmp_date2.set_Date(data2);
             for (int i = 0; i < tmp.size(); i++) {
                 if (op == "=" and tmp[i] == tmp_date1 and !nullity[i])
                     foundRows.push_back(i);
@@ -534,7 +534,7 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
             vector<bool> & nullity = (*static_cast<Column<Time> *>(cols[col_i])).valuesNullity;
             Time tmp_time1, tmp_time2;
             tmp_time1.set_time(data1);
-            tmp_time2.set_time(data2);
+            if(data2 != "/err") tmp_time2.set_time(data2);
             for (int i = 0; i < tmp.size(); i++) {
                 if (op == "=" and tmp[i] == tmp_time1 and !nullity[i])
                     foundRows.push_back(i);
@@ -843,9 +843,9 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
                         if (type == "time") {
                             Time &value = (*static_cast<Column<Time> *>(cols[index])).values[j];
                             bool nullity = (*static_cast<Column<Time> *>(cols[index])).valuesNullity[j];
-                            tabs = "\t";
+                            tabs = "\t\t";
                             if (!nullity) {
-                                cout << value.get_seconds() << ":";
+                                cout << value.get_hours() << ":";
                                 cout << value.get_minutes() << ":";
                                 cout << value.get_seconds() << tabs;
                             } else cout << tabs;
