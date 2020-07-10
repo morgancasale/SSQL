@@ -349,6 +349,7 @@ bool check_data_consistence(const string & var, const string & type){
         else if(Date_resp){ noErr = (type == "date"); }
     } else
     if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */
+    else if(character_counter(var,'-')==2){ noErr = (type == "date"); }
     else{
         noErr = (type == "int");
     }

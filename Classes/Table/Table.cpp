@@ -250,13 +250,13 @@ void Table::cast_data_to_col(const int & col_i, const string & type, const strin
     if(type=="time"){
         Column<Time> & tmp=(*static_cast<Column<Time>*>(cols[col_i]));
         tmp.values.resize((*static_cast<Column<Time>*>(cols[col_i])).values.size()+1); //Increase Time vector of one
-        tmp.values.end()->set_time(data);
+        tmp.values[tmp.values.size()-1].set_time(data);
         tmp.valuesNullity.push_back(false);
     } else
     if(type=="date"){
         Column<Date> & tmp=(*static_cast<Column<Date>*>(cols[col_i]));
         tmp.values.resize((*static_cast<Column<Date>*>(cols[col_i])).values.size()+1); //Increase Date vector of one
-        tmp.values.end()->set_Date(data);
+        tmp.values[tmp.values.size()-1].set_Date(data);
         tmp.valuesNullity.push_back(false);
     }
 }
@@ -557,9 +557,9 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
     }
 
     if(foundRows.empty()){
-        noErr=false;
-        cerr<<endl<<"No row/s that satisfies/y the condition "<<data1;
-        if(data2!="/err") cerr<<" or \""<<data2<<"\" were";
+        //noErr=false;
+        cerr<<endl<<"No rows that satisfies the condition "<<op<<" "<< data1;
+        if(data2!="/err") cerr<<" and \""<<data2<<"\" were";
         else cerr<<" was";
         cerr<<" found"<<endl;
     }
@@ -837,17 +837,15 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
                             bool nullity = (*static_cast<Column<Date> *>(cols[index])).valuesNullity[j];
                             tabs = "\t";
                             if (!nullity) {
-                                cout << value.get_day() << "/";
-                                cout << value.get_month() << "/";
-                                cout << value.get_year() << tabs;
-                            } else cout << tabs;
+                                cout << value.date_to_string() << tabs;
+                            } else cout <<"\t"<< tabs;
                         }
                         if (type == "time") {
                             Time &value = (*static_cast<Column<Time> *>(cols[index])).values[j];
                             bool nullity = (*static_cast<Column<Time> *>(cols[index])).valuesNullity[j];
                             tabs = "\t";
                             if (!nullity) {
-                                cout << value.get_hours() << ":";
+                                cout << value.get_seconds() << ":";
                                 cout << value.get_minutes() << ":";
                                 cout << value.get_seconds() << tabs;
                             } else cout << tabs;
@@ -985,7 +983,7 @@ bool Table::printTable_to_file(ofstream & out) {
             out<<col.not_null<<" ";
             out<<col.auto_increment<<endl;
             for(const Date & value: col.values){
-                string date_str=value.Date_to_string();
+                string date_str= value.date_to_string();
                 if(date_str.empty()){ date_str="\"/empty\""; }
                 out << date_str << " ";
             }

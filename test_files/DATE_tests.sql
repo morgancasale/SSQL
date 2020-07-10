@@ -4,9 +4,10 @@
     CREATE TablE DATE_test2 (Var1 date, var2 date not null, primary key(var2));
 
 #INSERT INTO test
-    insert into DATE_test (VAR1, Var2, var3, vAr4) vaLues( 12.04.1986, 25.08.1770, 19-05-2005, 31/01/2021);
-    insert into DATE_test (Var2, var3, vAr4) vaLues( 01.12.0678, 25.12.1675, 23.06.0889);
     insert into DATE_test (VAR1, Var2, var3, vAr4) vaLues( 29-03-2001, 30-10-1335, 19-03-2039, 31-12-3005);
+    insert into DATE_test (Var2, var3, vAr4) vaLues( 01.12.0678, 25.12.1675, 23.06.0889);
+    insert into DATE_test (VAR1, Var2, var3, vAr4) vaLues( 12.04.1986, 25.08.1770, 19-05-2005, 31/01/2021);
+
     insert InTo DATE_test (Var2, var3) valueS (08/07/0001, 29/02/2020);
     insert into DATE_test2(Var1, var2) values (05/07/1999, 23/08/2002);
     insert into DATE_test2 (var2) values (09/06/2901);
