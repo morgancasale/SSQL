@@ -9,7 +9,7 @@ using namespace std;
 #include "Classes/Date/Date.h"
 
 
-string tolower(string &in, int stop= -1){ //converts all upper letters of a string to lower ones
+string tolower(string & in, int stop= -1){ //converts all upper letters of a string to lower ones
     stop = ((stop<0)? (int)in.size()-1 : stop); //if stop<0 takes all the string
     for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
@@ -21,7 +21,7 @@ string tolower(string &in, int stop= -1){ //converts all upper letters of a stri
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substr_CC(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2= ' ') {
+string substr_CC(const string & in, const int & counter1, const int & counter2, const char & char1= ' ', const char & char2= ' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -65,7 +65,7 @@ string substr_CC(const string &in, const int &counter1, const int &counter2, con
     }
 } /** O(n) */
 
-int character_counter(const string & in, char char_to_count){
+unsigned int character_counter(const string & in, char char_to_count){
     int counter=0;
     for(char c:in){
         if(c==char_to_count) counter++;

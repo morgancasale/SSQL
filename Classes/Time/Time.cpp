@@ -1,7 +1,7 @@
 #include "Time.h"
 using namespace std;
 
-int c_counter(const string & in, char char_to_count){
+unsigned int c_counter(const string & in, char char_to_count){
     int counter=0;
     for(char c:in){
         if(c==char_to_count) counter++;
@@ -22,7 +22,7 @@ void Time::set_hours(const int &h) {
         cerr<<endl<<e;
     }
 }
-int Time::get_hours() const { return hours; }
+unsigned int Time::get_hours() const { return hours; }
 void Time::set_minutes(const int &m) {
     try{
         if(m<0 or m>60){
@@ -36,7 +36,7 @@ void Time::set_minutes(const int &m) {
         cerr<<endl<<e;
     }
 }
-int Time::get_minutes() const { return minutes; }
+unsigned int Time::get_minutes() const { return minutes; }
 void Time::set_seconds(const int &s) { try{
         if(s<0 or s>60){
             throw("Seconds format error");
@@ -49,7 +49,7 @@ void Time::set_seconds(const int &s) { try{
         cerr<<endl<<e;
     }
 }
-int Time::get_seconds() const { return seconds; }
+unsigned int Time::get_seconds() const { return seconds; }
 
 void Time::set_time(const int &h, const int &m, const int &s) {
     set_hours(h);
@@ -80,10 +80,10 @@ void Time::set_time(const string &time) {
     }
 }
 
-int Time::tot_seconds() const {
+unsigned int Time::tot_seconds() const {
     return 360*hours+60*minutes+seconds;
 }
-int Time::tot_mins() const {
+unsigned int Time::tot_mins() const {
     return 360*hours+60*minutes;
 }
 

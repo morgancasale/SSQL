@@ -1002,7 +1002,7 @@ bool Table::printTable_to_file(ofstream & out) {
     return noErr;
 }
 
-void Table::createTable_from_file(ifstream &in, string line) {
+void Table::createTable_from_file(ifstream & in, string line) {
     stringstream stream(line);
     stream>>(this->name)>>(this->rows)>>(this->primaryKey_index);
 
@@ -1032,7 +1032,7 @@ void Table::createTable_from_file(ifstream &in, string line) {
     }
 }
 
-void Table::createCol_from_file(ifstream &in, const string &type, int col_i) {
+void Table::createCol_from_file(ifstream & in, const string & type, const int &col_i) {
     string key;
     bool not_null, auto_increment;
 
