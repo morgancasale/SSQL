@@ -1,4 +1,5 @@
 #include <iostream>
+#include <list>
 #include "Classes/Time/Time.cpp"
 #include "Classes/Date/Date.cpp"
 #include "syntax.h"
@@ -7,25 +8,27 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    bool noErr=true, QUIT=false;
+    bool noErr, QUIT=false;
     Database d4;
+    list<int> fsgd;
     //d4.START();
 
-    //if(argc>2){
-        noErr= d4.readCommands_from_file("../script.sql", QUIT); // (argv[1]);
-    //}
+    if(argc>1) {
+        noErr = d4.readCommands_from_file(argv[1], QUIT);
+
+        if (noErr) {
+            cout << "Input file " << argv[1] << " correctly read.";
+        }
+        cout<<endl<<endl;
+    }
 
     string choice;
-    string command;
     do{
-        cout<<endl<<endl<<"Waiting for command: "<<endl;
+        cout<<"Waiting for next command: "<<endl;
         cin>>choice;
 
-        command=take_command(choice);
         d4.process_command(choice, QUIT);
-
     }while(!QUIT);
 
     return 0;
 }
-

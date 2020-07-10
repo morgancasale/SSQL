@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/script.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/CHAR_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/CREATE_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/INT_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/MISC_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/TEXT_tests.sql" dialect="GenericSQL" />
   </component>
 </project>

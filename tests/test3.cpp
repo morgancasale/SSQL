@@ -4,19 +4,9 @@
 #include <vector>
 #include "../utility.h"
 using namespace std;
-
-
 int main(){
-    string a="asasas -dsdasfsdfgò-  - dfgj  -dsfsdfsdf- jgd";
-    bool b;
-    a=remove_content(a, '-', '-', b);
-    b=true;
-    for(int i=0; b; i++){
-        cout<<i;
-        b= false;
-    }
-    cout<<" ciao";
-
+    string a="vaR4 = -1";
+    int b=num_of_words(a);
 
     return 0;
 }

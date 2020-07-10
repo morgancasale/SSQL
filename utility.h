@@ -9,8 +9,8 @@ using namespace std;
 #include "Classes/Date/Date.h"
 
 
-string tolower(string &in, int stop= -1){ //converts all upper letters of a string to lower ones
-    stop = ((stop<0)? in.size()-1 : stop); //if stop<0 takes all the string
+string tolower(string & in, int stop= -1){ //converts all upper letters of a string to lower ones
+    stop = ((stop<0)? (int)in.size()-1 : stop); //if stop<0 takes all the string
     for(int i=0; i<=stop; i++){
         in[i]=tolower(in[i]);
     }
@@ -21,7 +21,7 @@ string tolower(string &in, int stop= -1){ //converts all upper letters of a stri
 // to the n(counter2) instance of char2
 // tricks: counter1=0 to take from beginning ignoring char1
 //         and counter2=-1 to take up to the end ignoring char2
-string substr_CC(const string &in, const int &counter1, const int &counter2, const char &char1= ' ', const char &char2= ' ') {
+string substr_CC(const string & in, const int & counter1, const int & counter2, const char & char1= ' ', const char & char2= ' ') {
     int start=0, end=1;
     int tmpCounter1=0, i=0, tmpCounter2=0;
     bool found1=false, found2=false;
@@ -65,7 +65,7 @@ string substr_CC(const string &in, const int &counter1, const int &counter2, con
     }
 } /** O(n) */
 
-int character_counter(const string & in, char char_to_count){
+unsigned int character_counter(const string & in, char char_to_count){
     int counter=0;
     for(char c:in){
         if(c==char_to_count) counter++;
@@ -73,7 +73,7 @@ int character_counter(const string & in, char char_to_count){
     return counter;
 } /** O(in.size) --> O(x) */
 
-bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=true){
+bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & show_err=true){
     bool err=false;
 
     for(const char & tmp: c){
@@ -100,7 +100,7 @@ bool remove_duplicate_chars(string & in, vector<char> c, const bool & show_err=t
     return err;
 } /** O(xn) */
 
-string replace_chars(string &in, const vector<char> sub, const char &car) {
+string replace_chars(string &in, const vector<char> & sub, const char &car) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
@@ -116,15 +116,32 @@ string replace_chars(string &in, const vector<char> sub, const char &car) {
     return in;
 } /** O(sub.size()*n*(n+n)) --> O(xn^2) */
 
+unsigned long int find_nIteration(string in, const string & search, const int & it){
+    int pos=in.find(search);
+    for(int i=0; i<it-1 and pos!=-1; i++){
+        vector<char>tmp;
+        tmp.resize(search.size());
+        string repl(tmp.begin(), tmp.end());
+        in.replace(pos,search.size(), repl);
+        pos=in.find(search);
+    }
+    return pos;
+}
 
 bool clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
-        if (tmp.find(a)!=tmp.npos){
-            string big=in.substr(tmp.find(a), a.size());
-            while(big!=a and in.find(big)!=-1){
-                in.replace(in.find(big), a.size(), a); /** O(n^2) */
+        unsigned long int pos=0;
+        if(tmp.find(a)!=-1) {
+            for (int i = 1; (pos = find_nIteration(tmp, a, i)) != -1; i++) {
+                unsigned long int val = pos + a.size();
+                bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
+                flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
+
+                if (flag) {
+                    in.replace(pos, a.size(), a); /** O(n^2) */
+                }
             }
         }
     } /** O(programKeyWords.size()*n^2) --> O(p*n^2) */
@@ -132,7 +149,7 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
     return remove_duplicate_chars(in, {' '}, false); /** O(3n) */
 } /** O(xn^2) */
 
-string erase_substr(string &in, string to_erase){
+string erase_substr(string &in, const string & to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size()); /** O(n) */
@@ -160,10 +177,10 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
         std::reverse(in.begin(), in.end()); /** O(n) */
         std::reverse(s1.begin(), s1.end()); /** O(n) */
         std::reverse(s2.begin(), s2.end()); /** O(n) */
-        start = in.find(s2) + shift; /** O(n) */
+        start = (int)in.find(s2) + shift; /** O(n) */
         end = in.find(s1); /** O(n) */
     } else{
-        start = in.find(s1) + shift; /** O(n) */
+        start = (int)in.find(s1) + shift; /** O(n) */
         end = in.find(s2); /** O(n) */
     }
 
@@ -180,7 +197,7 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
 bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
 
 int num_of_words(string in){
-    int num=0, i=0, k=0, end=in.size()-1;
+    int num=0, i=0, k=0, end=(int)in.size()-1;
 
     for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
     end++;
@@ -204,9 +221,10 @@ int num_of_words(string in){
     while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
         for(const char & ch: characters){ /** O(x) */
             int pos=in.find(ch); /** O(n) */
-            if(pos!=-1 and isalphanum(in[pos-1]) and isalphanum(in[pos+1])){ /** O(2x) */
-                num--;
-                in[pos]=' ';
+            if(pos!=-1) {
+                if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
+                    num--;
+                in[pos] = ' ';
             }
         }
     } /** O(2n^2) */
@@ -214,24 +232,18 @@ int num_of_words(string in){
     return num;
 } /** O(2n^2) */
 
-template<typename type> bool check_existence(const vector<type> &vec, const type &el){
-    bool found=false;
-    for(const type &x : vec){
-        if(x==el){ found=true; }
-    }
-    return found;
-}
-
 bool is_a_Time(const string & var){
     bool response=true;
 
     int hours=-1, min=-1, sec=-1;
+    int dots=character_counter(var, '.');
+    int col=character_counter(var, ':');
 
     char sub;
-    if(var.find(':')!=-1){ /** O(n) */
+    if(var.find(':')!=-1 and (col==1 or col==2)){ /** O(n) */
         sub=':';
     }
-    else if(var.find('.')!=-1){ /** O(n) */
+    else if(var.find('.')!=-1 and (dots==1 or dots==2)){ /** O(n) */
         sub='.';
     }else{
         response=false;
@@ -245,8 +257,10 @@ bool is_a_Time(const string & var){
         if(min<0 or min>60){ //checks minutes
             response=false;
         }
-        if(sec<0 or sec>60){
-            response=false;
+        if(sec!=-1) {
+            if (sec < 0 or sec > 60) {
+                response = false;
+            }
         }
     }
 
@@ -260,51 +274,55 @@ bool is_a_Date(const string & var){
 
     char sub;
     bool err=false;
-    if(var.find(':')!=-1){ /** O(n) */
-        sub=':';
-    } else if(var.find('.')!=-1){ /** O(n) */
+    if(var.find('-')!=-1 and character_counter(var, '-')==2){ /** O(n) */
+        sub='-';
+    } else if(var.find('.')!=-1 and character_counter(var, '.')==2){ /** O(n) */
         sub='.';
-    } else if(var.find('/')!=-1){ /** O(n) */
+    } else if(var.find('/')!=-1 and character_counter(var, '/')==2){ /** O(n) */
         sub='/';
     } else{
         response=false;
     }
 
     if(response){
-        stringstream ss=data_ss(var, sub);
-        ss>>day>>month>>year;
-        if(day<=0 or day>31) response=false;
-        if(month<0 or month>12){
-            response=false;
-        }
-        if(response) {
-            switch (month) {
-                default:
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    if (day < 0 or day > 31) {
-                        response = false;
-                    }
-                    break;
-                case 2:
-                    if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
-                        response = false;
-                    }
-                    break;
-                case 4:
-                case 6:
-                case 9:
-                case 11:
-                    if (day < 0 or day > 30) {
-                        response = false;
-                    }
-                    break;
+        if(substr_CC(var, 2, -1, sub).size()==4) {
+            stringstream ss = data_ss(var, sub);
+            ss >> day >> month >> year;
+            if (day <= 0 or day > 31) response = false;
+            if (month < 0 or month > 12) {
+                response = false;
             }
+            if (response) {
+                switch (month) {
+                    default:
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        if (day < 0 or day > 31) {
+                            response = false;
+                        }
+                        break;
+                    case 2:
+                        if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
+                            response = false;
+                        }
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        if (day < 0 or day > 30) {
+                            response = false;
+                        }
+                        break;
+                }
+            }
+        } else{
+            response=false;
         }
     }
     return response;
@@ -321,10 +339,13 @@ bool check_data_consistence(const string & var, const string & type){
         noErr = (type == "char");
     } else
     if(var.find('.')!=-1){ /** O(n) */
-        bool Date_resp;
-        bool Time_resp;
-        if((Time_resp=is_a_Time(var)) and !(Date_resp=is_a_Date(var))){ /** O(5n) */
-            noErr = (type == "time");
+        bool Date_resp=is_a_Date(var);
+        bool Time_resp=is_a_Time(var);
+        if(Time_resp and !Date_resp){ /** O(5n) */
+            if (character_counter(var, '.') == 1){
+                noErr = (type == "time") or (type == "float");
+            } else
+                noErr = (type == "time");
         }
         else if(Date_resp){
             noErr = (type == "date"); }
@@ -332,11 +353,15 @@ bool check_data_consistence(const string & var, const string & type){
             noErr = (type == "float"); }
     } else
     if(var.find(':')!=-1){ /** O(n) */
-        bool Date_resp;
-        if(is_a_Time(var) and !(Date_resp=is_a_Date(var))){ noErr = (type == "time"); } /** O(3n) */
+        bool Date_resp=is_a_Date(var);
+        bool tmp=is_a_Time(var);
+        if(tmp and !Date_resp){
+            noErr = (type == "time");
+        } /** O(3n) */
         else if(Date_resp){ noErr = (type == "date"); }
     } else
     if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */
+    else if(character_counter(var,'-')==2){ noErr = (type == "date"); }
     else{
         noErr = (type == "int");
     }
@@ -381,8 +406,8 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
 } /** O(xy^2) */
 
 template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
-    for(int i=0; i<rows.size(); i++){ /** O(n) */
-        for(int k=rows[i]; k<minuend.size()-1; k++){ /** O(x) */
+    for(int k : rows){ /** O(n) */
+        for(; k<minuend.size()-1; k++){ /** O(x) */
             minuend[k]=minuend[k+1];
         }
         minuend.resize(minuend.size()-1);
@@ -395,7 +420,7 @@ string take_the_N_nextWord(const string & in, string before, int N){
     if(before.empty()){
         before=substr_CC(in, 0, 1, 0, ' ');
         replace_chars(before, {' '}, -1);
-    } if(in.find(before)==in.npos){ /** O(n) */
+    } if(in.find(before)==-1){ /** O(n) */
         cerr<<endl<<"La parola non esiste nella frase";
         return "/err";
     }
@@ -439,7 +464,7 @@ string replace_content(string in, const char & start, const char & end, const ch
 
 string remove_content(string & in, const char & start, const char & end, bool & noErr){
     noErr=true;
-    int i=in.find(start)+1;
+    int i=(int)in.find(start)+1;
     bool kill=true;
 
     bool tmp;
@@ -477,7 +502,7 @@ void operator>>(const string & str, vector<string> & vec){
 } /** O(n) */
 
 string removeSpaces_fromStart_andEnd(string & in){
-    int start=0, end=in.size()-1;
+    int start=0, end=(int)in.size()-1;
     for(; in[start]==' '; start++){} /** O(x) */
     for(; in[end]==' '; end--){} /** O(x) */
     in=in.substr(start, end-start+1);
@@ -503,6 +528,7 @@ vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
     }
     return output;
 }
+
 template <typename T>
 bool between(const T & in, const T & val1, const T & val2){
     if(val1 < val2){
@@ -515,5 +541,13 @@ bool between(const T & in, const T & val1, const T & val2){
         return (in == val2);
     } else return false;
 }
+
+/*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
+    bool found=false;
+    for(const type &x : vec){
+        if(x==el){ found=true; }
+    }
+    return found;
+}*/
 
 #endif

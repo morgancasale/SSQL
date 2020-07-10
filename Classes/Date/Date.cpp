@@ -77,16 +77,27 @@ int Date::get_month() const{ return month; }
 void Date::set_year(const int &y) { year=y; if(year<0){ AC=true; } }
 int Date::get_year() const{ return year; }
 
-string Date::Date_to_string() const &{
-    if(AC){ return to_string(day)+"-"+to_string(month)+"-"+to_string(abs(year))+"AC";}
-    return to_string(day)+"-"+to_string(month)+"-"+to_string(year);
+string Date::date_to_string() const &{
+    string d, m, y;
+    d = (day < 10) ? ("0"+to_string(day)) : to_string(day);
+    m = (month < 10) ? ("0"+to_string(month)) : to_string(month);
+    y = to_string(abs(year));
+    if(abs(year) < 1000){
+        if(abs(year) < 100){
+            if(abs(year) < 10){
+                y = "000" + y;
+            }else y = "00" + y;
+        }else y = "0" + y;
+    }
+    if(AC){ return d + "-" + m + "-" + y +"AC";}
+    return d + "-" + m + "-" + y;
 }
 void Date::set_Date(const string & in){
     bool err=false;
     char sub;
 
-    if(in.find(':')!=-1){
-        sub=':';
+    if(in.find('-')!=-1){
+        sub='-';
     } else if(in.find('.')!=-1){
         sub='.';
     } else if(in.find('/')!=-1){
