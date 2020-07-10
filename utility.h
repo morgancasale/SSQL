@@ -221,10 +221,11 @@ int num_of_words(string in){
     while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
         for(const char & ch: characters){ /** O(x) */
             int pos=in.find(ch); /** O(n) */
-            if(pos!=-1 and isalphanum(in[pos-1]) and isalphanum(in[pos+1])){ /** O(2x) */
-                num--;
+            if(pos!=-1) {
+                if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
+                    num--;
+                in[pos] = ' ';
             }
-            in[pos]=' ';
         }
     } /** O(2n^2) */
 
@@ -341,7 +342,10 @@ bool check_data_consistence(const string & var, const string & type){
         bool Date_resp=is_a_Date(var);
         bool Time_resp=is_a_Time(var);
         if(Time_resp and !Date_resp){ /** O(5n) */
-            noErr = (type == "time");
+            if (character_counter(var, '.') == 1){
+                noErr = (type == "time") or (type == "float");
+            } else
+                noErr = (type == "time");
         }
         else if(Date_resp){
             noErr = (type == "date"); }
@@ -357,6 +361,7 @@ bool check_data_consistence(const string & var, const string & type){
         else if(Date_resp){ noErr = (type == "date"); }
     } else
     if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */
+    else if(character_counter(var,'-')==2){ noErr = (type == "date"); }
     else{
         noErr = (type == "int");
     }

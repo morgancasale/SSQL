@@ -19,12 +19,11 @@
     SeleCt * from FLOAT_test;
     select * from FLOAT_test2;
 
-    select * from FLOAT_test where vAr4 = 0.0;
     select var1, Var2 from FLOAT_test where VAR3 = 0.0;
     select * from FLOAT_test where VAR3 > -4.7;
     select * from FLOAT_test where VAR3 < 8009.2345;
     select * from FLOAT_test where VAR3 >= -90.1356;
-    select * from FLOAT_test where VAR3 <= 35.346;
+    select * from FLOAT_test2 where VAR3 <= 8.3;
     select * from FLOAT_test where VAR3 <> 0.0;
     select * from FLOAT_test where VAR3 between -343.45 and 0.0;
 
