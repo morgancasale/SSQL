@@ -221,12 +221,10 @@ int num_of_words(string in){
     while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
         for(const char & ch: characters){ /** O(x) */
             int pos=in.find(ch); /** O(n) */
-            if (pos != -1) {
-                if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) { /** O(2x) */
-                    num--;
-                }
-                in[pos] = ' ';
+            if(pos!=-1 and isalphanum(in[pos-1]) and isalphanum(in[pos+1])){ /** O(2x) */
+                num--;
             }
+            in[pos]=' ';
         }
     } /** O(2n^2) */
 
@@ -237,13 +235,14 @@ bool is_a_Time(const string & var){
     bool response=true;
 
     int hours=-1, min=-1, sec=-1;
-    int tmp=0;
+    int dots=character_counter(var, '.');
+    int col=character_counter(var, ':');
 
     char sub;
-    if(var.find(':')!=-1 and character_counter(var, ':')<3){ /** O(n) */
+    if(var.find(':')!=-1 and (col==1 or col==2)){ /** O(n) */
         sub=':';
     }
-    else if(var.find('.')!=-1 and (tmp=character_counter(var, '.')==1 or tmp==2)){ /** O(n) */
+    else if(var.find('.')!=-1 and (dots==1 or dots==2)){ /** O(n) */
         sub='.';
     }else{
         response=false;
@@ -257,8 +256,10 @@ bool is_a_Time(const string & var){
         if(min<0 or min>60){ //checks minutes
             response=false;
         }
-        if(sec<0 or sec>60){
-            response=false;
+        if(sec!=-1) {
+            if (sec < 0 or sec > 60) {
+                response = false;
+            }
         }
     }
 
@@ -283,40 +284,44 @@ bool is_a_Date(const string & var){
     }
 
     if(response){
-        stringstream ss=data_ss(var, sub);
-        ss>>day>>month>>year;
-        if(day<=0 or day>31) response=false;
-        if(month<0 or month>12){
-            response=false;
-        }
-        if(response) {
-            switch (month) {
-                default:
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    if (day < 0 or day > 31) {
-                        response = false;
-                    }
-                    break;
-                case 2:
-                    if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
-                        response = false;
-                    }
-                    break;
-                case 4:
-                case 6:
-                case 9:
-                case 11:
-                    if (day < 0 or day > 30) {
-                        response = false;
-                    }
-                    break;
+        if(substr_CC(var, 2, -1, sub).size()==4) {
+            stringstream ss = data_ss(var, sub);
+            ss >> day >> month >> year;
+            if (day <= 0 or day > 31) response = false;
+            if (month < 0 or month > 12) {
+                response = false;
             }
+            if (response) {
+                switch (month) {
+                    default:
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        if (day < 0 or day > 31) {
+                            response = false;
+                        }
+                        break;
+                    case 2:
+                        if (day < 0 or day > 28 + (1 - abs(year) % 4)) { //this account also for leap years
+                            response = false;
+                        }
+                        break;
+                    case 4:
+                    case 6:
+                    case 9:
+                    case 11:
+                        if (day < 0 or day > 30) {
+                            response = false;
+                        }
+                        break;
+                }
+            }
+        } else{
+            response=false;
         }
     }
     return response;
@@ -335,7 +340,7 @@ bool check_data_consistence(const string & var, const string & type){
     if(var.find('.')!=-1){ /** O(n) */
         bool Date_resp=is_a_Date(var);
         bool Time_resp=is_a_Time(var);
-        if((Time_resp) and !(Date_resp)){ /** O(5n) */
+        if(Time_resp and !Date_resp){ /** O(5n) */
             noErr = (type == "time");
         }
         else if(Date_resp){
@@ -345,7 +350,10 @@ bool check_data_consistence(const string & var, const string & type){
     } else
     if(var.find(':')!=-1){ /** O(n) */
         bool Date_resp=is_a_Date(var);
-        if(is_a_Time(var) and !(Date_resp)){ noErr = (type == "time"); } /** O(3n) */
+        bool tmp=is_a_Time(var);
+        if(tmp and !Date_resp){
+            noErr = (type == "time");
+        } /** O(3n) */
         else if(Date_resp){ noErr = (type == "date"); }
     } else
     if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */

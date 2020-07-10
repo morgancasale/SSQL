@@ -9,7 +9,7 @@
 
 #This lines should give errors if uncommented
     #insert InTo Err_CHAR_test(VAR1) values ('d'); #No value was given to Var2
-    #insErt iNto CHAR_test (VAR1, Var2) valUes( '"', 'r'); # The use of the character '"' is not permitted
+    #insErt iNto Err_CHAR_test (VAR1, Var2) valUes( '"', 'r'); # The use of the character '"' is not permitted
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
     select * from CHAR_test;
