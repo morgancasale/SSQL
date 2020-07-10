@@ -33,10 +33,10 @@
 
 #This lines should give errors if uncommented
 #Comparing data of different types should give an error
+    #select vaR4 from DATE_test where Var2 = 15;
     #select vaR4 from DATE_test where Var2 = -2.3;
     #select vaR4 from DATE_test where Var2 = c;
     #select vaR4 from DATE_test where Var2 = "ciao";
-    #select vaR4 from DATE_test where Var2 = 15-01-2012;
     #select vaR4 from DATE_test where Var2 = 15:01:22;
     #select vaR4 from DATE_test where Var2 between 1 and "ciao";
     #select vaR4 from DATE_test where Var2 between "bau" and "ciao";
