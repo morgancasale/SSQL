@@ -249,7 +249,7 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el.Date_to_string()<<" from the Column "<<ConCol.key
+                    cerr << endl << "The element " << ConCol_el.date_to_string() << " from the Column " << ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
                         <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }

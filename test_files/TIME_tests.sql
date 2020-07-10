@@ -4,7 +4,7 @@
 
 
 #INSERT INTO test
-    insErt iNto TIME_test (VAR1, Var2) valUes( 19:01:45, 21.57);
+    insErt iNto TIME_test (VAR1, Var2) valUes( 19:01:45, 21.57.02);
     inSert into TIME_test (Var2) valUEs( 06.07.23);
 
 #This lines should give errors if uncommented
@@ -13,15 +13,16 @@
     #inseRt inTo Err_TIME_test (VAR1, Var2, VAr3) valUes( 25:40, 07.67.4, 04:47:80)
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
-    select * from TIME_test;
+    #select * from TIME_test;
 
-    select VAR1 from TIME_test where Var2 = 06:07:23;
+
+    select VAR1 from TIME_test where Var2 = 21:57:02;
     select * from TIME_test where Var2 > 21:56:55;
-    select VAR1 from TIME_test where Var2 < 20.30;
-    select * from TIME_test where Var2 >= 21.57;
+    select Var2 from TIME_test where Var2 < 22.30;
+    select * from TIME_test where Var2 >= 21:57;
     select * from TIME_test where Var2 <= 21:57;
     select * from TIME_test where VAR1 <> 19:01:45;
-    select * from TIME_test where VAR1 between 00.01 and 23:35;
+    select * from TIME_test where VAR1 between 00:01 and 23:35;
 
 #This lines should give errors if uncommented
 #Comparing data of different types should give an error
