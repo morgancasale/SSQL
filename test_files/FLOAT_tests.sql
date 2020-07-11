@@ -4,11 +4,14 @@
     CREATE TablE FLOAT_test2 (Var1 float, var2 float not null, primary key(var2));
 
 #INSERT INTO test
-    insert into FLOAT_test (var1, Var2, VAR3) values ( 2.355, -0.000008, 0.0);
-    insert into FLOAT_test (var1, Var2, vAr4, VAR3) values ( 267.45, 0.00668, 7684.23, -56.00);
     insert into FLOAT_test (vAr4, VAR3) values (9000.98, 32242.7);
+    insert into FLOAT_test (var1, Var2, vAr4, VAR3) values ( 267.45, 0.00668, 7684.23, -56.00);
+    insert into FLOAT_test (vAr4, var1, VAR3) values (566.12, 75.23, 32242.7);
     insert into FLOAT_test2 (var2) values (8.3);
+    insert into FLOAT_test (var1, Var2, VAR3) values ( 2.355, -0.000008, 0.0);
     insert into FLOAT_test2 (Var1, var2) values (78.466, 90.1356);
+
+
 
 #This lines should give errors if uncommented
     #insert Into FLOAT_test2 (Var3) values (57.789); #Var3 was not initialized int the first insert into
@@ -17,13 +20,14 @@
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
     SeleCt * from FLOAT_test;
+    SeleCt * from FLOAT_test order by VAR3 asc;
     select * from FLOAT_test2;
 
     select var1, Var2 from FLOAT_test where VAR3 = 0.0;
-    select * from FLOAT_test where VAR3 > -4.7;
+    select * from FLOAT_test where VAR3 > -4.7 order by vAr4 desc;
     select * from FLOAT_test where VAR3 < 8009.2345;
     select * from FLOAT_test where VAR3 >= -90.1356;
-    select * from FLOAT_test2 where VAR3 <= 8.3;
+    select * from FLOAT_test2 where var2 <= 8.3;
     select * from FLOAT_test where VAR3 <> 0.0;
     select * from FLOAT_test where VAR3 between -343.45 and 0.0;
 
