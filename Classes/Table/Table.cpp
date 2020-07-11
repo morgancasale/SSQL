@@ -731,26 +731,38 @@ void Table::col_orderer(int colIndex, vector <int> & rowsIndexes, int order){
     vector <int> tmp;
     if (type == "int") {
         vector<int> &values = (*static_cast<Column<int> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<int> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<int>(values, order);
     }
     if (type == "float") {
         vector<float> &values = (*static_cast<Column<float> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<float> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<float>(values, order);
     }
     if (type == "char") {
         vector<char> &values = (*static_cast<Column<char> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<char> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<char>(values, order);
     }
     if (type=="string" or type=="text") {
         vector<string> &values = (*static_cast<Column<string> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<string> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<string>(values, order);
     }
     if (type=="date") {
         vector<Date> & values = (*static_cast<Column<Date> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<Date> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<Date>(values, order);
     }
     if (type=="time") {
         vector<Time> & values = (*static_cast<Column<Time> *>(cols[colIndex])).values;
+        vector <bool> & nullity = (*static_cast<Column<Time> *>(cols[colIndex])).valuesNullity;
+        for(int j=0; j<nullity.size(); j++)    if(nullity[j]) values.erase(values.begin()+j);
         tmp = order_vector_indexes<Time>(values, order);
     }
     rowsIndexes = tmp - ( tmp - rowsIndexes);
