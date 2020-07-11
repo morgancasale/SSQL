@@ -149,7 +149,7 @@ void clean_input(string & in, const vector<string> & programKeyWords){
     remove_duplicate_chars(in, {' '}, false); /** O(3n) */
 } /** O(xn^2) */
 
-string erase_substr(string &in, const string & to_erase){
+string erase_substr(string & in, const string & to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size()); /** O(n) */
@@ -196,7 +196,7 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
 
 bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
 
-int num_of_words(string in){
+unsigned int num_of_words(string in){
     int num=0, i=0, k=0, end=(int)in.size()-1;
 
     for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
@@ -405,16 +405,16 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
     }
 } /** O(xy^2) */
 
-template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
-    for(int k : rows){ /** O(n) */
-        for(; k<minuend.size()-1; k++){ /** O(x) */
-            minuend[k]=minuend[k+1];
+template<typename type> void deleteElements_from_vec(vector<type> & vec, const vector<int> & els){
+    for(int k : els){ /** O(n) */
+        for(; k < vec.size() - 1; k++){ /** O(x) */
+            vec[k]=vec[k + 1];
         }
-        minuend.resize(minuend.size()-1);
+        vec.resize(vec.size() - 1);
     }
 }/** O(x*n) */
 
-string take_the_N_nextWord(const string & in, string before, int N){
+string take_the_N_nextWords(const string & in, string before, int N){
     string tmp, after;
     stringstream iss(in);
     if(before.empty()){
@@ -439,18 +439,9 @@ string take_the_N_nextWord(const string & in, string before, int N){
     return after;
 } /** O(2n) */
 
-
-int num_of_chars(const string & in, const char & c){
-    int num=0;
-    for(const char tmp: in){
-        if(tmp==c){ num++; }
-    }
-    return num;
-} /** O(x) */
-
 string replace_content(string in, const char & start, const char & end, const char & sub=' '){
     int start_i=0, end_i=0;
-    while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){ /** O(x) */
+    while(start_i<character_counter(in,start) and end_i<character_counter(in,end)){ /** O(x) */
         string repl=" ";
         string tmp= substr_CC(in, start_i + 1, end_i + 1, start, end); /** O(n) */
         int s=tmp.size();
@@ -489,7 +480,7 @@ string remove_content(string & in, const char & start, const char & end, bool & 
     return in;
 }
 
-void operator>>(const string & str, vector<string> & vec){
+void operator >> (const string & str, vector<string> & vec){
     vec.resize(0);
     stringstream ss(str);
     string tmp;
@@ -519,7 +510,7 @@ vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
     for (int i=0; i<n; i++){
         aux=0;
         for (int j=0; j<n; j++){
-            if(input[i]>input[j] and orden==+1) aux++;
+            if(input[i]>input[j] and orden==1) aux++;
             else if(input[i]<input[j] and orden==-1)  aux++;
             else if(input[i]==input[j]) aux = j==i ? aux : aux+1;
             else if(!orden) cerr<<endl<<"errore";
