@@ -394,4 +394,5 @@ bool control_select(string in){
     }
     return noErr;
 }
+
 #endif //CS_PROJECT_SYNTAX_H
