@@ -19,15 +19,15 @@
     #insert into FLOAT_test2 (Var1, var2) values ('e', "miao");
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
-    SeleCt * from FLOAT_test;
-    SeleCt * from FLOAT_test order by VAR3 asc;
-    select * from FLOAT_test2;
+    #SeleCt * from FLOAT_test;
+    #SeleCt * from FLOAT_test order by VAR3 asc;
+    #select * from FLOAT_test2;
 
-    select var1, Var2 from FLOAT_test where VAR3 = 0.0;
-    select * from FLOAT_test where VAR3 > -4.7 order by vAr4 desc;
-    select * from FLOAT_test where VAR3 < 8009.2345;
-    select * from FLOAT_test where VAR3 >= -90.1356;
-    select * from FLOAT_test2 where var2 <= 8.3;
+    #select var1, Var2 from FLOAT_test where VAR3 = 0.0;
+    #select * from FLOAT_test where VAR3 > -4.7 order by vAr4 desc;
+    #select * from FLOAT_test where VAR3 < 8009.2345;
+    #select * from FLOAT_test where VAR3 >= -90.1356;
+    select * from FLOAT_test2 where VAR3 <= 8.3;
     select * from FLOAT_test where VAR3 <> 0.0;
     select * from FLOAT_test where VAR3 between -343.45 and 0.0;
 

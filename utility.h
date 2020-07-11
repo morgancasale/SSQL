@@ -100,13 +100,13 @@ bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & sh
     return err;
 } /** O(xn) */
 
-string replace_chars(string &in, const vector<char> & sub, const char &car) {
+string replace_chars(string & in, const vector<char> & sub, const char & c) {
     for(const char & c: sub){
         int pos=in.find(c);
         while(pos!=-1){
             string tmp="";
-            if(car!=-1){
-                tmp[0]=car;
+            if(c != -1){
+                tmp[0]=c;
             }
             in.replace(pos,1, tmp);
             pos=in.find(c);
@@ -116,7 +116,7 @@ string replace_chars(string &in, const vector<char> & sub, const char &car) {
     return in;
 } /** O(sub.size()*n*(n+n)) --> O(xn^2) */
 
-unsigned long int find_nIteration(string in, const string & search, const int & it){
+unsigned long int find_nIterations(string in, const string & search, const int & it){
     int pos=in.find(search);
     for(int i=0; i<it-1 and pos!=-1; i++){
         vector<char>tmp;
@@ -128,13 +128,13 @@ unsigned long int find_nIteration(string in, const string & search, const int & 
     return pos;
 }
 
-bool clean_input(string & in, const vector<string> & programKeyWords){
+void clean_input(string & in, const vector<string> & programKeyWords){
     string tmp=in;
     tolower(tmp);
     for(const string & a: programKeyWords) {
         unsigned long int pos=0;
         if(tmp.find(a)!=-1) {
-            for (int i = 1; (pos = find_nIteration(tmp, a, i)) != -1; i++) {
+            for (int i = 1; (pos = find_nIterations(tmp, a, i)) != -1; i++) {
                 unsigned long int val = pos + a.size();
                 bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
                 flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
@@ -146,14 +146,14 @@ bool clean_input(string & in, const vector<string> & programKeyWords){
         }
     } /** O(programKeyWords.size()*n^2) --> O(p*n^2) */
     replace_chars(in, {'\n', '\t', '\r'}, ' '); /** O(3n^2) */
-    return remove_duplicate_chars(in, {' '}, false); /** O(3n) */
+    remove_duplicate_chars(in, {' '}, false); /** O(3n) */
 } /** O(xn^2) */
 
-string erase_substr(string &in, const string & to_erase){
+string erase_substr(string & in, const string & to_erase){
     int pos=in.find(to_erase);
     if(pos!=-1){
         in.erase(pos, to_erase.size()); /** O(n) */
-        replace_chars(in, {'\n'}, ' '); /** O(n^2) */ //we should delete this line
+        //replace_chars(in, {'\n'}, ' '); /** O(n^2) */ //we should delete this line
     }
     return in;
 } /** O(n^2) */
@@ -196,39 +196,41 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
 
 bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
 
-int num_of_words(string in){
-    int num=0, i=0, k=0, end=(int)in.size()-1;
+unsigned int num_of_words(string in){
+    int num=0, i=0, k=0, start=0, end=(int)in.size()-1;
+    int ciao=0;
 
-    for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
+    for(; !isalphanum(in[start]) and start<=in.size()-1; start++){}
+    for(; !isalphanum(in[end]) and end>=0; end--){} /** O(in.size()) --> O(x) */
     end++;
-    in=in.substr(0, end); /** O(n) */
+    in=in.substr(start, end-start); /** O(n) */
     in.push_back(' ');
-
-    if(!isalphanum(in[0]) and !isalphanum(in[in.size()-1])){ /** O(2x) */
-        i++;
-        k++;
-    }
-
-    for(; i<in.size()-k; i++){ /** O(x) */
-        for(; isalphanum(in[i]); i++){} /** O(x) */
-        if(i!=0 and isalphanum(in[i-1])){ /** O(x) */
-            num++;
+    if(!in.empty()) {
+        if (!isalphanum(in[0]) and !isalphanum(in[in.size() - 1])) { /** O(2x) */
+            i++;
+            k++;
         }
-    }/** O(2x^2) */
-    if(num==0 and isalphanum(in[in.size()-1])){ num++; } /** O(x) */
 
-    char characters[2]={'_', '-'};
-    while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
-        for(const char & ch: characters){ /** O(x) */
-            int pos=in.find(ch); /** O(n) */
-            if(pos!=-1) {
-                if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
-                    num--;
-                in[pos] = ' ';
+        for (; i < in.size() - k; i++) { /** O(x) */
+            for (; isalphanum(in[i]); i++) {} /** O(x) */
+            if (i != 0 and isalphanum(in[i - 1])) { /** O(x) */
+                num++;
             }
-        }
-    } /** O(2n^2) */
+        }/** O(2x^2) */
+        if (num == 0 and isalphanum(in[in.size() - 1])) { num++; } /** O(x) */
 
+        char characters[4] = {'_', '-', '.', ':'};
+        while (in.find('_') != -1 or in.find('-') != -1 or in.find('.') != -1 or in.find(':') != -1) { /** O(2n) */
+            for (const char &ch: characters) { /** O(x) */
+                int pos = in.find(ch); /** O(n) */
+                if (pos != -1) {
+                    if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
+                        num--;
+                    in[pos] = ' ';
+                }
+            }
+        } /** O(2n^2) */
+    } else{ num=0; }
     return num;
 } /** O(2n^2) */
 
@@ -405,16 +407,16 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
     }
 } /** O(xy^2) */
 
-template<typename type> void deleteElements_from_vec(vector<type> & minuend, const vector<int> & rows){
-    for(int k : rows){ /** O(n) */
-        for(; k<minuend.size()-1; k++){ /** O(x) */
-            minuend[k]=minuend[k+1];
+template<typename type> void deleteElements_from_vec(vector<type> & vec, const vector<int> & els){
+    for(int k : els){ /** O(n) */
+        for(; k < vec.size() - 1; k++){ /** O(x) */
+            vec[k]=vec[k + 1];
         }
-        minuend.resize(minuend.size()-1);
+        vec.resize(vec.size() - 1);
     }
 }/** O(x*n) */
 
-string take_the_N_nextWord(const string & in, string before, int N){
+string take_the_N_nextWords(const string & in, string before, int N){
     string tmp, after;
     stringstream iss(in);
     if(before.empty()){
@@ -439,18 +441,9 @@ string take_the_N_nextWord(const string & in, string before, int N){
     return after;
 } /** O(2n) */
 
-
-int num_of_chars(const string & in, const char & c){
-    int num=0;
-    for(const char tmp: in){
-        if(tmp==c){ num++; }
-    }
-    return num;
-} /** O(x) */
-
 string replace_content(string in, const char & start, const char & end, const char & sub=' '){
     int start_i=0, end_i=0;
-    while(start_i<num_of_chars(in,start) and end_i<num_of_chars(in,end)){ /** O(x) */
+    while(start_i<character_counter(in,start) and end_i<character_counter(in,end)){ /** O(x) */
         string repl=" ";
         string tmp= substr_CC(in, start_i + 1, end_i + 1, start, end); /** O(n) */
         int s=tmp.size();
@@ -489,7 +482,7 @@ string remove_content(string & in, const char & start, const char & end, bool & 
     return in;
 }
 
-void operator>>(const string & str, vector<string> & vec){
+void operator >> (const string & str, vector<string> & vec){
     vec.resize(0);
     stringstream ss(str);
     string tmp;
@@ -516,6 +509,7 @@ vector <int> order_vector_indexes( vector<T> input, const int & orden){
     vector<bool> equal(n);
     vector<T> tmp = input;
     vector <int> output(n);
+  
     sort(tmp.begin(), tmp.end());
     if(orden == -1) reverse(tmp.begin(), tmp.end());
     for(int i=0; i<n; i++){

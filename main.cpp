@@ -1,5 +1,4 @@
 #include <iostream>
-#include <list>
 #include "Classes/Time/Time.cpp"
 #include "Classes/Date/Date.cpp"
 #include "syntax.h"
@@ -10,7 +9,6 @@ using namespace std;
 int main(int argc, char **argv) {
     bool noErr, QUIT=false;
     Database d4;
-    list<int> fsgd;
     //d4.START();
 
     if(argc>1) {
