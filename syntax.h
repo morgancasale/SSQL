@@ -288,7 +288,7 @@ bool control_update(string in){
     bool noErr=(in[in.size()-1]==';'), exit=false;
     if(noErr) remove_content(in, '\"', '\"', noErr);
     if(noErr){
-        int tmp, tmp2;
+        unsigned int tmp, tmp2;
         string setRow;
         if(in.find("set")!=-1)  noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
         else noErr=false;
@@ -341,11 +341,12 @@ bool control_update(string in){
 
 bool control_select(string in){
     bool noErr=(in[in.size()-1]==';');
-    int c=0;
-    string s;
     string tmp=" ";
+    unsigned int c=0, a=character_counter((tmp = in.substr(0,in.find("from"))),',');
+    string s;
+
     if(noErr){
-        if(in.find("from")!=-1 and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1 or tmp.find("*")!=-1) {
+        if(in.find("from")!=-1 and  a==num_of_words(tmp)-1 or tmp.find('*')!=-1) {
             in-=tmp;
             if(in.find("where") != -1 and num_of_words(substr_SS(in, "from", "where")) == 1){
                 bool exit=false;

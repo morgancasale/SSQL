@@ -669,7 +669,7 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
         int col_i;
         noErr=((col_i= get_col_index(col)) != -1);
         if(noErr){
-            string & type=elementsTypes[col_i];
+            const string & type=elementsTypes[col_i];
             tmp-=(col+"=");
             noErr=check_data_consistence(tmp, type);
             if(noErr){

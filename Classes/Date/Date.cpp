@@ -1,6 +1,6 @@
 #include "Date.h"
 
-bool Date::equal_date(const Date &d2) const &{
+bool Date::equal_date(const Date &d2) const{
     bool response=false;
     if(this->get_day()==d2.get_day() and this->get_month()==d2.get_month() and this->get_year()==d2.get_year()){
         response=true;
@@ -9,7 +9,7 @@ bool Date::equal_date(const Date &d2) const &{
 }
 bool Date::operator ==(const Date &d2) const &{ return equal_date(d2); }
 
-bool Date::compare_date(const Date &d2) const &{
+bool Date::compare_date(const Date &d2) const {
     bool bigger=false;
     if(this->get_year()>d2.get_year()){
         bigger=true;

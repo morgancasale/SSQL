@@ -197,38 +197,40 @@ string substr_SS(string in, string s1, string s2, const bool & reverse= false, b
 bool isalphanum(const char & in){ return isalnum(in) or isalpha(in); }
 
 unsigned int num_of_words(string in){
-    int num=0, i=0, k=0, end=(int)in.size()-1;
+    int num=0, i=0, k=0, start=0, end=(int)in.size()-1;
+    int ciao=0;
 
-    for(; !isalphanum(in[end]); end--){} /** O(in.size()) --> O(x) */
+    for(; !isalphanum(in[start]) and start<=in.size()-1; start++){}
+    for(; !isalphanum(in[end]) and end>=0; end--){} /** O(in.size()) --> O(x) */
     end++;
-    in=in.substr(0, end); /** O(n) */
+    in=in.substr(start, end-start); /** O(n) */
     in.push_back(' ');
-
-    if(!isalphanum(in[0]) and !isalphanum(in[in.size()-1])){ /** O(2x) */
-        i++;
-        k++;
-    }
-
-    for(; i<in.size()-k; i++){ /** O(x) */
-        for(; isalphanum(in[i]); i++){} /** O(x) */
-        if(i!=0 and isalphanum(in[i-1])){ /** O(x) */
-            num++;
+    if(!in.empty()) {
+        if (!isalphanum(in[0]) and !isalphanum(in[in.size() - 1])) { /** O(2x) */
+            i++;
+            k++;
         }
-    }/** O(2x^2) */
-    if(num==0 and isalphanum(in[in.size()-1])){ num++; } /** O(x) */
 
-    char characters[2]={'_', '-'};
-    while(in.find('_')!=-1 or in.find('-')!=-1){ /** O(2n) */
-        for(const char & ch: characters){ /** O(x) */
-            int pos=in.find(ch); /** O(n) */
-            if(pos!=-1) {
-                if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
-                    num--;
-                in[pos] = ' ';
+        for (; i < in.size() - k; i++) { /** O(x) */
+            for (; isalphanum(in[i]); i++) {} /** O(x) */
+            if (i != 0 and isalphanum(in[i - 1])) { /** O(x) */
+                num++;
             }
-        }
-    } /** O(2n^2) */
+        }/** O(2x^2) */
+        if (num == 0 and isalphanum(in[in.size() - 1])) { num++; } /** O(x) */
 
+        char characters[4] = {'_', '-', '.', ':'};
+        while (in.find('_') != -1 or in.find('-') != -1 or in.find('.') != -1 or in.find(':') != -1) { /** O(2n) */
+            for (const char &ch: characters) { /** O(x) */
+                int pos = in.find(ch); /** O(n) */
+                if (pos != -1) {
+                    if (isalphanum(in[pos - 1]) and isalphanum(in[pos + 1])) /** O(2x) */
+                        num--;
+                    in[pos] = ' ';
+                }
+            }
+        } /** O(2n^2) */
+    } else{ num=0; }
     return num;
 } /** O(2n^2) */
 

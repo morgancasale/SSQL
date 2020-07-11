@@ -26,3 +26,5 @@ update Transazioni set ammontare = -20.85 where ora = 22.05;
 
 select * from Transazioni;
 select * from Transazioni where data = 13/07/2003;
+
+~
