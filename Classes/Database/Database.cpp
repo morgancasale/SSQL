@@ -82,7 +82,7 @@ bool Database::process_command(string choice, bool & quit) {
     } else
     if(command=="select"){
         if((noErr=control_select(choice))){
-            PRINT(choice);
+            noErr=PRINT(choice);
         }
     }
     return noErr;
@@ -249,7 +249,7 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el.Date_to_string()<<" from the Column "<<ConCol.key
+                    cerr << endl << "The element " << ConCol_el.date_to_string() << " from the Column " << ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
                         <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
                 }
@@ -299,14 +299,14 @@ bool Database::DELETE(string in) {
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = take_the_N_nextWord(in, "where", 1);
+        string element = take_the_N_nextWords(in, "where", 1);
         int col_i;
         if ((col_i=Tables[table_i].get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!";
             noErr = false;
         }
         if(noErr){
-            string oper = take_the_N_nextWord(in, "where", 2);
+            string oper = take_the_N_nextWords(in, "where", 2);
             string data1 = substr_SS(in, oper, ";"), data2="/err";
             if(oper=="between"){
                 data1 = substr_SS(in,"between", "and");
@@ -367,9 +367,9 @@ bool Database::UPDATE(string in){
 
     if(noErr){
         in-=(tableName+" set ");
-        string oper = take_the_N_nextWord(in, "where", 2), data2between="/err";
+        string oper = take_the_N_nextWords(in, "where", 2), data2between="/err";
         if(oper=="between") data2between=substr_SS(in,"between",";");
-        string colToSearch= take_the_N_nextWord(in, "where", 1);
+        string colToSearch= take_the_N_nextWords(in, "where", 1);
         int col_index;
         noErr=((col_index=table.get_col_index(colToSearch))!=-1);
 
@@ -425,8 +425,8 @@ bool Database::UPDATE(string in){
 }
 
 bool Database::PRINT(string in) {
-    bool noErr;
-    string tableName = take_the_N_nextWord(in, "from", 1);
+    bool noErr=true;
+    string tableName = take_the_N_nextWords(in, "from", 1);
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
     string colToOrder="/err";
@@ -436,7 +436,7 @@ bool Database::PRINT(string in) {
         vector <string> colNames;
         string tmp;
         bool exit=true;
-        if(in.substr(0,in.find("from")).find("*")!=-1) colNames={"*"};
+        if(in.substr(0,in.find("from")).find('*')!=-1) colNames={"*"};
         else {
             do {
                 tmp = substr_CC(in, 0, 1, ' ', ',');
@@ -457,13 +457,13 @@ bool Database::PRINT(string in) {
         if(in.find("order by")!=-1){
             if(in.find("asc")!=-1) orden = 1;
             else if(in.find("desc")!=-1) orden = -1;
-            colToOrder = take_the_N_nextWord(in, "by", 1);
+            colToOrder = take_the_N_nextWords(in, "by", 1);
         }
 
         if(in.find("*")!=-1 and in.find("where")==-1){
-            table.printCols({"*"}, vec, colToOrder, orden);
+            noErr=table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
-            string oper = take_the_N_nextWord(in,"where", 2), data2="/err", data1="/err";
+            string oper = take_the_N_nextWords(in, "where", 2), data2="/err", data1="/err";
             if(oper=="between"){
                 data1 = substr_SS(in, "between", "and");
                 data2 = substr_SS(in, "and", "order");
@@ -475,10 +475,10 @@ bool Database::PRINT(string in) {
             }
             removeSpaces_fromStart_andEnd(data1);
 
-            vec = {take_the_N_nextWord(in,"where", 1), oper, data1, data2};
-            table.printCols(colNames, vec, colToOrder, orden);
+            vec = {take_the_N_nextWords(in, "where", 1), oper, data1, data2};
+            noErr=table.printCols(colNames, vec, colToOrder, orden);
         }else{
-            table.printCols(colNames, vec, colToOrder, orden);
+            noErr=table.printCols(colNames, vec, colToOrder, orden);
         }
     }
     cout<<endl;

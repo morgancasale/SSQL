@@ -8,7 +8,7 @@
     CREATE TablE INT_Test2 (Var1 int auto_increment, var2 int not null, primary key(var2));
     CREATE TABLE Err_INT_test (VAR1 int, Var2 int not null,
                               VaR3 int auto_increment,
-                              vaR4 int not null auto_increment, primary key(vaR4));
+                              vaR4 int not null auto_increment, vAr5 int, primary key(vaR4));
 
 
 #INSERT INTO test
@@ -25,12 +25,13 @@
 #This lines should give errors if uncommented
     #insert Into Err_INT_test (Var2) values (30); #vaR4 was not initialized int the first insert into
     #insert InTo Err_INT_test(VAR1, VaR3, vaR4) values (1,2,3); #No value was given to Var2
+    #insert into Err_INT_test (VAR1, Var2, VaR3, vaR4, vAr5) valUEs ( 'c', -2.3, "test", -4, 19:01, 15-01-2024);
 
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
-    #select * from INT_test;
-    #SeleCt * from INt_test;
-    #select * from INT_Test2;
+    select * from INT_test;
+    SeleCt * from INt_test;
+    select * from INT_Test2;
 
     select vaR4 from INT_test where Var2 = -2;
     select * from INT_test where Var2 > -2;
@@ -38,13 +39,12 @@
     select * from INT_test where Var2 >= -2;
     select * from INT_test where Var2 <= 80;
     select * from INT_test where Var2 <> 80;
-    select * from INT_test where Var2 < 80;
     select * from INT_test where VAR1 between -100 and 43;
 
 #This lines should give errors if uncommented
 #Comparing data of different types should give an error
     #select vaR4 from INT_test where Var2 = -2.3;
-    #select vaR4 from INT_test where Var2 = c;
+    #select vaR4 from INT_test where Var2 = 'c';
     #select vaR4 from INT_test where Var2 = "ciao";
     #select vaR4 from INT_test where Var2 = 15-01-2012;
     #select vaR4 from INT_test where Var2 = 15:01:22;

@@ -57,7 +57,7 @@ class Table {
         static bool check_type(const string & type);
         void cast_data_to_col(const int &col_i, const string &type, const string &data);
         void col_orderer(int colIndex, vector <int> & rowsIndexes, int order);
-        void createCol_from_file(ifstream &in, const string &type, int col_i);
+        void createCol_from_file(ifstream &in, const string &type, const int &col_i);
 
     public:
         void delete_col(const int &i);
@@ -80,9 +80,9 @@ class Table {
 
         bool set_UPDATE_data(const vector<string> &data, const vector<int> &rows);
 
-        void printCols(vector <string> colSelection,
-                const vector <string> & search = {"/err", "0", "/err"},
-                const string &colToOrder="/err", const int &order=0 );
+        bool printCols(vector <string> colSelection,
+                       const vector <string> & search = {"/err", "0", "/err"},
+                       const string &colToOrder="/err", const int &order=0 );
 
         bool printTable_to_file(ofstream & out);
 
