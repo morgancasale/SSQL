@@ -81,10 +81,10 @@ void Time::set_time(const string &time) {
 }
 
 
-int Time::tot_seconds() const {
+unsigned int Time::tot_seconds() const {
     return 3600*hours+60*minutes+seconds;
 }
-int Time::tot_mins() const {
+unsigned int Time::tot_mins() const {
     return 60*hours+minutes;
 }
 

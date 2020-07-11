@@ -511,24 +511,24 @@ string removeSpaces_fromStart_andEnd(string & in){
 } /** O(2x) */
 
 template <typename T>
-vector <int> order_vector_indexes(const vector<T> & input, const int & orden){
-    /* +1=ascending; -1=descending */
-    int n=input.size(), aux=0;
+vector <int> order_vector_indexes( vector<T> input, const int & orden){
+    int n= input.size();
+    vector<bool> equal(n);
+    vector<T> tmp = input;
     vector <int> output(n);
-
-    for (int i=0; i<n; i++){
-        aux=0;
-        for (int j=0; j<n; j++){
-            if(input[i]>input[j] and orden==+1) aux++;
-            else if(input[i]<input[j] and orden==-1)  aux++;
-            else if(input[i]==input[j]) aux = j==i ? aux : aux+1;
-            else if(!orden) cerr<<endl<<"errore";
+    sort(tmp.begin(), tmp.end());
+    if(orden == -1) reverse(tmp.begin(), tmp.end());
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(tmp[i]==input[j] and !equal[j]){
+                output[i]=j;
+                equal[j]=true;
+                j=n;
+            }
         }
-        output[aux]=i;
     }
     return output;
 }
-
 template <typename T>
 bool between(const T & in, const T & val1, const T & val2){
     if(val1 < val2){
