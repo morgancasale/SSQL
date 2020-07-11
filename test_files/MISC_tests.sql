@@ -7,8 +7,6 @@
     insert into EUROPE (EUROPIAN_COUNTRIES) values ("Ucraina");
     insert into EUROPE (EUROPIAN_COUNTRIES) values ("Belgium");
 
-select * from EUROPE order by ;
-
     Create table AMERICA ( AMERICAN_COUNTRIES text, PRIMARY KEY (AMERICAN_COUNTRIES));
     insert into AMERICA (AMERICAN_COUNTRIES) values ("USA");
     insert into AMERICA (AMERICAN_COUNTRIES) values ("Canada");
@@ -28,7 +26,7 @@ select * from EUROPE order by ;
         Update COUNTRIES
                    seT NAME_EUROPE = "Greece",
                    NAME_AMERICAN = "USA"
-                   WheRe ID = 23;
+                   WheRe casc = 23;
 
 #TRUNCATE test
     truncate table AMERICA;

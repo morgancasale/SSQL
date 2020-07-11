@@ -5,8 +5,7 @@
 #include "../utility.h"
 using namespace std;
 int main(){
-    string a="vaR4 = -1";
-    int b=num_of_words(a);
-
+    string a="= -20.85 ", c="* ";
+    unsigned int b=num_of_words(c);
     return 0;
 }

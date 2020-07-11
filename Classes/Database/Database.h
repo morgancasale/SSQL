@@ -20,11 +20,11 @@ private:
     bool check_Table_existence(const string &in_Table_name, const bool & check_existence);
 
     bool INSERT_INTO(string in);
-    bool DELETE(string in);
+    bool DELETE(const string& in);
 
     bool PRINT(string in);
 
-    int find_Table(string in);
+    int find_Table(const string& in);
 
     static bool get_INSERT_INTO_data(string in, vector<string> &elementsNames, vector<string> &elementsValues);
 

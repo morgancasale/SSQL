@@ -16,9 +16,9 @@ public:
     int get_month() const;
     void set_year(const int &y);
     int get_year() const;
-    bool equal_date(const Date &d2) const &;
+    bool equal_date(const Date &d2) const;
     bool operator ==(const Date &d2) const &;
-    bool compare_date(const Date &d2) const &;
+    bool compare_date(const Date &d2) const ;
     bool operator >(const Date &d2) const &;
     bool operator <(const Date &d2) const &;
     bool operator <=(const Date &d2) const &;
