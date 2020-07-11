@@ -27,7 +27,7 @@
     #select * from FLOAT_test where VAR3 > -4.7 order by vAr4 desc;
     #select * from FLOAT_test where VAR3 < 8009.2345;
     #select * from FLOAT_test where VAR3 >= -90.1356;
-    select * from FLOAT_test2 where VAR3 <= 8.3;
+    select * from FLOAT_test2 where var2 <= 8.3;
     select * from FLOAT_test where VAR3 <> 0.0;
     select * from FLOAT_test where VAR3 between -343.45 and 0.0;
 

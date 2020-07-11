@@ -30,7 +30,7 @@ bool Table::set_Table(const string &in){
         }
         noErr = set_primaryKey(data[dataSize - 1]);
     } else {
-        cerr << endl << "Forbidden names were given to the columns!";
+        cerr << endl << "Forbidden names were given to the columns!"<<endl;
     }
     return noErr;
 }
@@ -56,7 +56,7 @@ bool Table::set_primaryKey(const string & in){ //controlla se la chiave primaria
     }
 
     if(!noErr){
-        cerr<<endl<<"Primary key is not valid or not found!";
+        cerr<<endl<<"Primary key is not valid or not found!"<<endl;
     }
     return noErr;
 }
@@ -75,10 +75,10 @@ bool Table::check_key(const string &key) { //controlla se non è già stato data
 
 
     if(!noErr and !existenceErr){
-        cerr<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names";
+        cerr<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names"<<endl;
     }
     else if(existenceErr){
-        cerr<<endl<<"Column with name "<< key <<" already exists!";
+        cerr<<endl<<"Column with name "<< key <<" already exists!"<<endl;
     }
     return noErr;
 }
@@ -89,7 +89,7 @@ bool Table::check_type(const string & type){
 
     if(!noErr){
         cerr<<endl<<"Type "<< type <<" is not allowed!"<<endl;
-        cerr<<"Check the documentation to find out the allowed types";
+        cerr<<"Check the documentation to find out the allowed types"<<endl;
     }
     return noErr;
 }
@@ -140,7 +140,7 @@ bool Table::create_col(string in) {
 
     if((type!="int" and auto_increment)){
         if(!err){
-            cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!";
+            cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!"<<endl;
             err=true;
         }
     }
@@ -182,7 +182,7 @@ bool Table::create_col(string in) {
         }
     }
     if(err){
-        cerr<<endl<<"CREATE input syntax error!";
+        cerr<<endl<<"CREATE input syntax error!"<<endl;
     }
 
     if(!err) {
@@ -265,9 +265,9 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
     bool err=false;
     if(elementsValues.size() != elements_Names.size()){
         if(elements_Names.size() > elementsValues.size()){
-            cerr << endl << "Too few arguments in values where given!";
+            cerr << endl << "Too few arguments in values where given!"<<endl;
         } else{
-            cerr << endl << "Too much arguments in values where given!";
+            cerr << endl << "Too much arguments in values where given!"<<endl;
         }
         err=true;
     }
@@ -278,11 +278,11 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
             if(check_data_consistence(elementsValues[i], type=elementsTypes[col_i])) {
                 cast_data_to_col(col_i, type, elementsValues[i]);
             } else{
-                cerr<<endl<<"Some of the data is not compatible with the respective column!";
+                cerr<<endl<<"Some of the data is not compatible with the respective column!"<<endl;
                 err = true;
             }
         } else{
-            cerr << endl << "No column with name " << elements_Names[i] << " is in the table!";
+            cerr << endl << "No column with name " << elements_Names[i] << " is in the table!"<<endl;
             err=true;
         }
     }
@@ -412,11 +412,11 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     }
 
     if(autoIncrAndNotNullErr){
-        cerr<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)";
+        cerr<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)"<<endl;
     }
 
     if(fillErr){
-        cerr<<endl<<R"(An element set as "not null" was not filled!)";
+        cerr<<endl<<R"(An element set as "not null" was not filled!)"<<endl;
     }
     return (fillErr and autoIncrAndNotNullErr);
 }
@@ -553,7 +553,7 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
             }
         }
     } else{
-        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")";
+        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")"<<endl;
     }
 
     if(foundRows.empty()){
@@ -717,10 +717,10 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
                     }
                 }
             } else{
-                cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)";
+                cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)"<<endl;
             }
         } else{
-            cerr<<endl<<"No column "<<col<<" was found!";
+            cerr<<endl<<"No column "<<col<<" was found!"<<endl;
         }
     }
     return noErr;
@@ -864,7 +864,7 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
                         }
                     }
                 } else {
-                    cerr << endl << "No column " << colSelectedName << " to print was found!";
+                    cerr << endl << "No column " << colSelectedName << " to print was found!"<<endl;
                 }
             }
             cout << endl;
