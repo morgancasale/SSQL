@@ -3,7 +3,7 @@
 
 bool Database::check_TableName(const string & name){
     bool noErr=true;
-    for(string tmp: allowed_coms){ noErr=(name!=tmp); }
+    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
     if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
     if(noErr){ for(const string & tmp: reserved_words){ noErr=(name!=tmp); } }
     return noErr;
@@ -277,7 +277,7 @@ bool Database::checkForeignKeys(const Table &table, int row) {
     return noErr;
 }
 
-int Database::find_Table(string in) {
+int Database::find_Table(const string & in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
@@ -293,7 +293,7 @@ int Database::find_Table(string in) {
     }
 }
 
-bool Database::DELETE(string in) {
+bool Database::DELETE(const string & in) {
     string table_name= substr_CC(in, 0, 1);
     bool noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
@@ -411,7 +411,7 @@ bool Database::UPDATE(string in){
             }*/
 
         } else{
-            cerr<<endl<<"No column "<<colToSearch<<"was found!";
+            cerr<<endl<<"No column "<<colToSearch<<" was found!";
         }
 
     } else{
@@ -460,7 +460,7 @@ bool Database::PRINT(string in) {
             colToOrder = take_the_N_nextWords(in, "by", 1);
         }
 
-        if(in.find("*")!=-1 and in.find("where")==-1){
+        if(in.find('*')!=-1 and in.find("where")==-1){
             noErr=table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
             string oper = take_the_N_nextWords(in, "where", 2), data2="/err", data1="/err";
@@ -476,7 +476,12 @@ bool Database::PRINT(string in) {
             removeSpaces_fromStart_andEnd(data1);
 
             vec = {take_the_N_nextWords(in, "where", 1), oper, data1, data2};
-            noErr=table.printCols(colNames, vec, colToOrder, orden);
+            if(table.get_col_index(vec[0])!=-1){
+                noErr=table.printCols(colNames, vec, colToOrder, orden);
+            } else{
+                noErr=false;
+                cerr<<endl<<"No column "<<vec[0]<<" was found!";
+            }
         }else{
             noErr=table.printCols(colNames, vec, colToOrder, orden);
         }
@@ -620,7 +625,7 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
 
     if(noErr){
         string line="the cake is a lie", command;
-        int line_i=0, startLine_i=0, endLine_i;
+        int line_i=1, startLine_i=1, endLine_i=1;
         bool start=true;
         while(line!="~" and noErr and !quit) {
             command="";
@@ -628,7 +633,7 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 if(start){ startLine_i=line_i; start=false;}
                 getline(in, line);
                 if(line!="~"){
-                    while(line=="\r" or line[0]=='#'){
+                    while(line=="\r" or removeSpaces_fromStart_andEnd(line)[0]=='#'){
                         getline(in, line);
                         line_i++;
                         startLine_i++;
@@ -649,10 +654,10 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 noErr = process_command(command, quit);
                 if (!noErr) {
                     if (endLine_i == startLine_i) {
-                        cerr << endl << "Error at line " << startLine_i+1;
+                        cerr << endl << "Error at line " << startLine_i;
                     } else {
-                        cerr << endl << "Error from line " << startLine_i+1
-                             << " to line " << endLine_i+1 << "!";
+                        cerr << endl << "Error from line " << startLine_i
+                             << " to line " << endLine_i << "!";
                     }
                 }
                 if(quit){

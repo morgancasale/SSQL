@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/test_files/CHAR_tests.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test_files/CREATE_tests.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test_files/DATE_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/test_files/FLOAT_tests.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test_files/INT_tests.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test_files/MISC_tests.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/test_files/TEXT_tests.sql" dialect="GenericSQL" />

@@ -26,7 +26,7 @@
         Update COUNTRIES
                    seT NAME_EUROPE = "Greece",
                    NAME_AMERICAN = "USA"
-                   WheRe ID = 23;
+                   WheRe casc = 23;
 
 #TRUNCATE test
     truncate table AMERICA;

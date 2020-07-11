@@ -720,7 +720,7 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
                 cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)";
             }
         } else{
-            cerr<<endl<<"No column "<<col<<"was found!";
+            cerr<<endl<<"No column "<<col<<" was found!";
         }
     }
     return noErr;
