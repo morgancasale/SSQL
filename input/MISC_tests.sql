@@ -26,7 +26,7 @@
         Update COUNTRIES
                    seT NAME_EUROPE = "Greece",
                    NAME_AMERICAN = "USA"
-                   WheRe casc = 23;
+                   WheRe ID = 23;
 
 #TRUNCATE test
     truncate table AMERICA;
@@ -52,7 +52,10 @@ create TABLE moto ( Name text not null, company1 text, color text, wheels int, p
 insert into moto (Name, company1, color, wheels) values ("Vespa", "piaggio", "rosso", 2);
 insert into moto (Name, company1, color, wheels) values ("C30", "yamaha", "nera", 4);
 
+drop table moto;
+
 #SELECT ALL tests
+    #select * from moto;
     select * from phone;
     select * from phone order by price asc;
     select * from phone;
@@ -61,6 +64,5 @@ insert into moto (Name, company1, color, wheels) values ("C30", "yamaha", "nera"
 
     select * from AMERICA;
     select * from COUNTRIES;
-    select * from moto;
 
 ~

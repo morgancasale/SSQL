@@ -8,7 +8,6 @@ class Date{
 private:
     int day, month, year;
     bool AC=false;
-    Time time;
 public:
     void set_day(const int &d);
     int get_day() const;

@@ -1,12 +1,7 @@
 #include "Time.h"
+#define RED     "\033[31m"
+#define RESET   "\033[0m"
 using namespace std;
-
-//remove char sub from string then returns a stringstream from the modified input string
-stringstream data_ss(string in, const char &sub){
-    replace(in.begin(), in.end(), sub, ' ');
-    stringstream ss(in);
-    return ss;
-}
 
 unsigned int c_counter(const string & in, char char_to_count){
     int counter=0;
@@ -18,20 +13,20 @@ unsigned int c_counter(const string & in, char char_to_count){
 
 void Time::set_hours(const int &h) {
     if(h<0 or h>24){
-        cerr<<endl<<"Hours format error"<<endl;
+        cout << RED<<endl<<"Hours format error"<<endl << RESET;
     } else{ hours=h; }
 }
 unsigned int Time::get_hours() const { return hours; }
 void Time::set_minutes(const int &m) {
     if(m<0 or m>60){
-        cerr<<endl<<"Minutes format error"<<endl;
+        cout << RED<<endl<<"Minutes format error"<<endl << RESET;
     }
     else{ minutes=m; }
 }
 unsigned int Time::get_minutes() const { return minutes; }
 void Time::set_seconds(const int &s) {
     if(s<0 or s>60){
-        cerr<<endl<<"Seconds format error"<<endl;
+        cout << RED<<endl<<"Seconds format error"<<endl << RESET;
     }
     else{ seconds=s; }
 }
@@ -54,7 +49,7 @@ void Time::set_time(const string &time) {
         sub='.';
     }
     else{
-        cerr<<"Time data format error!"<<endl;
+        cout << RED<<"Time data format error!"<<endl << RESET;
         hours=0;
         minutes=0;
         seconds=42;

@@ -1,11 +1,13 @@
 #ifndef CS_PROJECT_UTILITY_H
 #define CS_PROJECT_UTILITY_H
-
+#define RED     "\033[31m"
+#define RESET   "\033[0m"
 using namespace std;
 #include <iostream>
 #include <algorithm>
 #include <sstream>
 #include <vector>
+#include <fstream>
 #include "Classes/Date/Date.h"
 
 
@@ -101,15 +103,15 @@ bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & sh
 } /** O(xn) */
 
 string replace_chars(string & in, const vector<char> & sub, const char & c) {
-    for(const char & c: sub){
-        int pos=in.find(c);
+    for(const char & i: sub){
+        int pos=in.find(i);
         while(pos!=-1){
             string tmp="";
-            if(c != -1){
+            if(i != -1){
                 tmp[0]=c;
             }
             in.replace(pos,1, tmp);
-            pos=in.find(c);
+            pos=in.find(i);
         }
     }
 
@@ -136,7 +138,7 @@ void clean_input(string & in, const vector<string> & programKeyWords){
         if(tmp.find(a)!=-1) {
             for (int i = 1; (pos = find_nIterations(tmp, a, i)) != -1; i++) {
                 unsigned long int val = pos + a.size();
-                bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(');
+                bool flag = (tmp[val]==' ' or tmp[val]==',' or tmp[val]==')' or tmp[val]=='(' or tmp[val]=='\000' or tmp[val]==';');
                 flag &=(pos==0) or (tmp[pos-1]==' ' or tmp[pos-1]==',' or tmp[pos-1]==')' or tmp[pos-1]=='(');
 
                 if (flag) {
@@ -238,8 +240,8 @@ bool is_a_Time(const string & var){
     bool response=true;
 
     int hours=-1, min=-1, sec=-1;
-    int dots=character_counter(var, '.');
-    int col=character_counter(var, ':');
+    unsigned int dots=character_counter(var, '.');
+    unsigned int col=character_counter(var, ':');
 
     char sub;
     if(var.find(':')!=-1 and (col==1 or col==2)){ /** O(n) */
@@ -533,6 +535,27 @@ bool between(const T & in, const T & val1, const T & val2){
     else if(val1 == val2){
         return (in == val2);
     } else return false;
+}
+
+template<typename type> vector<type> remove_duplicateEls(vector<type> & vec){
+    vector<type> copy;
+    if(vec.size()!=0){
+        for(int i=0; i < vec.size() - 1; i++){
+            bool new_el=true;
+            for(const type & el : copy){ if(vec[i] == el){ new_el=false; } }
+            if(new_el){ copy.push_back(vec[i]); }
+        }
+    }
+    return vec=copy;
+}
+
+void get_cleanLine(ifstream & in, string & str){
+    getline(in, str);
+    replace_chars(str, {'\r', '\n'}, -1);
+}
+
+string pRed(const string & in){
+    return "\033[31m"+in+"\033[0m";
 }
 
 /*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
