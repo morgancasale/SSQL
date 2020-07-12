@@ -1,6 +1,13 @@
 #include "Time.h"
 using namespace std;
 
+//remove char sub from string then returns a stringstream from the modified input string
+stringstream data_ss(string in, const char &sub){
+    replace(in.begin(), in.end(), sub, ' ');
+    stringstream ss(in);
+    return ss;
+}
+
 unsigned int c_counter(const string & in, char char_to_count){
     int counter=0;
     for(char c:in){
@@ -10,44 +17,23 @@ unsigned int c_counter(const string & in, char char_to_count){
 }
 
 void Time::set_hours(const int &h) {
-    try{
-        if(h<0 or h>24){
-            throw("Hours format error");
-        }
-        else{
-            hours=h;
-        }
-    }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+    if(h<0 or h>24){
+        cerr<<endl<<"Hours format error"<<endl;
+    } else{ hours=h; }
 }
 unsigned int Time::get_hours() const { return hours; }
 void Time::set_minutes(const int &m) {
-    try{
-        if(m<0 or m>60){
-            throw("Minutes format error");
-        }
-        else{
-            minutes=m;
-        }
+    if(m<0 or m>60){
+        cerr<<endl<<"Minutes format error"<<endl;
     }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+    else{ minutes=m; }
 }
 unsigned int Time::get_minutes() const { return minutes; }
-void Time::set_seconds(const int &s) { try{
-        if(s<0 or s>60){
-            throw("Seconds format error");
-        }
-        else{
-            seconds=s;
-        }
+void Time::set_seconds(const int &s) {
+    if(s<0 or s>60){
+        cerr<<endl<<"Seconds format error"<<endl;
     }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+    else{ seconds=s; }
 }
 unsigned int Time::get_seconds() const { return seconds; }
 
@@ -60,15 +46,15 @@ void Time::set_time(const int &h, const int &m, const int &s) {
 void Time::set_time(const string &time) {
     char sub=' ';
     bool err=false;
-    int a;
-    if((a=c_counter(time,':'))==1 or a==2){
+    unsigned int tmp;
+    if((tmp=c_counter(time, ':')) == 1 or tmp == 2){
         sub=':';
     }
-    else if((a=c_counter(time,'.'))==1 or a==2){
+    else if((tmp=c_counter(time, '.')) == 1 or tmp == 2){
         sub='.';
     }
     else{
-        cerr<<"Time data format error";
+        cerr<<"Time data format error!"<<endl;
         hours=0;
         minutes=0;
         seconds=42;
