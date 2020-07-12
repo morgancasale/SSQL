@@ -4,8 +4,8 @@
 using namespace std;
 #include "../Classes/Time/Time.cpp"
 #include "../Classes/Date/Date.cpp"
-#include "../utility.h"
-#include "../syntax.h"
+#include "../src/utility.h"
+#include "../src/syntax.h"
 #include "../Classes/Table/Table.cpp"
 #include "../Classes/Database/Database.cpp"
 

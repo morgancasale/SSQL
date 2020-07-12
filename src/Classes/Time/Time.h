@@ -5,6 +5,14 @@
 #include <algorithm>
 using namespace std;
 
+//remove char sub from string then returns a stringstream from the modified input string
+stringstream data_ss(string in, const char &sub){
+    replace(in.begin(), in.end(), sub, ' ');
+    stringstream ss(in);
+    return ss;
+}
+
+
 class Time{
 private:
     unsigned int hours, minutes, seconds;

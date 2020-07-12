@@ -131,6 +131,7 @@ bool Database::INSERT_INTO(string in){
         if(err){
             table=tableBackup;
         }
+        updated_TablesNames.push_back(table.name);
     } else{
         cerr << endl << "There is no Table with name " << TableName << "!"<<endl;
         err=true;
@@ -300,8 +301,9 @@ bool Database::DELETE(const string & in) {
 
     if(noErr) {
         string element = take_the_N_nextWords(in, "where", 1);
+        Table & table=Tables[table_i];
         int col_i;
-        if ((col_i=Tables[table_i].get_col_index(element))==-1) {
+        if ((col_i=table.get_col_index(element))==-1) {
             cerr<<"No colum with name "<<element<<" was found!"<<endl;
             noErr = false;
         }
@@ -316,10 +318,11 @@ bool Database::DELETE(const string & in) {
             removeSpaces_fromStart_andEnd(data2);
           
             vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data1, col_i, foundRows, oper, data2);
+            noErr=table.find_Rows_by_value(data1, col_i, foundRows, oper, data2);
             if(noErr){
-                Tables[table_i].deleteRows(foundRows);
+                table.deleteRows(foundRows);
             }
+            updated_TablesNames.push_back(table.name);
         }
 
     }
@@ -335,10 +338,15 @@ bool Database::DROP_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        for(int i=table.get_elementsTypes().size(); i>0; i--){
+
+        vector<string> el_types=table.get_elementsTypes();
+        for(unsigned int i=table.get_elementsTypes().size()-1; i>0; i--){
             table.delete_col(i);
-            table.get_elementsTypes().resize(table.get_elementsTypes().size()-1);
+            //el_types.resize(el_types.size()-1);
         }
+        //table.set_elementsTypes(el_types);
+
+        deleted_TablesNames.push_back(table.name);
         deleteElements_from_vec(Tables,{Table_i});
     }
     return noErr;
@@ -354,6 +362,7 @@ bool Database::TRUNCATE_TABLE(const string & in){
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
         table.empty_Tablecontent();
+        updated_TablesNames.push_back(table.name);
     }
     return noErr;
 }
@@ -420,6 +429,8 @@ bool Database::UPDATE(string in){
 
     if(!noErr){
         table=TableBackup;
+    }else{
+        updated_TablesNames.push_back(table.name);
     }
     return noErr;
 }
@@ -491,13 +502,33 @@ bool Database::PRINT(string in) {
 }
 
 void Database::QUIT(){
+    string path="../Database.txt";
     ofstream out;
-    out.open("../Database.txt", ios::trunc);
-    for(Table & table:Tables){
-       table.printTable_to_file(out);
-       out<<endl;
+    ifstream in;
+    in.open(path);
+    out.open(path, ios::app);
+    vector<int> modified_Tables;
+
+    string tmp_line;
+    getline(in, tmp_line);
+    in.close();
+    if(!tmp_line.empty()) {
+        for (const string &up_table : updated_TablesNames) {
+            updateTables_fromFile(path, up_table);
+            modified_Tables.push_back(find_Table(up_table));
+        }
+
+        for (const string &del_table : deleted_TablesNames) {
+            deleteTables_fromFile(path, del_table);
+            modified_Tables.push_back(find_Table(del_table));
+        }
     }
-    out<<"|";
+    remove_duplicateEls(modified_Tables);
+    deleteElements_from_vec(Tables, modified_Tables);
+    for(Table & table:Tables){
+        streampos tmp;
+        table.printTable_to_file(out);
+    }
     out.close();
 }
 
@@ -511,22 +542,13 @@ bool Database::START() {
     string line;
     int i=0;
     char end=42;
-    while(end!='|'){
-        getline(in, line);
+    getline(in, line);
+    while(!in.eof()){
         this->Tables.resize(i+1);
+        getline(in, line);
         this->Tables[i].createTable_from_file(in, line);
         i++;
         getline(in, line);
-        end=line[0];
-        if(end!='|'){
-            streampos tmp = in.tellg();
-            getline(in, line);
-            if(line[0]=='|'){
-                end=line[0];
-            } else{
-               in.seekg(tmp);
-            }
-        }
     }
     return noErr;
 }
@@ -667,4 +689,106 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
         }
     }
     return noErr;
+}
+
+void Database::updateTables_fromFile(const string & path, const string & table_name){
+    ifstream in;
+    in.open(path);
+    ofstream copy;
+    copy.open("tmp.txt");
+
+    if(!in){
+        cout<<"err"<<endl;
+    }
+    if(!copy){
+        cout<<"err2"<<endl;
+    }
+
+    bool end=false;
+
+    string line, name;
+    while(!end and !in.eof()){
+        getline(in, line);
+        if (line == "~") {
+            getline(in, line);
+            name = substr_CC(line, 0, 1);
+            if (name == table_name) { end = true; }
+            else {
+                copy << "~" << endl << line << endl;
+            }
+        } else {
+            copy << line << endl;
+        }
+    }
+
+
+    Table &table = Tables[find_Table(table_name)];
+    table.printTable_to_file(copy);
+
+    getline(in, line);
+    while (line != "~") {
+        getline(in, line);
+    }
+    copy<<"~"<<endl;
+    while (!in.eof()) {
+        copy << line << endl;
+        getline(in, line);
+    }
+
+    remove(path.c_str());
+    rename("tmp.txt", path.c_str());
+}
+
+void Database::deleteTables_fromFile(const string & path, const string & table){
+    ifstream in;
+    in.open(path);
+    ofstream copy;
+    copy.open("tmp.txt");
+
+    if(!in){
+        cout<<"err"<<endl;
+    }
+    if(!copy){
+        cout<<"err2"<<endl;
+    }
+
+    bool end=false;
+
+    string line, name;
+    while(!end and !in.eof()){
+        getline(in, line);
+        if(!line.empty()) {
+            if (line == "~") {
+                getline(in, line);
+                name = substr_CC(line, 0, 1);
+                if (name == table) { end = true; }
+                else {
+                    copy << "~" << endl << line << endl;
+                }
+            } else {
+                copy << line << endl;
+            }
+        }
+    }
+
+
+    if(!line.empty()) {
+        for (int i = 0; i < 7; i++) { getline(in, line); }//scendo di 6 righe per arrivare alle colonne
+
+        bool cont = true;
+
+        do {
+            for (int i = 0; i < 4; i++) { getline(in, line); }//scendo di 4 righe per arrivare alla fine di una colonna
+            if (line.empty()) { cont = false; }
+        } while (cont);
+
+        getline(in, line);
+        while (!in.eof()) {
+            copy << line << endl;
+            getline(in, line);
+        }
+
+        remove(path.c_str());
+        rename("tmp.txt", path.c_str());
+    }
 }

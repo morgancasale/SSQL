@@ -1,13 +1,6 @@
 #include "Time.h"
 using namespace std;
 
-//remove char sub from string then returns a stringstream from the modified input string
-stringstream data_ss(string in, const char &sub){
-    replace(in.begin(), in.end(), sub, ' ');
-    stringstream ss(in);
-    return ss;
-}
-
 unsigned int c_counter(const string & in, char char_to_count){
     int counter=0;
     for(char c:in){

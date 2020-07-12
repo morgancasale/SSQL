@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char **argv) {
     bool noErr, QUIT=false;
     Database d4;
-    //d4.START();
+    d4.START();
 
     if(argc>1) {
         noErr = d4.readCommands_from_file(argv[1], QUIT);
@@ -21,12 +21,12 @@ int main(int argc, char **argv) {
     }
 
     string choice;
-    do{
+    while(!QUIT){
         cout<<"Waiting for next command: "<<endl;
         cin>>choice;
 
         d4.process_command(choice, QUIT);
-    }while(!QUIT);
+    }
 
     return 0;
 }

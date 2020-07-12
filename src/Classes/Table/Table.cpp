@@ -26,7 +26,7 @@ bool Table::set_Table(const string &in){
         name = data[0];
         int dataSize = data.size();
         for (int i = 1; i < (dataSize - 1) and noErr; i++) {
-            noErr = !create_col(data[i]);
+            noErr = !create_col(data[i], false);
         }
         noErr = set_primaryKey(data[dataSize - 1]);
     } else {
@@ -61,7 +61,7 @@ bool Table::set_primaryKey(const string & in){ //controlla se la chiave primaria
     return noErr;
 }
 
-bool Table::check_key(const string &key) { //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
+bool Table::check_key(const string &key, bool existence) { //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
     bool noErr = true;
     bool existenceErr = false;
     if(key=="/err"){ noErr=false; }
@@ -69,7 +69,7 @@ bool Table::check_key(const string &key) { //controlla se non è già stato data
     if(noErr){
         for(const auto & allowed_type : allowed_types){ if(key==allowed_type){ noErr=false; } }
     }
-    if(noErr){
+    if(noErr and !existence){
         for(auto & elementsName : elementsNames){ if(key==elementsName){ noErr=false; existenceErr=true; } }
     }
 
@@ -111,7 +111,7 @@ int Table::count_data(const vector<string> & data, const string & type){ //conta
     return counter;
 }
 
-bool Table::create_col(string in) {
+bool Table::create_col(string in, bool existence) {
     bool err=false;
 
     bool auto_increment=false;
@@ -128,7 +128,7 @@ bool Table::create_col(string in) {
 
     string key= substr_CC(in, 0, 1);
     replace_chars(key, {' '}, -1);
-    err=!check_key(key);
+    err=!check_key(key, existence);
     in-=key;
 
     string type;
@@ -185,7 +185,7 @@ bool Table::create_col(string in) {
         cerr<<endl<<"CREATE input syntax error!"<<endl;
     }
 
-    if(!err) {
+    if(!err and !existence) {
         elementsTypes.push_back(type);
         elementsNames.push_back(key);
     }
@@ -603,7 +603,7 @@ void Table::deleteRows(const vector<int> & Rows){
     }
 }
 
-void Table::delete_col(const int &i){ /**https://stackoverflow.com/questions/33805741/delete-pointer-and-object*/
+void Table::delete_col(const unsigned int &i){ /**https://stackoverflow.com/questions/33805741/delete-pointer-and-object*/
     if(elementsTypes[i]=="int"){
         delete((static_cast<Column<int>*>(cols[i])));
     }
@@ -873,8 +873,8 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
     return noErr;
 }
 
-bool Table::printTable_to_file(ofstream & out) {
-    bool noErr=true;
+void Table::printTable_to_file(ofstream &out) {
+    out<<"~"<<endl;
     out<<name<<" ";
     out<<rows<<" ";
     out<<primaryKey_index;
@@ -920,7 +920,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="float"){
             Column<float> & col=(*static_cast<Column<float>*>(cols[i]));
@@ -936,7 +936,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="char"){
             Column<char> & col=(*static_cast<Column<char>*>(cols[i]));
@@ -952,7 +952,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="string" or elementsTypes[i]=="text"){
             Column<string> & col=(*static_cast<Column<string>*>(cols[i]));
@@ -969,7 +969,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="time"){
             Column<Time> & col=(*static_cast<Column<Time>*>(cols[i]));
@@ -987,7 +987,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="date"){
             Column<Date> & col=(*static_cast<Column<Date>*>(cols[i]));
@@ -1005,11 +1005,9 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
-
     }
-    return noErr;
 }
 
 void Table::createTable_from_file(ifstream & in, string line) {
@@ -1039,6 +1037,7 @@ void Table::createTable_from_file(ifstream & in, string line) {
 
     for(int i=0; i<elementsTypes.size(); i++){
         createCol_from_file(in, elementsTypes[i], i);
+        getline(in, line);
     }
 }
 
@@ -1058,7 +1057,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     if(auto_increment){
         input+=" auto_increment";
     }
-    create_col(input);
+    create_col(input, true);
 
     getline(in, line);
     if(type=="int"){
@@ -1102,13 +1101,19 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     }
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
-        string data=line, element;
-        while((element= substr_CC(data, 1, 2, '\"', '\"')) != "/err"){
-            tmp.values.push_back(element);
-            data-="\""+element+"\" ";
-        }
-        getline(in, line);
         vector<string> tmp_data;
+
+        string tmp2=substr_CC(line, 1, 2, '\"', '\"');
+        while(tmp2!="/err"){
+            tmp2="\""+tmp2+"\"";
+            tmp_data.push_back(tmp2);
+            tmp2=substr_CC(line, 1, 2, '\"', '\"');
+        }
+
+        line>>tmp.values;
+
+
+        getline(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
