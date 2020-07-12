@@ -91,7 +91,7 @@ bool control_create(string in){
     if(!err and in.find('(')!=-1 and num_of_words(in.substr(0,in.find('(')))!=1) {
         err = true;
     }
-    if(!err and in.find("primary key(")==-1 and in.find("primary key (")==-1){
+    if(!err and in.find("primary key")==-1){
         primaryKeyErr=true;
     }
     if(!err and in.find("not_null")!=-1 ){
