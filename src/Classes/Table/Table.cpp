@@ -30,7 +30,7 @@ bool Table::set_Table(const string &in){
         }
         noErr = set_primaryKey(data[dataSize - 1]);
     } else {
-        cerr << endl << "Forbidden names were given to the columns!"<<endl;
+        cout << RED << endl << "Forbidden names were given to the columns!"<<endl << RESET;
     }
     return noErr;
 }
@@ -56,7 +56,7 @@ bool Table::set_primaryKey(const string & in){ //controlla se la chiave primaria
     }
 
     if(!noErr){
-        cerr<<endl<<"Primary key is not valid or not found!"<<endl;
+        cout << RED<<endl<<"Primary key is not valid or not found!"<<endl << RESET;
     }
     return noErr;
 }
@@ -75,10 +75,10 @@ bool Table::check_key(const string &key, bool existence) { //controlla se non è
 
 
     if(!noErr and !existenceErr){
-        cerr<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names"<<endl;
+        cout << RED<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names"<<endl << RESET;
     }
     else if(existenceErr){
-        cerr<<endl<<"Column with name "<< key <<" already exists!"<<endl;
+        cout << RED<<endl<<"Column with name "<< key <<" already exists!"<<endl << RESET;
     }
     return noErr;
 }
@@ -88,8 +88,8 @@ bool Table::check_type(const string & type){
     for(const string & tmp: allowed_types){ if(tmp==type){ noErr=true; } }
 
     if(!noErr){
-        cerr<<endl<<"Type "<< type <<" is not allowed!"<<endl;
-        cerr<<"Check the documentation to find out the allowed types"<<endl;
+        cout << RED<<endl<<"Type "<< type <<" is not allowed!"<<endl << RESET;
+        cout << RED<<"Check the documentation to find out the allowed types"<<endl << RESET;
     }
     return noErr;
 }
@@ -140,7 +140,7 @@ bool Table::create_col(string in, bool existence) {
 
     if((type!="int" and auto_increment)){
         if(!err){
-            cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!"<<endl;
+            cout << RED<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!"<<endl << RESET;
             err=true;
         }
     }
@@ -182,7 +182,7 @@ bool Table::create_col(string in, bool existence) {
         }
     }
     if(err){
-        cerr<<endl<<"CREATE input syntax error!"<<endl;
+        cout << RED<<endl<<"CREATE input syntax error!"<<endl << RESET;
     }
 
     if(!err and !existence) {
@@ -265,9 +265,9 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
     bool err=false;
     if(elementsValues.size() != elements_Names.size()){
         if(elements_Names.size() > elementsValues.size()){
-            cerr << endl << "Too few arguments in values where given!"<<endl;
+            cout << RED << endl << "Too few arguments in values where given!"<<endl << RESET;
         } else{
-            cerr << endl << "Too much arguments in values where given!"<<endl;
+            cout << RED << endl << "Too much arguments in values where given!"<<endl << RESET;
         }
         err=true;
     }
@@ -278,11 +278,11 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
             if(check_data_consistence(elementsValues[i], type=elementsTypes[col_i])) {
                 cast_data_to_col(col_i, type, elementsValues[i]);
             } else{
-                cerr<<endl<<"Some of the data is not compatible with the respective column!"<<endl;
+                cout << RED<<endl<<"Some of the data is not compatible with the respective column!"<<endl << RESET;
                 err = true;
             }
         } else{
-            cerr << endl << "No column with name " << elements_Names[i] << " is in the table!"<<endl;
+            cout << RED << endl << "No column with name " << elements_Names[i] << " is in the table!"<<endl << RESET;
             err=true;
         }
     }
@@ -412,11 +412,11 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     }
 
     if(autoIncrAndNotNullErr){
-        cerr<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)"<<endl;
+        cout << RED<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)"<<endl << RESET;
     }
 
     if(fillErr){
-        cerr<<endl<<R"(An element set as "not null" was not filled!)"<<endl;
+        cout << RED<<endl<<R"(An element set as "not null" was not filled!)"<<endl << RESET;
     }
     return (fillErr and autoIncrAndNotNullErr);
 }
@@ -553,15 +553,15 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
             }
         }
     } else{
-        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")"<<endl;
+        cout << RED<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")"<<endl << RESET;
     }
 
     if(foundRows.empty()){
         //noErr=false;
-        cerr<<endl<<"No rows that satisfies the condition "<<op<<" "<< data1;
-        if(data2!="/err") cerr<<" and \""<<data2<<"\" were";
-        else cerr<<" was";
-        cerr<<" found"<<endl;
+        cout << RED<<endl<<"No rows that satisfies the condition "<<op<<" "<< data1 << RESET;
+        if(data2!="/err") cout << RED<<" and \""<<data2<<"\" were" << RESET;
+        else cout << RED<<" was" << RESET;
+        cout << RED<<" found"<<endl << RESET;
     }
 
     return noErr;
@@ -717,10 +717,10 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
                     }
                 }
             } else{
-                cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)"<<endl;
+                cout << RED << endl << "Inserted data isn't of the correct type! (" << type << " was expected)"<<endl << RESET;
             }
         } else{
-            cerr<<endl<<"No column "<<col<<" was found!"<<endl;
+            cout << RED<<endl<<"No column "<<col<<" was found!"<<endl << RESET;
         }
     }
     return noErr;
@@ -864,7 +864,7 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
                         }
                     }
                 } else {
-                    cerr << endl << "No column " << colSelectedName << " to print was found!"<<endl;
+                    cout << RED << endl << "No column " << colSelectedName << " to print was found!"<<endl << RESET;
                 }
             }
             cout << endl;

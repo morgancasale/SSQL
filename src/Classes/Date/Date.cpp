@@ -59,7 +59,7 @@ void Date::set_day(const int &d) {
         day=d;
     }
     else{
-        cerr<<"Day not valid!"<<endl;
+        cout << RED<<"Day not valid!"<<endl << RESET;
     }
 }
 int Date::get_day() const { return day; }
@@ -69,7 +69,7 @@ void Date::set_month(const int &m) {
         month=m;
     }
     else{
-        cerr<<"Month not valid!"<<endl;
+        cout << RED<<"Month not valid!"<<endl << RESET;
     }
 }
 int Date::get_month() const{ return month; }
@@ -114,6 +114,6 @@ void Date::set_Date(const string & in){
         set_month(m);
         set_year(y);
     } else{
-        cerr<<endl<<"No date was found in this string!"<<endl;
+        cout << RED<<endl<<"No date was found in this string!"<<endl << RESET;
     }
 }

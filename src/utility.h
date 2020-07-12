@@ -1,6 +1,7 @@
 #ifndef CS_PROJECT_UTILITY_H
 #define CS_PROJECT_UTILITY_H
-
+#define RED     "\033[31m"
+#define RESET   "\033[0m"
 using namespace std;
 #include <iostream>
 #include <algorithm>
@@ -553,6 +554,9 @@ void get_cleanLine(ifstream & in, string & str){
     replace_chars(str, {'\r', '\n'}, -1);
 }
 
+string pRed(const string & in){
+    return "\033[31m"+in+"\033[0m";
+}
 
 /*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
     bool found=false;
