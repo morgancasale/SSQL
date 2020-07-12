@@ -877,7 +877,8 @@ void Table::printTable_to_file(ofstream &out) {
     out<<"~"<<endl;
     out<<name<<" ";
     out<<rows<<" ";
-    out<<primaryKey_index;
+    out<<primaryKey_index<<" ";
+    out<<Foreign_linked;
     out<<endl;
 
     for(const int & FTable_i : ForeignTables){
@@ -1012,7 +1013,8 @@ void Table::printTable_to_file(ofstream &out) {
 
 void Table::createTable_from_file(ifstream & in, string line) {
     stringstream stream(line);
-    stream>>(this->name)>>(this->rows)>>(this->primaryKey_index);
+    stream>>(this->name)>>(this->rows);
+    stream>>(this->primaryKey_index)>>(this->Foreign_linked);
 
     vector<string> tmp_data;
 

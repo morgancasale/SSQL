@@ -28,9 +28,6 @@
                    NAME_AMERICAN = "USA"
                    WheRe ID = 23;
 
-#TRUNCATE test
-    truncate table AMERICA;
-
 create table car ( model text not null, company text, yor int, price float, speed float, primary key(model) );
 insert iNTo car ( model, company, yor, price, speed) values ( "Pa,nda", "Fiat", 2012, 3000.0, 120.5);
 insert iNTo car ( model, yor, price) values ( "C3 Picasso", 2006, 5000.5);
@@ -61,8 +58,14 @@ drop table moto;
     select * from phone;
     select * from car;
     select * from EUROPE;
-
     select * from AMERICA;
     select * from COUNTRIES;
+
+#TRUNCATE test
+    truncate table phone;
+    #truncate table AMERICA; #Table AMERICA is connected to COUNTRIES so it cannot be truncated
+
+    select * from phone;
+
 
 ~

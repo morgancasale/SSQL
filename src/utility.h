@@ -335,6 +335,8 @@ bool is_a_Date(const string & var){
 //The first parameter is the input data while the second one is the type to check
 bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
+    bool Date_resp=is_a_Date(var);
+    bool Time_resp=is_a_Time(var);
 
     if(substr_CC(var, 1, 2, '"', '"') != "/err"){ /** O(n) */
         noErr = (type == "string" or type == "text");
@@ -343,8 +345,7 @@ bool check_data_consistence(const string & var, const string & type){
         noErr = (type == "char");
     } else
     if(var.find('.')!=-1){ /** O(n) */
-        bool Date_resp=is_a_Date(var);
-        bool Time_resp=is_a_Time(var);
+
         if(Time_resp and !Date_resp){ /** O(5n) */
             if (character_counter(var, '.') == 1){
                 noErr = (type == "time") or (type == "float");
@@ -357,14 +358,12 @@ bool check_data_consistence(const string & var, const string & type){
             noErr = (type == "float"); }
     } else
     if(var.find(':')!=-1){ /** O(n) */
-        bool Date_resp=is_a_Date(var);
-        bool tmp=is_a_Time(var);
-        if(tmp and !Date_resp){
+        if(Time_resp and !Date_resp){
             noErr = (type == "time");
         } /** O(3n) */
         else if(Date_resp){ noErr = (type == "date"); }
     } else
-    if(var.find('/')!=-1){ noErr = (type == "date"); } /** O(n) */
+    if(var.find('/')!=-1 and Date_resp){ noErr = (type == "date"); } /** O(n) */
     else if(character_counter(var,'-')==2){ noErr = (type == "date"); }
     else{
         noErr = (type == "int");
@@ -537,33 +536,9 @@ bool between(const T & in, const T & val1, const T & val2){
     } else return false;
 }
 
-template<typename type> vector<type> remove_duplicateEls(vector<type> & vec){
-    vector<type> copy;
-    if(vec.size()!=0){
-        for(int i=0; i < vec.size() - 1; i++){
-            bool new_el=true;
-            for(const type & el : copy){ if(vec[i] == el){ new_el=false; } }
-            if(new_el){ copy.push_back(vec[i]); }
-        }
-    }
-    return vec=copy;
-}
-
 void get_cleanLine(ifstream & in, string & str){
     getline(in, str);
     replace_chars(str, {'\r', '\n'}, -1);
 }
-
-string pRed(const string & in){
-    return "\033[31m"+in+"\033[0m";
-}
-
-/*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
-    bool found=false;
-    for(const type &x : vec){
-        if(x==el){ found=true; }
-    }
-    return found;
-}*/
 
 #endif

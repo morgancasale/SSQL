@@ -19,11 +19,14 @@ class Table {
     private:
         int primaryKey_index=0;
         int rows=0;
+        bool Foreign_linked=false;
         vector<void *> cols;
         vector<string> elementsNames;
         vector<string> elementsTypes;
         vector<int> ForeignTables, ForeignCols, ConnectedCols;
-    public:
+
+
+public:
         string name;
         Table()=default;
         ~Table()=default;
@@ -46,6 +49,9 @@ class Table {
 
     const vector<int> & get_ForeignTables() const { return ForeignTables; }
     void set_ForeignTables(const vector<int> & in){ ForeignTables=in; }
+
+    bool get_Foreign_linked() const { return Foreign_linked; }
+    void set_Foreign_linked(bool foreignLinked) { Foreign_linked = foreignLinked; }
 
 //Methods:
     private:

@@ -82,7 +82,7 @@ bool Database::process_command(string choice, bool & quit) {
     } else
     if(command=="select"){
         if((noErr=control_select(choice))){
-            noErr=PRINT(choice);
+            noErr= SELECT(choice);
         }
     }
     return noErr;
@@ -302,27 +302,32 @@ bool Database::DELETE(const string & in) {
     if(noErr) {
         string element = take_the_N_nextWords(in, "where", 1);
         Table & table=Tables[table_i];
-        int col_i;
-        if ((col_i=table.get_col_index(element))==-1) {
-            cout << RED<<"No colum with name "<<element<<" was found!"<<endl << RESET;
+        if(!table.get_Foreign_linked()) {
+            int col_i;
+            if ((col_i = table.get_col_index(element)) == -1) {
+                cout << RED << "No colum with name " << element << " was found!" << endl << RESET;
+                noErr = false;
+            }
+            if (noErr) {
+                string oper = take_the_N_nextWords(in, "where", 2);
+                string data1 = substr_SS(in, oper, ";"), data2 = "/err";
+                if (oper == "between") {
+                    data1 = substr_SS(in, "between", "and");
+                    data2 = substr_SS(in, "and", ";");
+                }
+                removeSpaces_fromStart_andEnd(data1);
+                removeSpaces_fromStart_andEnd(data2);
+
+                vector<int> foundRows;
+                noErr = table.find_Rows_by_value(data1, col_i, foundRows, oper, data2);
+                if (noErr) {
+                    table.deleteRows(foundRows);
+                }
+                updated_TablesNames.push_back(table.name);
+            }
+        } else{
             noErr = false;
-        }
-        if(noErr){
-            string oper = take_the_N_nextWords(in, "where", 2);
-            string data1 = substr_SS(in, oper, ";"), data2="/err";
-            if(oper=="between"){
-                data1 = substr_SS(in,"between", "and");
-                data2 = substr_SS(in,"and", ";");
-            }
-            removeSpaces_fromStart_andEnd(data1);
-            removeSpaces_fromStart_andEnd(data2);
-          
-            vector<int> foundRows;
-            noErr=table.find_Rows_by_value(data1, col_i, foundRows, oper, data2);
-            if(noErr){
-                table.deleteRows(foundRows);
-            }
-            updated_TablesNames.push_back(table.name);
+            cout<<RED<<"Table "<<table.name<<" is referenced somewhere by a Foreign Table!"<<RESET<<endl;
         }
 
     }
@@ -339,15 +344,23 @@ bool Database::DROP_TABLE(const string & in){
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
 
-        vector<string> el_types=table.get_elementsTypes();
-        for(unsigned int i=table.get_elementsTypes().size()-1; i>0; i--){
-            table.delete_col(i);
-            //el_types.resize(el_types.size()-1);
-        }
-        //table.set_elementsTypes(el_types);
+        if(!table.get_Foreign_linked()){
+            for(const int & for_Table_i : table.get_ForeignTables()){
+                Table & for_Table=Tables[for_Table_i];
+                for_Table.set_Foreign_linked(false);
+            }
 
-        deleted_TablesNames.push_back(table.name);
-        deleteElements_from_vec(Tables,{Table_i});
+            vector<string> el_types = table.get_elementsTypes();
+            for (unsigned int i = table.get_elementsTypes().size() - 1; i > 0; i--) {
+                table.delete_col(i);
+            }
+
+            deleted_TablesNames.push_back(table.name);
+            deleteElements_from_vec(Tables, {Table_i});
+        } else{
+            noErr=false;
+            cout<<RED<<"You can't Drop a Table connected to others!"<<RESET<<endl;
+        }
     }
     return noErr;
 }
@@ -361,8 +374,13 @@ bool Database::TRUNCATE_TABLE(const string & in){
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        table.empty_Tablecontent();
-        updated_TablesNames.push_back(table.name);
+        if(!table.get_Foreign_linked()) {
+            table.empty_Tablecontent();
+            updated_TablesNames.push_back(table.name);
+        } else{
+            noErr=false;
+            cout<<RED<<"You can't Empty a Table connected to others!"<<RESET<<endl;
+        }
     }
     return noErr;
 }
@@ -435,7 +453,7 @@ bool Database::UPDATE(string in){
     return noErr;
 }
 
-bool Database::PRINT(string in) {
+bool Database::SELECT(string in) {
     bool noErr=true;
     string tableName = take_the_N_nextWords(in, "from", 1);
     noErr = !check_Table_existence(tableName, true);
@@ -567,7 +585,7 @@ bool Database::CREATE_TABLE(string in){
     return noErr;
 }
 
-bool Database::setForeignKeys(string data, Table &thisTable) {
+bool Database::setForeignKeys(string data, Table & thisTable) {
     bool noErr=true;
     string line = substr_CC(data, 0, 1, ' ', ',');
     while(noErr and !data.empty()) {
@@ -603,6 +621,7 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
                     thisTable.set_ForeignCols(tmp_ForeignCols);
 
                     line = substr_CC(data, 0, 1, ' ', ',');
+                    foreignTable.set_Foreign_linked(true);
                 } else{
                     cout << RED<<endl<<"Uncaught reference to a non existence Column in" << RESET;
                     cout << RED<<" the foreign Table "<<foreignTableName << RESET;

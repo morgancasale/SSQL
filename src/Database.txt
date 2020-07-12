@@ -1,5 +1,5 @@
 ~
-EUROPE 6 0
+EUROPE 6 0 1
 
 
 
@@ -12,7 +12,7 @@ EUROPIAN_COUNTRIES 0 0
 -
 
 ~
-AMERICA 0 0
+AMERICA 3 0 1
 
 
 
@@ -20,12 +20,12 @@ text
 AMERICAN_COUNTRIES 
 
 AMERICAN_COUNTRIES 0 0
-
-
+"USA" "Canada" "Mexico" 
+0 0 0 
 -
 
 ~
-COUNTRIES 1 0
+COUNTRIES 1 0 0
 0 1 
 0 0 
 1 2 
@@ -48,7 +48,7 @@ NAME_AMERICAN 0 0
 -
 
 ~
-car 2 0
+car 2 0 0
 
 
 
@@ -81,7 +81,7 @@ speed 0 0
 -
 
 ~
-phone 3 0
+phone 0 0 0
 
 
 
@@ -89,22 +89,22 @@ text int float int
 Name yOr price sef 
 
 Name 1 0
-"oneplus 8 pro" "iphone 5" "samsung s7 edge" 
-0 0 0 
+
+
 -
 
 yOr 1 0
-2020 2013 2016 
-0 0 0 
+
+
 -
 
 price 0 0
-1019.010010 729.989990 729.989990 
-0 0 0 
+
+
 -
 
 sef 1 1
-6 5 10 
-0 0 0 
+
+
 -
 
