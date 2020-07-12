@@ -44,11 +44,6 @@ private:
     bool setForeignKeys(string data, Table &thisTable);
 
     bool checkForeignKeys(const Table &table, int row=-1);
-
-    void updateTables_fromFile(const string & path, const string & table_name);
-
-    //static bool check_command(const string &input, const bool &show_error, string &command= (string &) "temp");
-    static void deleteTables_fromFile(const string &path, const string &table);
 };
 
 #endif //CS_PROJECT_DATABASE_H
