@@ -9,15 +9,15 @@ private:
     int day, month, year;
     bool AC=false;
 public:
-    void set_day(const int &d);
+    bool set_day(const int &d);
     int get_day() const;
-    void set_month(const int &m);
+    bool set_month(const int &m);
     int get_month() const;
     void set_year(const int &y);
     int get_year() const;
     bool equal_date(const Date &d2) const;
     bool operator ==(const Date &d2) const &;
-    bool compare_date(const Date &d2) const ;
+    bool is_bigger_than(const Date &d2) const ;
     bool operator >(const Date &d2) const &;
     bool operator <(const Date &d2) const &;
     bool operator <=(const Date &d2) const &;
@@ -28,9 +28,11 @@ public:
     };
     ~Date()= default;
 
-    void set_Date(const string & in);
+    bool set_Date(const string & in);
     Date(const string & in){
-        set_Date(in);
+        if(!set_Date(in)){
+            Date();
+        }
     }
 };
 
