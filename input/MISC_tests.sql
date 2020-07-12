@@ -47,7 +47,6 @@ CREATE table phone ( Name tExt not null, yOr int not null, price float, sef int 
 insert into phone (yOr, Name, sef, price) values (2020, "oneplus 8 pro", 6, 1019.01);
 insert into phone (yOr, Name, sef, price) values (2013, "iphone 5", 5, 729.99);
 insert into phone (yOr, Name, sef, price) values (2016, "samsung s7 edge", 10, 729.99);
-insert into phone (yOr, Name, sef, price) values (2020, "samsung a51", 56, 269.99);
 
 create TABLE moto ( Name text not null, company1 text, color text, wheels int, primary key(Name));
 insert into moto (Name, company1, color, wheels) values ("Vespa", "piaggio", "rosso", 2);
@@ -66,6 +65,4 @@ drop table moto;
     select * from AMERICA;
     select * from COUNTRIES;
 
-
-QUIT();
 ~

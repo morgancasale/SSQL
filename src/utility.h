@@ -548,6 +548,12 @@ template<typename type> vector<type> remove_duplicateEls(vector<type> & vec){
     return vec=copy;
 }
 
+void get_cleanLine(ifstream & in, string & str){
+    getline(in, str);
+    replace_chars(str, {'\r', '\n'}, -1);
+}
+
+
 /*template<typename type> bool check_existence(const vector<type> &vec, const type &el){
     bool found=false;
     for(const type &x : vec){

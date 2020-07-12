@@ -1016,28 +1016,28 @@ void Table::createTable_from_file(ifstream & in, string line) {
 
     vector<string> tmp_data;
 
-    getline(in, line);
-    line>>(tmp_data);
+    get_cleanLine(in, line);
+    line>>tmp_data;
     for(const string & el : tmp_data){ this->ForeignTables.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(tmp_data);
     for(const string & el : tmp_data){ this->ForeignCols.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(tmp_data);
     for(const string & el : tmp_data){ this->ConnectedCols.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(this->elementsTypes);
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(this->elementsNames);
-    getline(in, line);
 
+    get_cleanLine(in, line);
     for(int i=0; i<elementsTypes.size(); i++){
         createCol_from_file(in, elementsTypes[i], i);
-        getline(in, line);
+
     }
 }
 
@@ -1046,7 +1046,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     bool not_null, auto_increment;
 
     string line;
-    getline(in, line);
+    get_cleanLine(in, line);
     stringstream stream(line);
     stream>>key>>not_null>>auto_increment;
 
@@ -1059,7 +1059,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     }
     create_col(input, true);
 
-    getline(in, line);
+    get_cleanLine(in, line);
     if(type=="int"){
         Column<int> & tmp=(*static_cast<Column<int>*>(cols[col_i]));
         vector<string> tmp_data;
@@ -1067,7 +1067,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(stoi(str)); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1080,7 +1080,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(stof(str)); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1093,7 +1093,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(str[0]); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1107,13 +1107,14 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         while(tmp2!="/err"){
             tmp2="\""+tmp2+"\"";
             tmp_data.push_back(tmp2);
+            line-=tmp2;
+            removeSpaces_fromStart_andEnd(line);
             tmp2=substr_CC(line, 1, 2, '\"', '\"');
         }
 
-        line>>tmp.values;
+        tmp.values=tmp_data;
 
-
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1131,7 +1132,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
             }
             tmp.values = tmp_dates;
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1149,11 +1150,12 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
             }
             tmp.values = tmp_times;
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
         }
     }
-    getline(in, line);
+    get_cleanLine(in, line);
+    get_cleanLine(in, line);
 }

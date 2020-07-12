@@ -506,25 +506,7 @@ void Database::QUIT(){
     ofstream out;
     ifstream in;
     in.open(path);
-    out.open(path, ios::app);
-    vector<int> modified_Tables;
-
-    string tmp_line;
-    getline(in, tmp_line);
-    in.close();
-    if(!tmp_line.empty()) {
-        for (const string &up_table : updated_TablesNames) {
-            updateTables_fromFile(path, up_table);
-            modified_Tables.push_back(find_Table(up_table));
-        }
-
-        for (const string &del_table : deleted_TablesNames) {
-            deleteTables_fromFile(path, del_table);
-            modified_Tables.push_back(find_Table(del_table));
-        }
-    }
-    remove_duplicateEls(modified_Tables);
-    deleteElements_from_vec(Tables, modified_Tables);
+    out.open(path, ios::trunc);
     for(Table & table:Tables){
         streampos tmp;
         table.printTable_to_file(out);
@@ -541,14 +523,18 @@ bool Database::START() {
     }
     string line;
     int i=0;
-    char end=42;
-    getline(in, line);
+
+    get_cleanLine(in, line);
     while(!in.eof()){
         this->Tables.resize(i+1);
-        getline(in, line);
+        get_cleanLine(in, line);
         this->Tables[i].createTable_from_file(in, line);
         i++;
-        getline(in, line);
+        get_cleanLine(in, line);
+
+        /*streampos pos=in.tellg();
+        get_cleanLine(in, line);
+        if(line!="~"){ in.seekg(pos); }*/
     }
     return noErr;
 }
@@ -557,7 +543,7 @@ bool Database::CREATE_TABLE(string in){
     bool noErr=true;
     string table_name= substr_CC(in, 0, 1);
     noErr=check_TableName(table_name);
-    if(check_Table_existence(table_name, false) and noErr){
+    if(noErr and (noErr=check_Table_existence(table_name, false))){
         Table temp;//this creates a temporary Table
 
         string foreignKeys;
@@ -653,10 +639,10 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
             command="";
             do{
                 if(start){ startLine_i=line_i; start=false;}
-                getline(in, line);
+                get_cleanLine(in, line);
                 if(line!="~"){
                     while(line=="\r" or removeSpaces_fromStart_andEnd(line)[0]=='#'){
-                        getline(in, line);
+                        get_cleanLine(in, line);
                         line_i++;
                         startLine_i++;
                     }
@@ -708,9 +694,9 @@ void Database::updateTables_fromFile(const string & path, const string & table_n
 
     string line, name;
     while(!end and !in.eof()){
-        getline(in, line);
+        get_cleanLine(in, line);
         if (line == "~") {
-            getline(in, line);
+            get_cleanLine(in, line);
             name = substr_CC(line, 0, 1);
             if (name == table_name) { end = true; }
             else {
@@ -725,14 +711,14 @@ void Database::updateTables_fromFile(const string & path, const string & table_n
     Table &table = Tables[find_Table(table_name)];
     table.printTable_to_file(copy);
 
-    getline(in, line);
+    get_cleanLine(in, line);
     while (line != "~") {
-        getline(in, line);
+        get_cleanLine(in, line);
     }
     copy<<"~"<<endl;
     while (!in.eof()) {
         copy << line << endl;
-        getline(in, line);
+        get_cleanLine(in, line);
     }
 
     remove(path.c_str());
@@ -756,10 +742,10 @@ void Database::deleteTables_fromFile(const string & path, const string & table){
 
     string line, name;
     while(!end and !in.eof()){
-        getline(in, line);
+        get_cleanLine(in, line);
         if(!line.empty()) {
             if (line == "~") {
-                getline(in, line);
+                get_cleanLine(in, line);
                 name = substr_CC(line, 0, 1);
                 if (name == table) { end = true; }
                 else {
@@ -773,19 +759,19 @@ void Database::deleteTables_fromFile(const string & path, const string & table){
 
 
     if(!line.empty()) {
-        for (int i = 0; i < 7; i++) { getline(in, line); }//scendo di 6 righe per arrivare alle colonne
+        for (int i = 0; i < 7; i++) { get_cleanLine(in, line); }//scendo di 6 righe per arrivare alle colonne
 
         bool cont = true;
 
         do {
-            for (int i = 0; i < 4; i++) { getline(in, line); }//scendo di 4 righe per arrivare alla fine di una colonna
+            for (int i = 0; i < 4; i++) { get_cleanLine(in, line); }//scendo di 4 righe per arrivare alla fine di una colonna
             if (line.empty()) { cont = false; }
         } while (cont);
 
-        getline(in, line);
+        get_cleanLine(in, line);
         while (!in.eof()) {
             copy << line << endl;
-            getline(in, line);
+            get_cleanLine(in, line);
         }
 
         remove(path.c_str());

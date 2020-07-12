@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     string choice;
     while(!QUIT){
         cout<<"Waiting for next command: "<<endl;
-        cin>>choice;
+        getline(cin, choice);
 
         d4.process_command(choice, QUIT);
     }

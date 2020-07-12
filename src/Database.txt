@@ -1,5 +1,41 @@
 ~
-EUROPE 12 0
+TEXT_test 3 1
+
+
+
+text string 
+VAR1 Var2 
+
+VAR1 0 0
+"abba" "/empty" "abba" 
+0 1 0 
+-
+
+Var2 1 0
+"zyyz" "miao" "zyyz" 
+0 0 0 
+-
+
+~
+Err_TEXT_test 0 1
+
+
+
+string text 
+VAR1 Var2 
+
+VAR1 0 0
+
+
+-
+
+Var2 1 0
+
+
+-
+
+~
+EUROPE 6 0
 
 
 
@@ -7,11 +43,10 @@ text
 EUROPIAN_COUNTRIES 
 
 EUROPIAN_COUNTRIES 0 0
-"Italy" "France" "Greece" "Germany" "Ucraina" "Belgium" "Italy" "France" "Greece" "Germany" "Ucraina" "Belgium" 
-0 0 0 0 0 0 0 0 0 0 0 0 
+"Italy" "France" "Greece" "Germany" "Ucraina" "Belgium" 
+0 0 0 0 0 0 
 -
 
-~
 ~
 AMERICA 0 0
 
@@ -27,7 +62,7 @@ AMERICAN_COUNTRIES 0 0
 
 ~
 COUNTRIES 1 0
-0 1 
+2 3 
 0 0 
 1 2 
 int text text 
@@ -82,7 +117,7 @@ speed 0 0
 -
 
 ~
-phone 4 0
+phone 3 0
 
 
 
@@ -90,22 +125,22 @@ text int float int
 Name yOr price sef 
 
 Name 1 0
-"oneplus 8 pro" "iphone 5" "samsung s7 edge" "samsung a51" 
-0 0 0 0 
+"oneplus 8 pro" "iphone 5" "samsung s7 edge" 
+0 0 0 
 -
 
 yOr 1 0
-2020 2013 2016 2020 
-0 0 0 0 
+2020 2013 2016 
+0 0 0 
 -
 
 price 0 0
-1019.010010 729.989990 729.989990 269.989990 
-0 0 0 0 
+1019.010010 729.989990 729.989990 
+0 0 0 
 -
 
 sef 1 1
-6 5 10 56 
-0 0 0 0 
+6 5 10 
+0 0 0 
 -
 
