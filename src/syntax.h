@@ -272,9 +272,12 @@ bool control_delete(string in){
         for(string oper: possibleOperators){
             if((tmp = take_the_N_nextWords(in, "where", 2)) == oper){
                 noErr=true;
-                if(tmp=="between" and in.find("and") != -1){
-                    if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
-                } else noErr = false;
+                if(tmp=="between") {
+                    if (in.find("and") != -1) {
+                        if (num_of_words(substr_SS(in, "between", "and")) == 0 or num_of_words(substr_SS(in, "and", ";")) == 0)
+                            noErr = false;
+                    } else noErr = false;
+                }
             }
         }
     }

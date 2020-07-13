@@ -79,7 +79,7 @@ bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & sh
     bool err=false;
 
     for(const char & tmp: c){
-        int first_c=in.find(tmp); /*finds the position of the first occurrence of the character tmp*/ /** O(n) */
+        int first_c=in.find(tmp); /*finds the position of the first occurrence of the character tmp*/
         if(first_c != -1){//find returns -1 if the characters isn't found
             int found=0;
             for(int i= first_c + 1; i < in.size(); i++){ //Loops over all characters of the input starting from first_c
@@ -221,7 +221,7 @@ unsigned int num_of_words(string in){
         if (num == 0 and isalphanum(in[in.size() - 1])) { num++; }
 
         char characters[4] = {'_', '-', '.', ':'};
-        while (in.find('_') != -1 or in.find('-') != -1 or in.find('.') != -1 or in.find(':') != -1) { /** O(2n) */
+        while (in.find('_') != -1 or in.find('-') != -1 or in.find('.') != -1 or in.find(':') != -1) {
             for (const char &ch: characters) {
                 int pos = in.find(ch);
                 if (pos != -1) {
@@ -230,10 +230,10 @@ unsigned int num_of_words(string in){
                     in[pos] = ' ';
                 }
             }
-        } /** O(2n^2) */
+        }
     } else{ num=0; }
     return num;
-} /** O(2n^2) */
+}
 
 bool is_a_Time(const string & var){
     bool response=true;
@@ -243,10 +243,10 @@ bool is_a_Time(const string & var){
     unsigned int col=character_counter(var, ':');
 
     char sub;
-    if(var.find(':')!=-1 and (col==1 or col==2)){ /** O(n) */
+    if(var.find(':')!=-1 and (col==1 or col==2)){
         sub=':';
     }
-    else if(var.find('.')!=-1 and (dots==1 or dots==2)){ /** O(n) */
+    else if(var.find('.')!=-1 and (dots==1 or dots==2)){
         sub='.';
     }else{
         response=false;
@@ -268,7 +268,7 @@ bool is_a_Time(const string & var){
     }
 
     return response;
-} /** O(2n) */
+}
 
 bool is_a_Date(const string & var){
     bool response=true;
@@ -277,11 +277,11 @@ bool is_a_Date(const string & var){
 
     char sub;
     bool err=false;
-    if(var.find('-')!=-1 and character_counter(var, '-')==2){ /** O(n) */
+    if(var.find('-')!=-1 and character_counter(var, '-')==2){
         sub='-';
-    } else if(var.find('.')!=-1 and character_counter(var, '.')==2){ /** O(n) */
+    } else if(var.find('.')!=-1 and character_counter(var, '.')==2){
         sub='.';
-    } else if(var.find('/')!=-1 and character_counter(var, '/')==2){ /** O(n) */
+    } else if(var.find('/')!=-1 and character_counter(var, '/')==2){
         sub='/';
     } else{
         response=false;
@@ -329,19 +329,19 @@ bool is_a_Date(const string & var){
         }
     }
     return response;
-} /** O(3n) */
+}
 
 //The first parameter is the input data while the second one is the type to check
 bool check_data_consistence(const string & var, const string & type){
     bool noErr=false;
 
-    if(substr_CC(var, 1, 2, '"', '"') != "/err"){ /** O(n) */
+    if(substr_CC(var, 1, 2, '"', '"') != "/err"){
         noErr = (type == "string" or type == "text");
     } else
-    if(substr_CC(var, 1, 2, 39, 39) != "/err"){ /** O(n) */ //char a=39 --> a='
+    if(substr_CC(var, 1, 2, 39, 39) != "/err"){
         noErr = (type == "char");
     } else
-    if(var.find('.')!=-1){ /** O(n) */
+    if(var.find('.')!=-1){
         bool Date_resp=is_a_Date(var);
         bool Time_resp=is_a_Time(var);
         if(Time_resp and !Date_resp){
@@ -409,11 +409,14 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
 }
 
 template<typename type> void deleteElements_from_vec(vector<type> & vec, const vector<int> & els){
+    int h=0;
     for(int k : els){
+        k-=h;
         for(; k < vec.size() - 1; k++){
             vec[k]=vec[k + 1];
         }
         vec.resize(vec.size() - 1);
+        h++;
     }
 }
 
@@ -497,7 +500,7 @@ void operator >> (const string & str, vector<string> & vec){
 
 string removeSpaces_fromStart_andEnd(string & in){
     int start=0, end=(int)in.size()-1;
-    for(; in[start]==' '; start++){} /** O(x) */
+    for(; in[start]==' '; start++){}
     for(; in[end]==' '; end--){}
     in=in.substr(start, end-start+1);
 

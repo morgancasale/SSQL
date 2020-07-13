@@ -1,5 +1,12 @@
 create table Transazioni ( data date not null, ammontare float not null, ora time, ID int auto_increment, commento string, primary key(ID));
 
+insert into Transazioni (data, ora, ammontare) values (11/07/2003, 11:26, 113.45);
+insert into Transazioni (data, ora, ammontare) values (11/07/2003, 12:47, -199.10);
+insert into Transazioni (data, ora, ammontare) values (11/07/2003, 14:08, 1530.23);
+insert into Transazioni (data, ora, ammontare) values (11/07/2003, 17:00, 23.88);
+insert into Transazioni (data, ora, ammontare) values (11/07/2003, 22:55, -1062.95);
+insert into Transazioni (data, ora, ammontare, commento) values (12/07/2003, 23:02, 425.5, "totale giornata");
+
 insert into Transazioni (data, ora, ammontare) values (12/07/2003, 10:24, 123.45);
 insert into Transazioni (data, ora, ammontare) values (12/07/2003, 11:45, -189.10);
 insert into Transazioni (data, ora, ammontare) values (12/07/2003, 13:08, 530.23);
@@ -23,8 +30,12 @@ insert into Transazioni (data, ora, ammontare) values (14/07/2003, 22:05, -2.85)
 insert into Transazioni (data, ora, ammontare, commento) values (14/07/2003, 23:35, 425.5, "totale giornata");
 
 update Transazioni set ammontare = -20.85 where ora = 22.05;
-
 select * from Transazioni;
-select * from Transazioni where data = 13/07/2003;
+
+delete from Transazioni where data = 13/07/2003;
+
+select * from Transazioni where data between 11/07/2003 and 14/07/2003;
+
+select * from Transazioni where ammontare < 0.0 order by ammontare asc;
 
 ~
