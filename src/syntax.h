@@ -80,7 +80,7 @@ string take_command(string & in){
             return s;
         }
     }
-    if(err) cerr<<endl<<"Command not recognised!"<<endl;
+    if(err) cout<<RED<<endl<<"Command not recognised!"<<RESET<<endl;
     return "/err";
 };
 
@@ -166,9 +166,9 @@ bool control_create(string in){
         }
     }
     if(primaryKeyErr){
-        cerr<<endl<<"No primary key specified!"<<endl;
+        cout<<RED<<endl<<"No primary key specified!"<<RESET<<endl;
     }else if(err){
-        cerr<<endl<<"CREATE command Syntax error!"<<endl;
+        cout<<RED<<endl<<"CREATE command Syntax error!"<<RESET<<endl;
     }
 
     return (!err and !primaryKeyErr);
@@ -191,7 +191,7 @@ bool control_drop(const string & in){
     if(noErr){ noErr = (num_of_words(in) == 1); }
 
     if(!noErr){
-        cerr<<endl<<"Drop Table command syntax error!"<<endl;
+        cout<<RED<<endl<<"Drop Table command syntax error!"<<RESET<<endl;
     }
     return noErr;
 };
@@ -257,7 +257,7 @@ bool control_insert(string in){
         }
     }
     if (!noErr) {
-        cerr << "INSERT INTO syntax error!"<<endl;
+        cout<<RED<<"INSERT INTO syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
@@ -282,7 +282,7 @@ bool control_delete(string in){
         }
     }
     if(!noErr){
-        cerr<<endl<<"DELETE command syntax error!"<<endl;
+        cout<<RED<<endl<<"DELETE command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
@@ -337,7 +337,7 @@ bool control_update(string in){
         }
     }
     if(!noErr){
-        cerr<<endl<<"UPDATE command syntax error!"<<endl;
+        cout<<RED<<endl<<"UPDATE command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
@@ -391,7 +391,7 @@ bool control_select(string in){
         } else noErr=false;
     }
     if(!noErr){
-        cerr<<endl<<"SELECT command syntax error!"<<endl;
+        cout<<RED<<endl<<"SELECT command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }

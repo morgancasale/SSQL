@@ -92,12 +92,12 @@ bool remove_duplicate_chars(string & in, const vector<char> & c, const bool & sh
             }
             in.resize(in.size()-found);
         } else{
-          err=true;
+            err=true;
         }
     }
 
     if(err and show_err){
-        cerr<<"Can't find one or more of the characters to delete!"<<endl;
+        cout<<RED<<"Can't find one or more of the characters to delete!"<<RESET<<endl;
     }
     return err;
 }
@@ -427,12 +427,12 @@ string take_the_N_nextWords(const string & in, string before, int N){
         before=substr_CC(in, 0, 1, 0, ' ');
         replace_chars(before, {' '}, -1);
     } if(in.find(before)==-1){
-        cerr<<endl<<"La parola non esiste nella frase";
+        cout<<RED<<endl<<"La parola non esiste nella frase"<<RESET;
         return "/err";
     }
-  
+
     if(N<=0 or N>in.size()){
-        cerr<<endl<<"Non ci sono "<<N<<" parole";
+        cout<<RED<<endl<<"Non ci sono "<<N<<" parole"<<RESET;
         return "/err";
     }
     while(iss>>tmp){
