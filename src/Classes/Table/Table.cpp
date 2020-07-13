@@ -603,7 +603,7 @@ void Table::deleteRows(const vector<int> & Rows){
     }
 }
 
-void Table::delete_col(const unsigned int &i){ /**https://stackoverflow.com/questions/33805741/delete-pointer-and-object*/
+void Table::delete_col(const unsigned int &i){
     if(elementsTypes[i]=="int"){
         delete((static_cast<Column<int>*>(cols[i])));
     }

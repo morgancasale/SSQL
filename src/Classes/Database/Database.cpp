@@ -88,19 +88,6 @@ bool Database::process_command(string choice, bool & quit) {
     return noErr;
 }
 
-/*bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
-    bool err=true;
-    for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
-        if(((command= substr_CC(input, 0, 1, ' ')) == tmp) or ((command= substr_CC(input, 0, 2, ' ')) == tmp)){
-            err=false;
-        }
-    }
-    if(show_error and err){
-        cout << RED<<"This command doesn't exist!" << RESET;
-    }
-    return err;
-}*/
-
 bool Database::INSERT_INTO(string in){
     bool err;
 
@@ -408,9 +395,6 @@ bool Database::UPDATE(string in){
                 searchData=substr_SS(searchData, oper,";");
             }
             removeSpaces_fromStart_andEnd(searchData);
-            /*string searchData= substr_SS(in, colToSearch, ";");
-            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
-            replace_chars(searchData, {' '}, -1);*/
 
             vector<int> foundRows;
             noErr=table.find_Rows_by_value(searchData, col_index, foundRows, oper, data2between);
@@ -433,9 +417,7 @@ bool Database::UPDATE(string in){
                 noErr= table.set_UPDATE_data(updateData, foundRows);
 
                 if(noErr and !table.get_ForeignTables().empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
-            } /*else{
-                cout << RED<<endl<<"No row containing"<<searchData<<"was found!" << RESET;
-            }*/
+            }
 
         } else{
             cout << RED<<endl<<"No column "<<colToSearch<<" was found!"<<endl << RESET;
@@ -549,10 +531,6 @@ bool Database::START() {
         this->Tables[i].createTable_from_file(in, line);
         i++;
         get_cleanLine(in, line);
-
-        /*streampos pos=in.tellg();
-        get_cleanLine(in, line);
-        if(line!="~"){ in.seekg(pos); }*/
     }
     return noErr;
 }
