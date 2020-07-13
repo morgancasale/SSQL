@@ -26,11 +26,11 @@ bool Table::set_Table(const string &in){
         name = data[0];
         int dataSize = data.size();
         for (int i = 1; i < (dataSize - 1) and noErr; i++) {
-            noErr = !create_col(data[i]);
+            noErr = !create_col(data[i], false);
         }
         noErr = set_primaryKey(data[dataSize - 1]);
     } else {
-        cerr << endl << "Forbidden names were given to the columns!";
+        cout << RED << endl << "Forbidden names were given to the columns!"<<endl << RESET;
     }
     return noErr;
 }
@@ -56,12 +56,12 @@ bool Table::set_primaryKey(const string & in){ //controlla se la chiave primaria
     }
 
     if(!noErr){
-        cerr<<endl<<"Primary key is not valid or not found!";
+        cout << RED<<endl<<"Primary key is not valid or not found!"<<endl << RESET;
     }
     return noErr;
 }
 
-bool Table::check_key(const string &key) { //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
+bool Table::check_key(const string &key, bool existence) { //controlla se non è già stato data questa key e se non è uguale ad un tipo o a /err
     bool noErr = true;
     bool existenceErr = false;
     if(key=="/err"){ noErr=false; }
@@ -69,16 +69,16 @@ bool Table::check_key(const string &key) { //controlla se non è già stato data
     if(noErr){
         for(const auto & allowed_type : allowed_types){ if(key==allowed_type){ noErr=false; } }
     }
-    if(noErr){
+    if(noErr and !existence){
         for(auto & elementsName : elementsNames){ if(key==elementsName){ noErr=false; existenceErr=true; } }
     }
 
 
     if(!noErr and !existenceErr){
-        cerr<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names";
+        cout << RED<<endl<<"Column name ("<< key <<") is not valid, read the documentation to find out the allowed names"<<endl << RESET;
     }
     else if(existenceErr){
-        cerr<<endl<<"Column with name "<< key <<" already exists!";
+        cout << RED<<endl<<"Column with name "<< key <<" already exists!"<<endl << RESET;
     }
     return noErr;
 }
@@ -88,8 +88,8 @@ bool Table::check_type(const string & type){
     for(const string & tmp: allowed_types){ if(tmp==type){ noErr=true; } }
 
     if(!noErr){
-        cerr<<endl<<"Type "<< type <<" is not allowed!"<<endl;
-        cerr<<"Check the documentation to find out the allowed types";
+        cout << RED<<endl<<"Type "<< type <<" is not allowed!"<<endl << RESET;
+        cout << RED<<"Check the documentation to find out the allowed types"<<endl << RESET;
     }
     return noErr;
 }
@@ -111,7 +111,7 @@ int Table::count_data(const vector<string> & data, const string & type){ //conta
     return counter;
 }
 
-bool Table::create_col(string in) {
+bool Table::create_col(string in, bool existence) {
     bool err=false;
 
     bool auto_increment=false;
@@ -128,7 +128,7 @@ bool Table::create_col(string in) {
 
     string key= substr_CC(in, 0, 1);
     replace_chars(key, {' '}, -1);
-    err=!check_key(key);
+    err=!check_key(key, existence);
     in-=key;
 
     string type;
@@ -140,7 +140,7 @@ bool Table::create_col(string in) {
 
     if((type!="int" and auto_increment)){
         if(!err){
-            cerr<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!";
+            cout << RED<<endl<<"Type "<<type<<" doesn't support auto_increment parameter!"<<endl << RESET;
             err=true;
         }
     }
@@ -182,10 +182,10 @@ bool Table::create_col(string in) {
         }
     }
     if(err){
-        cerr<<endl<<"CREATE input syntax error!";
+        cout << RED<<endl<<"CREATE input syntax error!"<<endl << RESET;
     }
 
-    if(!err) {
+    if(!err and !existence) {
         elementsTypes.push_back(type);
         elementsNames.push_back(key);
     }
@@ -265,9 +265,9 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
     bool err=false;
     if(elementsValues.size() != elements_Names.size()){
         if(elements_Names.size() > elementsValues.size()){
-            cerr << endl << "Too few arguments in values where given!";
+            cout << RED << endl << "Too few arguments in values where given!"<<endl << RESET;
         } else{
-            cerr << endl << "Too much arguments in values where given!";
+            cout << RED << endl << "Too much arguments in values where given!"<<endl << RESET;
         }
         err=true;
     }
@@ -278,11 +278,11 @@ bool Table::set_INSERT_INTO_data(const vector<string> & elements_Names, const ve
             if(check_data_consistence(elementsValues[i], type=elementsTypes[col_i])) {
                 cast_data_to_col(col_i, type, elementsValues[i]);
             } else{
-                cerr<<endl<<"Some of the data is not compatible with the respective column!";
+                cout << RED<<endl<<"Some of the data is not compatible with the respective column!"<<endl << RESET;
                 err = true;
             }
         } else{
-            cerr << endl << "No column with name " << elements_Names[i] << " is in the table!";
+            cout << RED << endl << "No column with name " << elements_Names[i] << " is in the table!"<<endl << RESET;
             err=true;
         }
     }
@@ -412,11 +412,11 @@ bool Table::checkINSERT_INTOData_and_Nullify(vector<string> filled_elements) {
     }
 
     if(autoIncrAndNotNullErr){
-        cerr<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)";
+        cout << RED<<endl<<R"(An element set as "not null" and "auto_increment" wasn't initialized in the first row!)"<<endl << RESET;
     }
 
     if(fillErr){
-        cerr<<endl<<R"(An element set as "not null" was not filled!)";
+        cout << RED<<endl<<R"(An element set as "not null" was not filled!)"<<endl << RESET;
     }
     return (fillErr and autoIncrAndNotNullErr);
 }
@@ -553,15 +553,15 @@ bool Table::find_Rows_by_value(string data1, const int & col_i, vector<int> &fou
             }
         }
     } else{
-        cerr<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")";
+        cout << RED<<endl<<"Search data isn't of the right type (it should be of type "<<type<<")"<<endl << RESET;
     }
 
     if(foundRows.empty()){
         //noErr=false;
-        cerr<<endl<<"No rows that satisfies the condition "<<op<<" "<< data1;
-        if(data2!="/err") cerr<<" and \""<<data2<<"\" were";
-        else cerr<<" was";
-        cerr<<" found"<<endl;
+        cout << RED<<endl<<"No rows that satisfies the condition "<<op<<" "<< data1 << RESET;
+        if(data2!="/err") cout << RED<<" and \""<<data2<<"\" were" << RESET;
+        else cout << RED<<" was" << RESET;
+        cout << RED<<" found"<<endl << RESET;
     }
 
     return noErr;
@@ -603,7 +603,7 @@ void Table::deleteRows(const vector<int> & Rows){
     }
 }
 
-void Table::delete_col(const int &i){ /**https://stackoverflow.com/questions/33805741/delete-pointer-and-object*/
+void Table::delete_col(const unsigned int &i){
     if(elementsTypes[i]=="int"){
         delete((static_cast<Column<int>*>(cols[i])));
     }
@@ -717,10 +717,10 @@ bool Table::set_UPDATE_data(const vector<string> &data, const vector<int> &found
                     }
                 }
             } else{
-                cerr << endl << "Inserted data isn't of the correct type! (" << type << " was expected)";
+                cout << RED << endl << "Inserted data isn't of the correct type! (" << type << " was expected)"<<endl << RESET;
             }
         } else{
-            cerr<<endl<<"No column "<<col<<" was found!";
+            cout << RED<<endl<<"No column "<<col<<" was found!"<<endl << RESET;
         }
     }
     return noErr;
@@ -864,7 +864,7 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
                         }
                     }
                 } else {
-                    cerr << endl << "No column " << colSelectedName << " to print was found!";
+                    cout << RED << endl << "No column " << colSelectedName << " to print was found!"<<endl << RESET;
                 }
             }
             cout << endl;
@@ -873,11 +873,12 @@ bool Table::printCols(vector <string> colSelection, const vector <string> & sear
     return noErr;
 }
 
-bool Table::printTable_to_file(ofstream & out) {
-    bool noErr=true;
+void Table::printTable_to_file(ofstream &out) {
+    out<<"~"<<endl;
     out<<name<<" ";
     out<<rows<<" ";
-    out<<primaryKey_index;
+    out<<primaryKey_index<<" ";
+    out<<Foreign_linked;
     out<<endl;
 
     for(const int & FTable_i : ForeignTables){
@@ -920,7 +921,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="float"){
             Column<float> & col=(*static_cast<Column<float>*>(cols[i]));
@@ -936,7 +937,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="char"){
             Column<char> & col=(*static_cast<Column<char>*>(cols[i]));
@@ -952,7 +953,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="string" or elementsTypes[i]=="text"){
             Column<string> & col=(*static_cast<Column<string>*>(cols[i]));
@@ -969,7 +970,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="time"){
             Column<Time> & col=(*static_cast<Column<Time>*>(cols[i]));
@@ -987,7 +988,7 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
         if(elementsTypes[i]=="date"){
             Column<Date> & col=(*static_cast<Column<Date>*>(cols[i]));
@@ -1005,40 +1006,40 @@ bool Table::printTable_to_file(ofstream & out) {
                 out<<nullity<<" ";
             }
             out<<endl;
-            out<<"-"<<endl;
+            out<<"-"<<endl<<endl;
         }
-
     }
-    return noErr;
 }
 
 void Table::createTable_from_file(ifstream & in, string line) {
     stringstream stream(line);
-    stream>>(this->name)>>(this->rows)>>(this->primaryKey_index);
+    stream>>(this->name)>>(this->rows);
+    stream>>(this->primaryKey_index)>>(this->Foreign_linked);
 
     vector<string> tmp_data;
 
-    getline(in, line);
-    line>>(tmp_data);
+    get_cleanLine(in, line);
+    line>>tmp_data;
     for(const string & el : tmp_data){ this->ForeignTables.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(tmp_data);
     for(const string & el : tmp_data){ this->ForeignCols.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(tmp_data);
     for(const string & el : tmp_data){ this->ConnectedCols.push_back(stoi(el)); }
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(this->elementsTypes);
 
-    getline(in, line);
+    get_cleanLine(in, line);
     line>>(this->elementsNames);
-    getline(in, line);
 
+    get_cleanLine(in, line);
     for(int i=0; i<elementsTypes.size(); i++){
         createCol_from_file(in, elementsTypes[i], i);
+
     }
 }
 
@@ -1047,7 +1048,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     bool not_null, auto_increment;
 
     string line;
-    getline(in, line);
+    get_cleanLine(in, line);
     stringstream stream(line);
     stream>>key>>not_null>>auto_increment;
 
@@ -1058,9 +1059,9 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     if(auto_increment){
         input+=" auto_increment";
     }
-    create_col(input);
+    create_col(input, true);
 
-    getline(in, line);
+    get_cleanLine(in, line);
     if(type=="int"){
         Column<int> & tmp=(*static_cast<Column<int>*>(cols[col_i]));
         vector<string> tmp_data;
@@ -1068,7 +1069,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(stoi(str)); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1081,7 +1082,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(stof(str)); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1094,7 +1095,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.values.push_back(str[0]); }
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1102,13 +1103,20 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
     }
     if(type=="string" or type=="text"){
         Column<string> & tmp=(*static_cast<Column<string>*>(cols[col_i]));
-        string data=line, element;
-        while((element= substr_CC(data, 1, 2, '\"', '\"')) != "/err"){
-            tmp.values.push_back(element);
-            data-="\""+element+"\" ";
-        }
-        getline(in, line);
         vector<string> tmp_data;
+
+        string tmp2=substr_CC(line, 1, 2, '\"', '\"');
+        while(tmp2!="/err"){
+            tmp2="\""+tmp2+"\"";
+            tmp_data.push_back(tmp2);
+            line-=tmp2;
+            removeSpaces_fromStart_andEnd(line);
+            tmp2=substr_CC(line, 1, 2, '\"', '\"');
+        }
+
+        tmp.values=tmp_data;
+
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1126,7 +1134,7 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
             }
             tmp.values = tmp_dates;
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
@@ -1144,11 +1152,12 @@ void Table::createCol_from_file(ifstream & in, const string & type, const int &c
             }
             tmp.values = tmp_times;
         }
-        getline(in, line);
+        get_cleanLine(in, line);
         line>>tmp_data;
         if(!tmp_data.empty()) {
             for (const string &str: tmp_data) { tmp.valuesNullity.push_back(stoi(str)); }
         }
     }
-    getline(in, line);
+    get_cleanLine(in, line);
+    get_cleanLine(in, line);
 }

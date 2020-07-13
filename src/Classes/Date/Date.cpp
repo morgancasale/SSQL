@@ -9,7 +9,7 @@ bool Date::equal_date(const Date &d2) const{
 }
 bool Date::operator ==(const Date &d2) const &{ return equal_date(d2); }
 
-bool Date::compare_date(const Date &d2) const {
+bool Date::is_bigger_than(const Date &d2) const {
     bool bigger=false;
     if(this->get_year()>d2.get_year()){
         bigger=true;
@@ -22,12 +22,12 @@ bool Date::compare_date(const Date &d2) const {
     }
     return bigger;
 }
-bool Date::operator >(const Date &d2) const &{ return compare_date(d2); }
-bool Date::operator <(const Date &d2) const &{ return !compare_date(d2); }
-bool Date::operator >=(const Date &d2) const &{ return (compare_date(d2) or equal_date(d2)); }
-bool Date::operator <=(const Date &d2) const &{ return (!compare_date(d2) or equal_date(d2)); }
+bool Date::operator >(const Date &d2) const &{ return is_bigger_than(d2); }
+bool Date::operator <(const Date &d2) const &{ return !is_bigger_than(d2); }
+bool Date::operator >=(const Date &d2) const &{ return (is_bigger_than(d2) or equal_date(d2)); }
+bool Date::operator <=(const Date &d2) const &{ return (!is_bigger_than(d2) or equal_date(d2)); }
 
-void Date::set_day(const int &d) {
+bool Date::set_day(const int &d) {
     bool day_err=false;
     switch(month){
         case 1:
@@ -59,18 +59,22 @@ void Date::set_day(const int &d) {
         day=d;
     }
     else{
-        cerr<<"Day not valid";
+        cout << RED<<"Day not valid!"<<endl << RESET;
     }
+    return !day_err;
 }
 int Date::get_day() const { return day; }
 
-void Date::set_month(const int &m) {
+bool Date::set_month(const int &m) {
+    bool noErr=true;
     if(m>0 and m<=12){
         month=m;
     }
     else{
-        cerr<<"Month not valid";
+        noErr=false;
+        cout << RED<<"Month not valid!"<<endl << RESET;
     }
+    return noErr;
 }
 int Date::get_month() const{ return month; }
 
@@ -92,8 +96,8 @@ string Date::date_to_string() const &{
     if(AC){ return d + "-" + m + "-" + y +"AC";}
     return d + "-" + m + "-" + y;
 }
-void Date::set_Date(const string & in){
-    bool err=false;
+bool Date::set_Date(const string & in){
+    bool noErr=true;
     char sub;
 
     if(in.find('-')!=-1){
@@ -103,17 +107,21 @@ void Date::set_Date(const string & in){
     } else if(in.find('/')!=-1){
         sub='/';
     } else{
-        err=true;
+        noErr=false;
     }
 
-    if(!err){
+    if(noErr){
         stringstream ss=data_ss(in, sub);
         int d, m, y;
         ss>>d>>m>>y;
-        set_day(d);
-        set_month(m);
-        set_year(y);
-    } else{
-        cerr<<endl<<"No date was found in this string!";
+        noErr=( set_day(d) and set_month(m) );
+        if(noErr){
+            set_year(y);
+        }
     }
+
+    if(!noErr){
+        cout <<RED<<endl<<"An error occurred while creating the Date object!"<<endl << RESET;
+    }
+    return noErr;
 }

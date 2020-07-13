@@ -1,4 +1,6 @@
 #include "Time.h"
+#define RED     "\033[31m"
+#define RESET   "\033[0m"
 using namespace std;
 
 unsigned int c_counter(const string & in, char char_to_count){
@@ -9,75 +11,64 @@ unsigned int c_counter(const string & in, char char_to_count){
     return counter;
 }
 
-void Time::set_hours(const int &h) {
-    try{
-        if(h<0 or h>24){
-            throw("Hours format error");
-        }
-        else{
-            hours=h;
-        }
-    }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+bool Time::set_hours(const int &h) {
+    bool noErr=true;
+    if(h<0 or h>24){
+        noErr=false;
+        cout << RED<<endl<<"Hours format error"<<endl << RESET;
+    } else{ hours=h; }
+    return noErr;
 }
 unsigned int Time::get_hours() const { return hours; }
-void Time::set_minutes(const int &m) {
-    try{
-        if(m<0 or m>60){
-            throw("Minutes format error");
-        }
-        else{
-            minutes=m;
-        }
+bool Time::set_minutes(const int &m) {
+    bool noErr=true;
+    if(m<0 or m>60){
+        noErr=false;
+        cout << RED<<endl<<"Minutes format error"<<endl << RESET;
     }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+    else{ minutes=m; }
+    return noErr;
 }
 unsigned int Time::get_minutes() const { return minutes; }
-void Time::set_seconds(const int &s) { try{
-        if(s<0 or s>60){
-            throw("Seconds format error");
-        }
-        else{
-            seconds=s;
-        }
+bool Time::set_seconds(const int &s) {
+    bool noErr=true;
+    if(s<0 or s>60){
+        noErr=false;
+        cout << RED<<endl<<"Seconds format error"<<endl << RESET;
     }
-    catch(const string &e){
-        cerr<<endl<<e;
-    }
+    else{ seconds=s; }
+    return noErr;
 }
 unsigned int Time::get_seconds() const { return seconds; }
 
-void Time::set_time(const int &h, const int &m, const int &s) {
-    set_hours(h);
-    set_minutes(m);
+bool Time::set_time(const int &h, const int &m, const int &s) {
+    return set_hours(h) and
+    set_minutes(m) and
     set_seconds(s);
 }
 
-void Time::set_time(const string &time) {
+bool Time::set_time(const string &time) {
     char sub=' ';
-    bool err=false;
-    int a;
-    if((a=c_counter(time,':'))==1 or a==2){
+    bool noErr=true;
+    unsigned int tmp;
+    if((tmp=c_counter(time, ':')) == 1 or tmp == 2){
         sub=':';
     }
-    else if((a=c_counter(time,'.'))==1 or a==2){
+    else if((tmp=c_counter(time, '.')) == 1 or tmp == 2){
         sub='.';
     }
     else{
-        cerr<<"Time data format error";
+        cout << RED<<"Time data format error!"<<endl << RESET;
         hours=0;
         minutes=0;
         seconds=42;
-        err=true;
+        noErr=false;
     }
-    if(!err){
+    if(noErr){
         stringstream ss=data_ss(time, sub);
         ss>>hours>>minutes>>seconds;
     }
+    return noErr;
 }
 
 
@@ -90,7 +81,6 @@ unsigned int Time::tot_mins() const {
 
 bool Time::equal_sec(Time t2) const & { return this->tot_seconds()==t2.tot_seconds(); }
 bool Time::operator==(Time t2) const & { return equal_sec(t2); }
-bool Time::equal_min(Time t2) const & { return this->tot_mins()==t2.tot_mins(); }
 
 bool Time::operator>(Time t2) const & { return this->tot_seconds()>t2.tot_seconds(); }
 bool Time::operator<(Time t2) const & { return this->tot_seconds()<t2.tot_seconds(); }
