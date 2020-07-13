@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/input/CHAR_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/CREATE_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/DATE_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/FLOAT_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/INT_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/MISC_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/TEXT_tests.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/input/TIME_tests.sql" dialect="GenericSQL" />
+  </component>
+</project>
