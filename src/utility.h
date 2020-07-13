@@ -409,11 +409,14 @@ template<typename type> void operator -=(vector<type> & minuend, const vector<ty
 } /** O(xy^2) */
 
 template<typename type> void deleteElements_from_vec(vector<type> & vec, const vector<int> & els){
+    int h=0;
     for(int k : els){ /** O(n) */
+        k-=h;
         for(; k < vec.size() - 1; k++){ /** O(x) */
             vec[k]=vec[k + 1];
         }
         vec.resize(vec.size() - 1);
+        h++;
     }
 }/** O(x*n) */
 

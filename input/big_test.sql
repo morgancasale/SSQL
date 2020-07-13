@@ -22,7 +22,9 @@ insert into Transazioni (data, ora, ammontare) values (14/07/2003, 22:00, -172.9
 insert into Transazioni (data, ora, ammontare) values (14/07/2003, 22:05, -2.85);
 insert into Transazioni (data, ora, ammontare, commento) values (14/07/2003, 23:35, 425.5, "totale giornata");
 
-update Transazioni set ammontare = -20.85 where ora = 22.05;
+delete from Transazioni where data = 12/07/2003;
+
+#update Transazioni set ammontare = -20.85 where ora = 22.05;
 
 select * from Transazioni;
 select * from Transazioni where data = 13/07/2003;
