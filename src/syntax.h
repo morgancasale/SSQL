@@ -257,7 +257,7 @@ bool control_insert(string in){
         }
     }
     if (!noErr) {
-        cerr << "INSERT INTO syntax error!"<<RESET<<endl;
+        cout<<RED<<"INSERT INTO syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
