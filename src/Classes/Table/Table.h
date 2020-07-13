@@ -94,12 +94,6 @@ public:
         void printTable_to_file(ofstream &out);
 
         void createTable_from_file(ifstream &in, string line);
-
-
-    //string get_name() const{ return name; }
-    //void set_name(const string &name_in){ name=name_in; }
-    //bool get_rows_by_data(const int &col_i, const string &searchData, vector<int> &foundRows);
-    //void empty_table();
 };
 
 #endif //CS_PROJECT_TABLE_H
