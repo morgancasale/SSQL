@@ -74,13 +74,13 @@ string take_command(string & in){
 
     clean_input(in, dictionary);
     for(const string & s:allowed_coms) {
-        if(in.find(s) != in.npos) {
+        if(in.find(s) != -1) {
             err=false;
             in-=(s+" ");
             return s;
         }
     }
-    if(err) cerr<<endl<<"Comando non riconosciuto!"<<endl;
+    if(err) cout<<RED<<endl<<"Command not recognised!"<<RESET<<endl;
     return "/err";
 };
 
@@ -91,7 +91,7 @@ bool control_create(string in){
     if(!err and in.find('(')!=-1 and num_of_words(in.substr(0,in.find('(')))!=1) {
         err = true;
     }
-    if(!err and in.find("primary key(")==-1 and in.find("primary key (")==-1){
+    if(!err and in.find("primary key")==-1){
         primaryKeyErr=true;
     }
     if(!err and in.find("not_null")!=-1 ){
@@ -137,7 +137,7 @@ bool control_create(string in){
                     }
                     noErr = (line.find("foreign key") != -1 and line.find("references") != -1);
                     if (noErr) {
-                        noErr = (num_of_chars(line, '(') == 2 and num_of_chars(line, ')') == 2);
+                        noErr = (character_counter(line, '(') == 2 and character_counter(line, ')') == 2);
                         if (noErr) {
                             string tmp_str = substr_CC(line, 1, 1, '(', ')');
                             noErr = (num_of_words(tmp_str) == 1);
@@ -166,9 +166,9 @@ bool control_create(string in){
         }
     }
     if(primaryKeyErr){
-        cerr<<endl<<"No primary key specified!";
+        cout<<RED<<endl<<"No primary key specified!"<<RESET<<endl;
     }else if(err){
-        cerr<<endl<<"CREATE command Syntax error!";
+        cout<<RED<<endl<<"CREATE command Syntax error!"<<RESET<<endl;
     }
 
     return (!err and !primaryKeyErr);
@@ -191,7 +191,7 @@ bool control_drop(const string & in){
     if(noErr){ noErr = (num_of_words(in) == 1); }
 
     if(!noErr){
-        cerr<<endl<<"Drop Table command syntax error!";
+        cout<<RED<<endl<<"Drop Table command syntax error!"<<RESET<<endl;
     }
     return noErr;
 };
@@ -206,7 +206,7 @@ bool control_insert(string in){
     //tra insert e la parentesi, che ci siano solo 2 '(' e 2 ')' e che l'ultimo carattere sia ')'
     noErr= (in.find("values")!=in.npos and in[in.size()-1]==';');
     noErr&=(num_of_words(substr_CC(in, 0, 1, ' ', '(')));
-    noErr= noErr and (num_of_chars(in, '(')==2 and num_of_chars(in, ')')==2);
+    noErr= noErr and (character_counter(in, '(')==2 and character_counter(in, ')')==2);
     noErr= noErr and (in[in.size()-2]==')');
     noErr= noErr and (character_counter(in,'\"')%2==0);
     if(noErr) remove_content(in, '\"', '\"', noErr);
@@ -215,7 +215,7 @@ bool control_insert(string in){
     if(noErr){
         string no_content= replace_content(in, '(', ')');
         string tmp_line=in.substr(0, in.find("values"));
-        noErr=(num_of_chars(tmp_line, '(')==1 and num_of_chars(tmp_line,')')==1);
+        noErr=(character_counter(tmp_line, '(')==1 and character_counter(tmp_line,')')==1);
         if(noErr) {
             string secondLine = in.substr(no_content.find("values"), in.find(';') - no_content.find("values")+1);
             string firstLine = in - secondLine;
@@ -257,7 +257,7 @@ bool control_insert(string in){
         }
     }
     if (!noErr) {
-        cerr << "INSERT INTO syntax error!";
+        cout<<RED<<"INSERT INTO syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
@@ -266,20 +266,23 @@ bool control_delete(string in){
     string tmp, s;
     bool noErr=true;
     if(in[in.size()-1]!=';'){ noErr=false; }
-    if(take_the_N_nextWord(in, "", 1) != "where"){ noErr =false; }
+    if(take_the_N_nextWords(in, "", 1) != "where"){ noErr =false; }
     if (noErr){
         noErr=false;
         for(string oper: possibleOperators){
-            if((tmp = take_the_N_nextWord(in, "where", 2))==oper){
+            if((tmp = take_the_N_nextWords(in, "where", 2)) == oper){
                 noErr=true;
-                if(tmp=="between" and in.find("and") != -1){
-                    if(num_of_words(substr_SS(in,"between","and"))==0 or num_of_words(substr_SS(in,"and",";"))==0) noErr=false;
-                } else noErr = false;
+                if(tmp=="between") {
+                    if (in.find("and") != -1) {
+                        if (num_of_words(substr_SS(in, "between", "and")) == 0 or num_of_words(substr_SS(in, "and", ";")) == 0)
+                            noErr = false;
+                    } else noErr = false;
+                }
             }
         }
     }
     if(!noErr){
-        cerr<<endl<<"DELETE command syntax error!";
+        cout<<RED<<endl<<"DELETE command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
@@ -288,12 +291,12 @@ bool control_update(string in){
     bool noErr=(in[in.size()-1]==';'), exit=false;
     if(noErr) remove_content(in, '\"', '\"', noErr);
     if(noErr){
-        int tmp, tmp2;
+        unsigned int tmp, tmp2;
         string setRow;
         if(in.find("set")!=-1)  noErr=(num_of_words(in.substr(0,tmp=in.find("set")))==1);
         else noErr=false;
         if(noErr){
-            in-=in.substr(0,in.find(take_the_N_nextWord(in,"", 2)));
+            in-=in.substr(0,in.find(take_the_N_nextWords(in, "", 2)));
             if(in.find("where")!=-1)   {
                 setRow = substr_SS(in, "", "where",false,true);
                 in-=setRow;
@@ -318,7 +321,7 @@ bool control_update(string in){
                 if(noErr){
                     exit=false;
                     for(string oper: possibleOperators){
-                        if(take_the_N_nextWord(in, "where", 2)==oper){
+                        if(take_the_N_nextWords(in, "where", 2) == oper){
                             exit=true;
                             if(num_of_words(substr_SS(in,"where",oper))!=1) noErr=false;
                             else if(oper=="between"){
@@ -334,23 +337,24 @@ bool control_update(string in){
         }
     }
     if(!noErr){
-        cerr<<endl<<"UPDATE command syntax error!";
+        cout<<RED<<endl<<"UPDATE command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }
 
 bool control_select(string in){
     bool noErr=(in[in.size()-1]==';');
-    int c=0;
-    string s;
     string tmp=" ";
+    unsigned int c=0, a=character_counter((tmp = in.substr(0,in.find("from"))),',');
+    string s;
+
     if(noErr){
-        if(in.find("from")!=in.npos and character_counter((tmp = in.substr(0,in.find("from"))),',') == num_of_words(tmp)-1 or tmp.find("*")!=-1) {
+        if(in.find("from")!=-1 and  a==num_of_words(tmp)-1 or tmp.find('*')!=-1) {
             in-=tmp;
-            if(in.find("where") != in.npos and num_of_words(substr_SS(in, "from", "where")) == 1){
+            if(in.find("where") != -1 and num_of_words(substr_SS(in, "from", "where")) == 1){
                 bool exit=false;
-                for(string oper: possibleOperators){
-                    if(take_the_N_nextWord(in, "where", 2)==oper){
+                for(const string & oper: possibleOperators){
+                    if(take_the_N_nextWords(in, "where", 2) == oper){
                         exit=true;
                         if(num_of_words(substr_SS(in,"where",oper))!=1) noErr=false;
                         else if(oper=="between"){
@@ -365,10 +369,10 @@ bool control_select(string in){
                 if(noErr) {
                     in -= "from" + substr_SS(in, "from", "where") + "where";
                     if (num_of_words(in) > 2) {
-                        if (in.find("order by") != in.npos) {
+                        if (in.find("order by") != -1) {
                             tmp = in.substr(in.find("order by"), in.size() - in.find("order by"));
                             if ((num_of_words(tmp)) == 4) {
-                                tmp = take_the_N_nextWord(tmp, "by", 2);
+                                tmp = take_the_N_nextWords(tmp, "by", 2);
                                 if (tmp != "asc" and tmp != "desc") noErr = false;
                             } else noErr = false;
                         }
@@ -376,21 +380,18 @@ bool control_select(string in){
                 }
             }
             else if(num_of_words(in) > 2){
-                if(in.find("order by") != in.npos){
+                if(in.find("order by") != -1){
                     tmp = in.substr(in.find("order by"),in.size()-in.find("order by"));
                     if(num_of_words(tmp)==4){
-                        tmp=take_the_N_nextWord(tmp, "by", 2);
+                        tmp= take_the_N_nextWords(tmp, "by", 2);
                         if(tmp!="asc" and tmp!="desc") noErr=false;
-                    }
-                }
-                else noErr=false;
-            }
-            else if(num_of_words(in) < 2) noErr=false;
-        }
-        else noErr=false;
+                    } else noErr=false;
+                } else noErr=false;
+            } else if(num_of_words(in) < 2) noErr=false;
+        } else noErr=false;
     }
     if(!noErr){
-        cerr<<endl<<"SELECT command syntax error!";
+        cout<<RED<<endl<<"SELECT command syntax error!"<<RESET<<endl;
     }
     return noErr;
 }

@@ -22,7 +22,7 @@
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
     #select * from DATE_test;
-    #select * from DATE_test2;
+    select * from DATE_test2;
 
     select vAr4 from DATE_test where Var2 = 25.08.1770;
     select * from DATE_test where Var2 > 29-12-1999;

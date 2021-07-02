@@ -5,6 +5,7 @@
 
 #INSERT INTO test
     insErt iNto TIME_test (VAR1, Var2) valUes( 19:01:45, 21.57.02);
+    insErt iNto TIME_test (VAR1, Var2) valUes( 19:02:45, 21.57.02);
     inSert into TIME_test (Var2) valUEs( 06.07.23);
 
 #This lines should give errors if uncommented
@@ -13,7 +14,7 @@
     #inseRt inTo Err_TIME_test (VAR1, Var2, VAr3) valUes( 25:40, 07.67.4, 04:47:80)
 
 #WHERE test (WHERE is shared between SELECT, UPDATE and DELETE)
-    #select * from TIME_test;
+    select * from TIME_test order by Var2 asc;
 
 
     select VAR1 from TIME_test where Var2 = 21:57:02;

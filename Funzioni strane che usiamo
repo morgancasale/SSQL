@@ -1,7 +1,0 @@
-<algorithm>:
-    find
-    replace
-<sstream>:
-    sstream
-
-static_cast

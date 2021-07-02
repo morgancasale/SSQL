@@ -3,7 +3,7 @@
 
 bool Database::check_TableName(const string & name){
     bool noErr=true;
-    for(string tmp: allowed_coms){ noErr=(name!=tmp); }
+    for(const string & tmp: allowed_coms){ noErr=(name!=tmp); }
     if(noErr){ for(const string & tmp: allowed_types){ noErr=(name!=tmp); } }
     if(noErr){ for(const string & tmp: reserved_words){ noErr=(name!=tmp); } }
     return noErr;
@@ -25,13 +25,13 @@ bool Database::check_Table_existence(const string &in_Table_name, const bool & c
 
     if(check_existence){ //devo controllare che esista la tabella
         if(not_exists){ //la tabella non esiste
-            cerr<<endl<<"Table named "<<in_Table_name<<" doesn't exist!"<<endl;
+            cout << RED<<endl<<"Table named "<<in_Table_name<<" doesn't exist!"<<endl << RESET;
         }
     }
     if(!check_existence){ //devo controllare se la tabella non esista
         if(!not_exists){ //la tabella esiste
-            cerr<<endl<<"Table named "<<in_Table_name<<" already exists!"<<endl;
-            cerr<<"Choose another name.";
+            cout << RED<<endl<<"Table named "<<in_Table_name<<" already exists!"<<endl << RESET;
+            cout << RED<<"Choose another name."<<endl << RESET;
         }
     }
 
@@ -49,7 +49,7 @@ bool Database::process_command(string choice, bool & quit) {
     } else
     if(command=="create table"){
         if(!control_create(choice)){
-            cerr<<endl<<"CREATE command syntax error!";
+            cout << RED<<endl<<"CREATE command syntax error!"<<endl << RESET;
             noErr=false;
         } else{
             noErr = CREATE_TABLE(choice);
@@ -82,24 +82,11 @@ bool Database::process_command(string choice, bool & quit) {
     } else
     if(command=="select"){
         if((noErr=control_select(choice))){
-            noErr=PRINT(choice);
+            noErr= SELECT(choice);
         }
     }
     return noErr;
 }
-
-/*bool Database::check_command(const string &input, const bool &show_error, string &command) { //checks whatever the command exists
-    bool err=true;
-    for(const string &tmp :allowed_coms){ //this loop checks if in the input string there's an allowed command, and if found writes it in the variable "command"
-        if(((command= substr_CC(input, 0, 1, ' ')) == tmp) or ((command= substr_CC(input, 0, 2, ' ')) == tmp)){
-            err=false;
-        }
-    }
-    if(show_error and err){
-        cerr<<"This command doesn't exist!";
-    }
-    return err;
-}*/
 
 bool Database::INSERT_INTO(string in){
     bool err;
@@ -131,8 +118,9 @@ bool Database::INSERT_INTO(string in){
         if(err){
             table=tableBackup;
         }
+        updated_TablesNames.push_back(table.name);
     } else{
-        cerr << endl << "There is no Table with name " << TableName << "!";
+        cout << RED << endl << "There is no Table with name " << TableName << "!"<<endl << RESET;
         err=true;
     }
     return err;
@@ -170,7 +158,7 @@ bool Database::get_INSERT_INTO_data(string in, vector<string> &elementsNames, ve
             removeSpaces_fromStart_andEnd(elementValue);
             elementsValues.push_back(elementValue);
         } else{
-           cerr<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!";
+           cout << RED<<endl<<"A reserved word ( "<<elementValue<<" ) was inserted!"<<endl << RESET;
         }
     }
     return noErr;
@@ -193,9 +181,9 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
+                    cout << RED<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
             if(type=="float"){
@@ -207,9 +195,9 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
+                    cout << RED<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
             if(type=="char"){
@@ -221,9 +209,9 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
+                    cout << RED<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
             if(type=="string" or type=="text"){
@@ -235,9 +223,9 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
+                    cout << RED<<endl<<"The element "<<ConCol_el<<" from the Column "<<ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
             if(type=="date"){
@@ -249,9 +237,9 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr << endl << "The element " << ConCol_el.date_to_string() << " from the Column " << ConCol.key
+                    cout << RED << endl << "The element " << ConCol_el.date_to_string() << " from the Column " << ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
             if(type=="Time"){
@@ -263,21 +251,21 @@ bool Database::checkForeignKeys(const Table &table, int row) {
                     if(FCol.values[j]==ConCol_el){ noErr=true; }
                 }
                 if(!noErr){
-                    cerr<<endl<<"The element "<<ConCol_el.to_string()<<" from the Column "<<ConCol.key
+                    cout << RED<<endl<<"The element "<<ConCol_el.to_string()<<" from the Column "<<ConCol.key
                         <<" ,of the Table "<<table.name<<","<<endl<<"wasn't found in the Column "
-                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!";
+                        <<FCol.key<<" of the Table "<<ForeignTable.name<<"!"<<endl << RESET;
                 }
             }
 
 
         } else{
-            cerr<<endl<<"The types of the Foreign column and the Connected one don't match!";
+            cout << RED<<endl<<"The types of the Foreign column and the Connected one don't match!"<<endl << RESET;
         }
     }
     return noErr;
 }
 
-int Database::find_Table(string in) {
+int Database::find_Table(const string & in) {
     int i=0;
     bool found=false;
     for(; i<Tables.size() and !found; i++){
@@ -293,33 +281,40 @@ int Database::find_Table(string in) {
     }
 }
 
-bool Database::DELETE(string in) {
+bool Database::DELETE(const string & in) {
     string table_name= substr_CC(in, 0, 1);
     bool noErr=!check_Table_existence(table_name, true);
     int table_i=find_Table(table_name);
 
     if(noErr) {
-        string element = take_the_N_nextWord(in, "where", 1);
-        int col_i;
-        if ((col_i=Tables[table_i].get_col_index(element))==-1) {
-            cerr<<"No colum with name "<<element<<" was found!";
+        string element = take_the_N_nextWords(in, "where", 1);
+        Table & table=Tables[table_i];
+        if(!table.get_Foreign_linked()) {
+            int col_i;
+            if ((col_i = table.get_col_index(element)) == -1) {
+                cout << RED << "No colum with name " << element << " was found!" << endl << RESET;
+                noErr = false;
+            }
+            if (noErr) {
+                string oper = take_the_N_nextWords(in, "where", 2);
+                string data1 = substr_SS(in, oper, ";"), data2 = "/err";
+                if (oper == "between") {
+                    data1 = substr_SS(in, "between", "and");
+                    data2 = substr_SS(in, "and", ";");
+                }
+                removeSpaces_fromStart_andEnd(data1);
+                removeSpaces_fromStart_andEnd(data2);
+
+                vector<int> foundRows;
+                noErr = table.find_Rows_by_value(data1, col_i, foundRows, oper, data2);
+                if (noErr) {
+                    table.deleteRows(foundRows);
+                }
+                updated_TablesNames.push_back(table.name);
+            }
+        } else{
             noErr = false;
-        }
-        if(noErr){
-            string oper = take_the_N_nextWord(in, "where", 2);
-            string data1 = substr_SS(in, oper, ";"), data2="/err";
-            if(oper=="between"){
-                data1 = substr_SS(in,"between", "and");
-                data2 = substr_SS(in,"and", ";");
-            }
-            removeSpaces_fromStart_andEnd(data1);
-            removeSpaces_fromStart_andEnd(data2);
-          
-            vector<int> foundRows;
-            noErr=Tables[table_i].find_Rows_by_value(data1, col_i, foundRows, oper, data2);
-            if(noErr){
-                Tables[table_i].deleteRows(foundRows);
-            }
+            cout<<RED<<"Table "<<table.name<<" is referenced somewhere by a Foreign Table!"<<RESET<<endl;
         }
 
     }
@@ -331,15 +326,28 @@ bool Database::DROP_TABLE(const string & in){
     string tableName=in-";";
     noErr=!check_Table_existence(tableName, true);
     if(!noErr){
-        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+        cout << RED<<endl<<"No Table named "<<tableName<<" was found!"<<endl << RESET;
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        for(int i=table.get_elementsTypes().size(); i>0; i--){
-            table.delete_col(i);
-            table.get_elementsTypes().resize(table.get_elementsTypes().size()-1);
+
+        if(!table.get_Foreign_linked()){
+            for(const int & for_Table_i : table.get_ForeignTables()){
+                Table & for_Table=Tables[for_Table_i];
+                for_Table.set_Foreign_linked(false);
+            }
+
+            vector<string> el_types = table.get_elementsTypes();
+            for (unsigned int i = table.get_elementsTypes().size() - 1; i > 0; i--) {
+                table.delete_col(i);
+            }
+
+            deleted_TablesNames.push_back(table.name);
+            deleteElements_from_vec(Tables, {Table_i});
+        } else{
+            noErr=false;
+            cout<<RED<<"You can't Drop a Table connected to others!"<<RESET<<endl;
         }
-        deleteElements_from_vec(Tables,{Table_i});
     }
     return noErr;
 }
@@ -349,11 +357,17 @@ bool Database::TRUNCATE_TABLE(const string & in){
     string tableName=in-";";
     noErr=!check_Table_existence(tableName, true);
     if(!noErr){
-        cerr<<endl<<"No Table named "<<tableName<<" was found!";
+        cout << RED<<endl<<"No Table named "<<tableName<<" was found!"<<endl << RESET;
     } else{
         int Table_i=find_Table(tableName);
         Table & table=Tables[Table_i];
-        table.empty_Tablecontent();
+        if(!table.get_Foreign_linked()) {
+            table.empty_Tablecontent();
+            updated_TablesNames.push_back(table.name);
+        } else{
+            noErr=false;
+            cout<<RED<<"You can't Empty a Table connected to others!"<<RESET<<endl;
+        }
     }
     return noErr;
 }
@@ -367,9 +381,9 @@ bool Database::UPDATE(string in){
 
     if(noErr){
         in-=(tableName+" set ");
-        string oper = take_the_N_nextWord(in, "where", 2), data2between="/err";
+        string oper = take_the_N_nextWords(in, "where", 2), data2between="/err";
         if(oper=="between") data2between=substr_SS(in,"between",";");
-        string colToSearch= take_the_N_nextWord(in, "where", 1);
+        string colToSearch= take_the_N_nextWords(in, "where", 1);
         int col_index;
         noErr=((col_index=table.get_col_index(colToSearch))!=-1);
 
@@ -381,9 +395,6 @@ bool Database::UPDATE(string in){
                 searchData=substr_SS(searchData, oper,";");
             }
             removeSpaces_fromStart_andEnd(searchData);
-            /*string searchData= substr_SS(in, colToSearch, ";");
-            searchData=substr_from_c_to_c(searchData, 1, -1, '=', ' ');
-            replace_chars(searchData, {' '}, -1);*/
 
             vector<int> foundRows;
             noErr=table.find_Rows_by_value(searchData, col_index, foundRows, oper, data2between);
@@ -406,27 +417,27 @@ bool Database::UPDATE(string in){
                 noErr= table.set_UPDATE_data(updateData, foundRows);
 
                 if(noErr and !table.get_ForeignTables().empty()){ noErr=checkForeignKeys(table, foundRows[0]); }
-            } /*else{
-                cerr<<endl<<"No row containing"<<searchData<<"was found!";
-            }*/
+            }
 
         } else{
-            cerr<<endl<<"No column "<<colToSearch<<"was found!";
+            cout << RED<<endl<<"No column "<<colToSearch<<" was found!"<<endl << RESET;
         }
 
     } else{
-        cerr<<"Table named "<<tableName<<" doesn't exist!";
+        cout << RED<<"Table named "<<tableName<<" doesn't exist!"<<endl << RESET;
     }
 
     if(!noErr){
         table=TableBackup;
+    }else{
+        updated_TablesNames.push_back(table.name);
     }
     return noErr;
 }
 
-bool Database::PRINT(string in) {
+bool Database::SELECT(string in) {
     bool noErr=true;
-    string tableName = take_the_N_nextWord(in, "from", 1);
+    string tableName = take_the_N_nextWords(in, "from", 1);
     noErr = !check_Table_existence(tableName, true);
     Table &table = Tables[find_Table(tableName)];
     string colToOrder="/err";
@@ -457,13 +468,13 @@ bool Database::PRINT(string in) {
         if(in.find("order by")!=-1){
             if(in.find("asc")!=-1) orden = 1;
             else if(in.find("desc")!=-1) orden = -1;
-            colToOrder = take_the_N_nextWord(in, "by", 1);
+            colToOrder = take_the_N_nextWords(in, "by", 1);
         }
 
-        if(in.find("*")!=-1 and in.find("where")==-1){
+        if(in.find('*')!=-1 and in.find("where")==-1){
             noErr=table.printCols({"*"}, vec, colToOrder, orden);
         }else if(in.find("where")!=-1){
-            string oper = take_the_N_nextWord(in,"where", 2), data2="/err", data1="/err";
+            string oper = take_the_N_nextWords(in, "where", 2), data2="/err", data1="/err";
             if(oper=="between"){
                 data1 = substr_SS(in, "between", "and");
                 data2 = substr_SS(in, "and", "order");
@@ -475,8 +486,13 @@ bool Database::PRINT(string in) {
             }
             removeSpaces_fromStart_andEnd(data1);
 
-            vec = {take_the_N_nextWord(in,"where", 1), oper, data1, data2};
-            noErr=table.printCols(colNames, vec, colToOrder, orden);
+            vec = {take_the_N_nextWords(in, "where", 1), oper, data1, data2};
+            if(table.get_col_index(vec[0])!=-1){
+                noErr=table.printCols(colNames, vec, colToOrder, orden);
+            } else{
+                noErr=false;
+                cout << RED<<endl<<"No column "<<vec[0]<<" was found!"<<endl << RESET;
+            }
         }else{
             noErr=table.printCols(colNames, vec, colToOrder, orden);
         }
@@ -486,13 +502,15 @@ bool Database::PRINT(string in) {
 }
 
 void Database::QUIT(){
+    string path="../Database.txt";
     ofstream out;
-    out.open("../Database.txt", ios::trunc);
+    ifstream in;
+    in.open(path);
+    out.open(path, ios::trunc);
     for(Table & table:Tables){
-       table.printTable_to_file(out);
-       out<<endl;
+        streampos tmp;
+        table.printTable_to_file(out);
     }
-    out<<"|";
     out.close();
 }
 
@@ -501,27 +519,18 @@ bool Database::START() {
     ifstream in;
     in.open("../Database.txt", ios::in);
     if(!in){
-        cerr<<endl<<"The file doesn't exist!";
+        cout << RED<<endl<<"The file doesn't exist!"<<endl << RESET;
     }
     string line;
     int i=0;
-    char end=42;
-    while(end!='|'){
-        getline(in, line);
+
+    get_cleanLine(in, line);
+    while(!in.eof()){
         this->Tables.resize(i+1);
+        get_cleanLine(in, line);
         this->Tables[i].createTable_from_file(in, line);
         i++;
-        getline(in, line);
-        end=line[0];
-        if(end!='|'){
-            streampos tmp = in.tellg();
-            getline(in, line);
-            if(line[0]=='|'){
-                end=line[0];
-            } else{
-               in.seekg(tmp);
-            }
-        }
+        get_cleanLine(in, line);
     }
     return noErr;
 }
@@ -530,7 +539,7 @@ bool Database::CREATE_TABLE(string in){
     bool noErr=true;
     string table_name= substr_CC(in, 0, 1);
     noErr=check_TableName(table_name);
-    if(check_Table_existence(table_name, false) and noErr){
+    if(noErr and (noErr=check_Table_existence(table_name, false))){
         Table temp;//this creates a temporary Table
 
         string foreignKeys;
@@ -554,7 +563,7 @@ bool Database::CREATE_TABLE(string in){
     return noErr;
 }
 
-bool Database::setForeignKeys(string data, Table &thisTable) {
+bool Database::setForeignKeys(string data, Table & thisTable) {
     bool noErr=true;
     string line = substr_CC(data, 0, 1, ' ', ',');
     while(noErr and !data.empty()) {
@@ -590,17 +599,18 @@ bool Database::setForeignKeys(string data, Table &thisTable) {
                     thisTable.set_ForeignCols(tmp_ForeignCols);
 
                     line = substr_CC(data, 0, 1, ' ', ',');
+                    foreignTable.set_Foreign_linked(true);
                 } else{
-                    cerr<<endl<<"Uncaught reference to a non existence Column in";
-                    cerr<<" the foreign Table "<<foreignTableName;
-                    cerr<<"! (Column name: " << foreignTableElement<< ")";
+                    cout << RED<<endl<<"Uncaught reference to a non existence Column in" << RESET;
+                    cout << RED<<" the foreign Table "<<foreignTableName << RESET;
+                    cout << RED<<"! (Column name: " << foreignTableElement<< ")"<<endl << RESET;
                 }
             }else {
-                cerr << endl << "Uncaught reference to a non existence Table! (Table name: " << foreignTableName << ")";
+                cout << RED << endl << "Uncaught reference to a non existence Table! (Table name: " << foreignTableName << ")"<<endl << RESET;
                 noErr=false;
             }
         } else{
-            cerr << "No element called " << thisTableElement << " exists in this Table!";
+            cout << RED << "No element called " << thisTableElement << " exists in this Table!"<<endl << RESET;
             noErr=false;
         }
     }
@@ -614,22 +624,22 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
     ifstream in;
     in.open(filepath, ios::in);
     if(!in){
-        cerr<<endl<<"The file "<< filepath <<" doesn't exist!";
+        cout << RED<<endl<<"The file "<< filepath <<" doesn't exist!"<<endl << RESET;
         noErr=false;
     }
 
     if(noErr){
         string line="the cake is a lie", command;
-        int line_i=0, startLine_i=0, endLine_i;
+        int line_i=1, startLine_i=1, endLine_i=1;
         bool start=true;
         while(line!="~" and noErr and !quit) {
             command="";
             do{
                 if(start){ startLine_i=line_i; start=false;}
-                getline(in, line);
+                get_cleanLine(in, line);
                 if(line!="~"){
-                    while(line=="\r" or line[0]=='#'){
-                        getline(in, line);
+                    while(line=="\r" or removeSpaces_fromStart_andEnd(line)[0]=='#'){
+                        get_cleanLine(in, line);
                         line_i++;
                         startLine_i++;
                     }
@@ -649,17 +659,18 @@ bool Database::readCommands_from_file(const string &filepath, bool &quit) {
                 noErr = process_command(command, quit);
                 if (!noErr) {
                     if (endLine_i == startLine_i) {
-                        cerr << endl << "Error at line " << startLine_i+1;
+                        cout << RED << endl << "Error at line " << startLine_i<<endl << RESET;
                     } else {
-                        cerr << endl << "Error from line " << startLine_i+1
-                             << " to line " << endLine_i+1 << "!";
+                        cout << RED << endl << "Error from line " << startLine_i
+                             << " to line " << endLine_i << "!"<<endl << RESET;
                     }
                 }
                 if(quit){
-                    cout<<endl<<"QUIT command has been executed"<<endl<<"Goodbye!";
+                    cout<<endl<<"QUIT command has been executed"<<endl<<"Goodbye!"<<endl;
                 }
             }
         }
     }
     return noErr;
 }
+
